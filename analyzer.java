@@ -49,6 +49,10 @@ public class analyzer {
                 line=br.readLine();
             }
             br.close();
+            while(r.indexOf("/*")!=-1){
+                if(r.indexOf("*/")!=-1) r=r.substring(0,r.indexOf("/*")-1).concat(r.substring(r.indexOf("*/")+2));
+                else r=r.substring(r.indexOf("/*"));
+            }
             r=r.replaceAll(" {2,}", " ");//删去多余的空格
             if(r.charAt(0)==' ') r=r.substring(1);//删去首部空格
             if(r.charAt(r.length()-1)==' ') r=r.substring(0,r.length()-1);//删去尾部空格
