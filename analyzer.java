@@ -29,10 +29,10 @@ public class analyzer {
     public static void main(String[] args) throws Exception {
         String path_in = "./in.txt";
         String path_out = "./out.txt";
-        new analyzer().main(path_in, path_out);
+        new analyzer().answer(path_in, path_out);
     }
 
-    public void main(String path_in, String path_out) {
+    public void answer(String path_in, String path_out) {
         try{
             File filename = new File(path_in);
             InputStreamReader reader = new InputStreamReader(new FileInputStream(filename)); // 建立一个输入流对象reader
@@ -57,7 +57,7 @@ public class analyzer {
             if(r.charAt(0)==' ') r=r.substring(1);//删去首部空格
             if(r.charAt(r.length()-1)==' ') r=r.substring(0,r.length()-1);//删去尾部空格
 
-            System.out.println(r);
+            //System.out.println(r);
 
             
             while(j<r.length()){
@@ -124,8 +124,8 @@ public class analyzer {
                             }
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    // System.out.println(word);
+                    // System.out.println(result);
                     break;
 
                 case 2://数字
@@ -151,8 +151,8 @@ public class analyzer {
                             result=result.concat(" {c,").concat(String.valueOf(c.indexOf(Integer.parseInt(word)))).concat("}");
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    // System.out.println(word);
+                    // System.out.println(result);
                     break;
 
                 case 3://字符串
@@ -174,8 +174,8 @@ public class analyzer {
                             result=result.concat(" {S,").concat(String.valueOf(S.indexOf(word))).concat("}");
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    // System.out.println(word);
+                    // System.out.println(result);
                     j++;
                     break;
                     
@@ -198,8 +198,8 @@ public class analyzer {
                             result=result.concat(" {C,").concat(String.valueOf(C.indexOf(word))).concat("}");
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    // System.out.println(word);
+                    // System.out.println(result);
                     j++;
                     break;
 
@@ -229,8 +229,8 @@ public class analyzer {
                             result=result.concat(" {p,").concat(String.valueOf(p.indexOf(word))).concat("}");
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    // System.out.println(word);
+                    // System.out.println(result);
                     j++;
                     break;
                 }
