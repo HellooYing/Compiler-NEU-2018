@@ -7,11 +7,39 @@ import java.io.FileWriter;
 import java.util.*;
 
 public class Recursive_decline{
+    public static int now=0,flag=1,brackets=0;
+    public static String[] step,i,C,S,c,k,p;
     public static void main(String[] args) throws Exception {
         String path_in = "./in.txt";
         String path_out = "./out.txt";
+        //先进行语法分析，把结果存到out文件里：
         new analyzer().answer(path_in, path_out);
-        new Recursive_decline().answer(path_out);
+        //打开out文件，读取step和参照表：
+        try{
+            File filename = new File(path_out);
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename)); // 建立一个输入流对象reader
+            BufferedReader br = new BufferedReader(reader);// 建立一个对象，它把文件内容转成计算机能读懂的语言
+            String line = "";
+            line= br.readLine().substring(1);//out.txt的第一行是{c,0}……等，substring(1)是因为analyzer搞得第一个是空格，切的时候会多一个
+            step=line.split(" ");//切成数组
+            line=br.readLine();//读第二行的i变量名参照表，下面同理
+            i=line.substring(4,line.length()-1).replace(" ", "").split(",");//把参照表弄成数组
+            line=br.readLine();
+            C=line.substring(4,line.length()-1).replace(" ", "").split(",");
+            line=br.readLine();
+            S=line.substring(4,line.length()-1).replace(" ", "").split(",");
+            line=br.readLine();
+            c=line.substring(4,line.length()-1).replace(" ", "").split(",");
+            line=br.readLine();
+            k=line.substring(4,line.length()-1).replace(" ", "").split(",");
+            line=br.readLine();
+            p=line.substring(4,line.length()-1).replace(" ", "").split(",");
+            br.close();
+        }catch (Exception e) {
+			e.printStackTrace();
+        }
+        //进行递归下降分析，判断算数表达式合理性
+        new Recursive_decline().answer();
     }
     //文法：
     //   E -> T E1
@@ -27,66 +55,165 @@ public class Recursive_decline{
     // T则要变成FT1
 
     // F就可以变成一个变量名或者数字或者一个括号括起来的表达式，当前step是（就（E），别的I。每转换一个F就step+1.
-    // 每次改变step（也包括最开始step[0]）都要检查是否是括号，前括号的话kh++，后括号的话kh--且step再+1。
+    // 每次改变step（也包括最开始step[now]）都要检查是否是括号，前括号的话kh++，后括号的话kh--且step再+1。
 
     // E1是，如果到它这step是+/-，就变成+/- F T1,否则就直接去掉E1
-    // T1是到它这step是*//,就*// E T1，否则删掉
-    public static int now=0;
+    // T1是到它这step是*//,就*// E T1，否则删掉 
+    // 如何在发生错误时立刻返回呢？设置flag，默认1，若flag=0则立刻返回
     private void E(){
+        if(flag==0) return;
         T();
         E1();
     }
     private void T(){
+        if(flag==0) return;
         F();
         T1();
     }
     private void E1(){
-        F();
-        T1();
-        
-    }
-    public void answer(String path_in) {
-        try{
-            File filename = new File(path_in);
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename)); // 建立一个输入流对象reader
-            BufferedReader br = new BufferedReader(reader);// 建立一个对象，它把文件内容转成计算机能读懂的语言
-            String result="",r = "",line = "",t;
-            r= br.readLine().substring(1);//out.txt的第一行是{c,0}……等，substring(1)是因为analyzer搞得第一个是空格，切的时候会多一个
-            String[] step=r.split(" ");//切成数组
-            line=br.readLine();//读第二行的i变量名参照表，下面同理
-            String[] i=line.substring(4,line.length()-1).replace(" ", "").split(",");//把参照表弄成数组
-            line=br.readLine();
-            String[] C=line.substring(4,line.length()-1).replace(" ", "").split(",");
-            line=br.readLine();
-            String[] S=line.substring(4,line.length()-1).replace(" ", "").split(",");
-            line=br.readLine();
-            String[] c=line.substring(4,line.length()-1).replace(" ", "").split(",");
-            line=br.readLine();
-            String[] k=line.substring(4,line.length()-1).replace(" ", "").split(",");
-            line=br.readLine();
-            String[] p=line.substring(4,line.length()-1).replace(" ", "").split(",");
-            br.close();
-            
-            switch(step[0].substring(1,2)){
-                case "i":
-                t=i[Integer.parseInt(step[0].substring(3,4))];
+        if(flag==0) return;
+        String t;
+        switch(step[now].substring(1,2)){
+            case "i"://如果到E1时step[now]是变量名，不造成错误，仍然继续
+            t=i[Integer.parseInt(step[now].substring(3,4))];//查表找出对应变量名
+            break;
+            case "c"://如果到E1时step[now]是数字，不造成错误，仍然继续
+            t=c[Integer.parseInt(step[now].substring(3,4))];//查表找出对应数字
+            break;
+            case "p"://如果到E1时step[now]是+-*/(),仍然继续，别的符号是错的
+            t=p[Integer.parseInt(step[now].substring(3,4))];//查表找出对应符号
+            if(t.equals("+")||t.equals("-")){
                 System.out.println(t);
+                if(now==step.length-1) {
+                    flag=0;
+                    return;
+                };
+                now++;//+和-只在T1里消除，别的地方遇到都是错的
+                T();
+                E1();
                 break;
-                case "c":
-                t=c[Integer.parseInt(step[0].substring(3,4))];
-                System.out.println(t);
-                break;
-                case "p":
-                t=p[Integer.parseInt(step[0].substring(3,4))];
-                System.out.println(t);
-                break;
-                default:
-                System.out.println("wrong");
+            }
+            else if(t.equals("*")||t.equals("/")||t.equals("(")||t.equals(")")) break;
+            else{
+                flag=0;
                 return;
             }
+            default:
+            flag=0;
+            return;
+        }    
+    }
 
-        }catch (Exception e) {
-			e.printStackTrace();
-		}      
+    private void T1(){
+        if(flag==0) return;
+        String t;
+        switch(step[now].substring(1,2)){
+            case "i"://如果到E1时step[now]是变量名，则应该转换为变量名
+            t=i[Integer.parseInt(step[now].substring(3,4))];//查表找出对应变量名
+            System.out.println(t);
+            if(now==step.length-1) return;
+            now++;
+            break;
+            case "c"://如果到E1时step[now]是数字，则应该转换为数字
+            t=c[Integer.parseInt(step[now].substring(3,4))];//查表找出对应数字
+            System.out.println(t);
+            if(now==step.length-1) return;
+            now++;
+            break;
+            case "p"://如果到E1时step[now]是+-*/(),仍然继续，别的符号是错的
+            t=p[Integer.parseInt(step[now].substring(3,4))];//查表找出对应符号
+            if(t.equals("*")||t.equals("/")){
+                System.out.println(t);
+                if(now==step.length-1) {
+                    flag=0;
+                    return;
+                };
+                now++;//*和/只在T1里消除，别的地方遇到都是错的
+                F();
+                T1();
+                break;
+            }
+            else if(t.equals("+")||t.equals("-")||t.equals("(")||t.equals(")")) break;
+            else{
+                flag=0;
+                return;
+            }
+            default:
+            flag=0;
+            return;
+        }    
+    }
+    private void F(){
+        if(flag==0) return;
+        String t;
+        switch(step[now].substring(1,2)){
+            case "i":
+            t=i[Integer.parseInt(step[now].substring(3,4))];//查表找出对应变量名 
+            System.out.println(t);     
+            if(now==step.length-1) return;
+            now++;
+            if(step[now].substring(1,2).equals("p")){
+                t=p[Integer.parseInt(step[now].substring(3,4))];
+                if(t.equals(")")){
+                    brackets--;
+                    System.out.println(t);
+                    if(now==step.length-1) return;
+                    now++;
+                    if(brackets<0){
+                        flag=0;
+                        return;
+                    }
+                }
+            }
+            break;
+            case "c":
+            t=c[Integer.parseInt(step[now].substring(3,4))];//查表找出对应数字
+            System.out.println(t);
+            if(now==step.length-1) return;
+            now++;
+            if(step[now].substring(1,2).equals("p")){
+                t=p[Integer.parseInt(step[now].substring(3,4))];
+                if(t.equals(")")){
+                    brackets--;
+                    System.out.println(t);
+                    if(now==step.length-1) return;
+                    now++;
+                    if(brackets<0){
+                        flag=0;
+                        return;
+                    }
+                }
+            }
+            break;
+            case "p"://如果到E1时step[now]是符号，只接受（，别的都是错的
+            t=p[Integer.parseInt(step[now].substring(3,4))];//查表找出对应符号
+            if(t.equals("(")){
+                System.out.println(t);
+                if(now==step.length-1) {
+                    flag=0;
+                    return;
+                }
+                else if(step[now+1].substring(1,2).equals("p")&&p[Integer.parseInt(step[now+1].substring(3,4))].equals(")")){
+                    flag=0;
+                    return;
+                }
+                now++;
+                brackets++;
+                E();
+                break;
+            }
+            else{
+                flag=0;
+                return;
+            }
+            default:
+            flag=0;
+            return;
+        }    
+    }
+    public void answer() {
+        E();
+        if(brackets!=0||flag==0||now!=step.length-1) System.out.println("wrong");
+        else System.out.println("right");
     }
 }

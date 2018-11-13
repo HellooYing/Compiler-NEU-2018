@@ -50,14 +50,14 @@ public class analyzer {
             }
             br.close();
             while(r.indexOf("/*")!=-1){
-                if(r.indexOf("*/")!=-1) r=r.substring(0,r.indexOf("/*")-1).concat(r.substring(r.indexOf("*/")+2));
+                if(r.indexOf("*/")!=-1) r=r.substring(0,r.indexOf("/*")).concat(r.substring(r.indexOf("*/")+2));
                 else r=r.substring(r.indexOf("/*"));
             }
             r=r.replaceAll(" {2,}", " ");//删去多余的空格
             if(r.charAt(0)==' ') r=r.substring(1);//删去首部空格
             if(r.charAt(r.length()-1)==' ') r=r.substring(0,r.length()-1);//删去尾部空格
 
-            //System.out.println(r);
+            System.out.println(r);
 
             
             while(j<r.length()){
@@ -82,21 +82,21 @@ public class analyzer {
 
                 case 1://字母（单词）
                     jj=j;
-                    j++;
                     if(j!=r.length()){
                         t=(int)r.charAt(j);
                         while(((t>=65&&t<=90)||(t>=97&&t<=122)||(t>=48&&t<=57))&&j<r.length()-1){
                             j++;
                             t=(int)r.charAt(j);
-                            if(j==r.length()-2) {
+                            if(j==r.length()-1) {
                                 if((t>=65&&t<=90)||(t>=97&&t<=122)||(t>=48&&t<=57))
                                 {
-                                    j=j+2;
+                                    j=j+1;
                                 }
                             }
                         }
                         //这个while的意思是如果后面还是字母或数字，这个单词就没有结束，要一直j++找到单词的结尾
                     }
+                    if(jj==j) j++;
                     word=r.substring(jj,j);
                     int key=0;
                     int m;
@@ -124,19 +124,26 @@ public class analyzer {
                             }
                         }
                     }
-                    // System.out.println(word);
-                    // System.out.println(result);
+                    System.out.println(word);
+                    System.out.println(result);
                     break;
 
                 case 2://数字
                     jj=j;
-                    t=(int)r.charAt(j);
-                    while(t>=48&&t<=57&&j<r.length()-1){
-                        j++;
+                    if(j!=r.length()){
                         t=(int)r.charAt(j);
-                        if(j==r.length()-2) {j=j+2;}
+                        while(t>=48&&t<=57&&j<r.length()-1){
+                            j++;
+                            t=(int)r.charAt(j);
+                            if(j==r.length()-1) {
+                                if(t>=48&&t<=57)
+                                {
+                                    j=j+1;
+                                }
+                            }
+                        }
                     }
-                    //这个while的意思是如果后面还是数字，这个单词就没有结束，要一直j++找到单词的结尾
+                    if(jj==j) j++;
                     word=r.substring(jj,j);
                     if(c==null){
                         c.add(Integer.parseInt(word));
@@ -151,8 +158,8 @@ public class analyzer {
                             result=result.concat(" {c,").concat(String.valueOf(c.indexOf(Integer.parseInt(word)))).concat("}");
                         }
                     }
-                    // System.out.println(word);
-                    // System.out.println(result);
+                    System.out.println(word);
+                    System.out.println(result);
                     break;
 
                 case 3://字符串
@@ -174,8 +181,8 @@ public class analyzer {
                             result=result.concat(" {S,").concat(String.valueOf(S.indexOf(word))).concat("}");
                         }
                     }
-                    // System.out.println(word);
-                    // System.out.println(result);
+                    System.out.println(word);
+                    System.out.println(result);
                     j++;
                     break;
                     
@@ -198,8 +205,8 @@ public class analyzer {
                             result=result.concat(" {C,").concat(String.valueOf(C.indexOf(word))).concat("}");
                         }
                     }
-                    // System.out.println(word);
-                    // System.out.println(result);
+                    System.out.println(word);
+                    System.out.println(result);
                     j++;
                     break;
 
@@ -229,8 +236,8 @@ public class analyzer {
                             result=result.concat(" {p,").concat(String.valueOf(p.indexOf(word))).concat("}");
                         }
                     }
-                    // System.out.println(word);
-                    // System.out.println(result);
+                    System.out.println(word);
+                    System.out.println(result);
                     j++;
                     break;
                 }
