@@ -124,8 +124,8 @@ public class analyzer {
                             }
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    //System.out.println(word);
+                    //System.out.println(result);
                     break;
 
                 case 2://数字
@@ -158,8 +158,8 @@ public class analyzer {
                             result=result.concat(" {c,").concat(String.valueOf(c.indexOf(Integer.parseInt(word)))).concat("}");
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    //System.out.println(word);
+                    //System.out.println(result);
                     break;
 
                 case 3://字符串
@@ -181,8 +181,8 @@ public class analyzer {
                             result=result.concat(" {S,").concat(String.valueOf(S.indexOf(word))).concat("}");
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    //System.out.println(word);
+                    //System.out.println(result);
                     j++;
                     break;
                     
@@ -205,8 +205,8 @@ public class analyzer {
                             result=result.concat(" {C,").concat(String.valueOf(C.indexOf(word))).concat("}");
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    //System.out.println(word);
+                    //System.out.println(result);
                     j++;
                     break;
 
@@ -236,8 +236,8 @@ public class analyzer {
                             result=result.concat(" {p,").concat(String.valueOf(p.indexOf(word))).concat("}");
                         }
                     }
-                    System.out.println(word);
-                    System.out.println(result);
+                    //System.out.println(word);
+                    //System.out.println(result);
                     j++;
                     break;
                 }

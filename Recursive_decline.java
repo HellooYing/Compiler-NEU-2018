@@ -39,7 +39,7 @@ public class Recursive_decline{
 			e.printStackTrace();
         }
         //进行递归下降分析，判断算数表达式合理性
-        new Recursive_decline().answer();
+        System.out.println(new Recursive_decline().answer());;
     }
     //文法：
     //   E -> T E1
@@ -211,9 +211,9 @@ public class Recursive_decline{
             return;
         }    
     }
-    public void answer() {
+    public String answer() {
         E();
-        if(brackets!=0||flag==0||now!=step.length-1) System.out.println("wrong");
-        else System.out.println("right");
+        if(brackets!=0||flag==0||now!=step.length-1) return "wrong";
+        else return "right";
     }
 }
