@@ -97,6 +97,7 @@ public class LL1{
         st.push("E");
         
         while(now<step.length){
+            if(brackets<0) return "wrong";
             flag_t=0;
             pe=st.pop();
             System.out.println("出栈".concat(pe));
@@ -114,8 +115,14 @@ public class LL1{
                 t=p[Integer.parseInt(step[now].substring(3,4))];//t变成+-*/()
                 if(pe.equals("w")&&(t.equals("+")||t.equals("-"))) flag_t=1;//如果出栈的是w而step[now]类型是+-，就是符合的
                 else if(pe.equals("W")&&(t.equals("*")||t.equals("/"))) flag_t=1;//如果出栈的是W而step[now]类型是*/，就是符合的
-                else if(pe.equals(")")&&t.equals(")")) flag_t=1;
-                else if(pe.equals("(")&&t.equals("(")) flag_t=1;
+                else if(t.equals(")")) {
+                    brackets--;
+                    if(pe.equals(")")) flag_t=1; 
+                }
+                else if(t.equals("(")) {
+                    brackets++;
+                    if(pe.equals("(")) flag_t=1; 
+                }
             }
             //判断完了pe符合不符合step[now],开始执行符合了要干啥和不符合要干啥
             if(flag_t==1){//如果pe是符合step[now]的,也就是说pe是W而step[now]是*/之类的
