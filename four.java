@@ -15,38 +15,16 @@ public class four {
     public static List<String[]> qt = new ArrayList<String[]>();
     public static String f;
 
+
     public static void main(String[] args) throws Exception {
         String path_in = "./in.txt";
         String path_out = "./out.txt";
+        String path_out2 = "./out2.txt";
         new analyzer().answer(path_in, path_out);
-        try {
-            File filename = new File(path_out);
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-            BufferedReader br = new BufferedReader(reader);
-            String line = "";
-            line = br.readLine().substring(1);
-            step = line.split(" ");
-            line = br.readLine();
-            i = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            C = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            S = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            c = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            k = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            p = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            br.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(new four().answer());
-        ;
+        System.out.println(new four().answer(path_out,path_out2));
     }
 
-    public static String getTraceInfo() { // 一个输出代码行号的函数，用来告诉我何时return也就是何时认为表达式出错了或者认为表达式结束了
+    public static String getTraceInfo() {
         StringBuffer sb = new StringBuffer();
         StackTraceElement[] stacks = new Throwable().getStackTrace();
         sb.append("class: ").append(stacks[1].getClassName()).append("; method: ").append(stacks[1].getMethodName())
@@ -54,7 +32,7 @@ public class four {
         return sb.toString();
     }
 
-    public static void printall() { // 打印symbol、synum、qt
+    public static void printall() {
         System.out.println(symbol.toString());
         System.out.println(synum.toString());
         for (int aa = 0; aa < qt.size(); aa++) {
@@ -467,7 +445,30 @@ public class four {
         st.pop();
     }
 
-    public String answer() {
+    public String answer(String path_in, String path_out) {
+        try {
+            File filename = new File(path_in);
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
+            BufferedReader br = new BufferedReader(reader);
+            String line = "";
+            line = br.readLine().substring(1);
+            step = line.split(" ");
+            line = br.readLine();
+            i = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            C = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            S = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            c = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            k = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            p = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         E();
         // printall();
         String result = "";
@@ -480,18 +481,17 @@ public class four {
             }
             result = result.concat("] ");
             if (aa == qt.size() - 1) {
-                result = result.concat("\n").concat(Integer.toString(aa + 2));
+                result = result.concat("\n").concat(Integer.toString(aa + 1));
             }
         }
         System.out.println(result);
         try {
-            String path_out = "./out2.txt";
-            File writename = new File(path_out); // 如果没有则新建一个新的path_out的txt文件
-            writename.createNewFile(); // 创建新文件
+            File writename = new File(path_out);
+            writename.createNewFile();
             BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-            out.write(result); // 写入
-            out.flush(); // 把缓存区内容压入文件
-            out.close(); // 最后记得关闭文件
+            out.write(result);
+            out.flush();
+            out.close(); 
         } catch (Exception e) {
             e.printStackTrace();
         }
