@@ -45,176 +45,10 @@ public class four {
         System.out.println(new four().answer());
         ;
     }
-    // 文法：
-    // E -> T D
-    // D-> w T D|ε
-    // T -> F Y
-    // Y-> W F Y|ε
-    // F -> I | ( E )
 
-    // 以a*(b/c-d*e+f)/g-h为例,最终输出[*,a,t4,t5][/,b,c,t1][-,t1,t2,t3][*,d,e,t2][+,t3,f,t4][/,t5,g,t6][-,t6,h,t7]
-    // [E]
-    // [E, T]
-    // [E, T, F] f=a;
-    // a
-    // [E, T]
-    // [E, T, Y] if(symbol.empty())
-    // {symbol.push(t);qt.add(new
-    // String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
-    // 此时qt应为{[*,a, , ]} symbol[*] synum[0]
-    // *
-    // [E, T, Y, F] symbol.push("(");synum.push(-1);
-    // (
-    // [E, T, Y, F, E]
-    // [E, T, Y, F, E, T]
-    // [E, T, Y, F, E, T, F] f=b;
-    // b
-    // [E, T, Y, F, E, T]
-    // [E, T, Y, F, E, T, Y] 虽然symbol不空，但优先级高else if(s
-    // mbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))
-    // {symbol.push(t);qt.add(new String[4])
-    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
-    // 此时qt应为{[*,a, , ],[/,b, , ]} symbol[*,(,/] synum[0,-1,1]
-    // /
-    // [E, T, Y, F, E, T, Y, F] f=c;
-    // c
-    // [E, T, Y, F, E, T, Y]
-    // [E, T, Y, F, E, T, Y, Y]
-    // [E, T, Y, F, E, T, Y]
-    // [E, T, Y, F, E, T]
-    // [E, T, Y, F, E]
-    // [E, T, Y, F, E, D] 优先级比别人低的 els
-    // {while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))))
-    // {if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
-    //
-    // 此时qt应为{[*,a, , ],[/,b,c,t1],[-,t1, , ]} symbol[*,(,-] synum[0,-1,2] num=2;
-    // -
-    // [E, T, Y, F, E, D, T]
-    // [E, T, Y, F, E, D, T, F] f=d;
-    // d
-    // [E, T, Y, F, E, D, T]
-    // [E, T, Y, F, E, D, T, Y]虽然symbol不空，但优先级高else if(s
-    // mbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))
-    // {symbol.push(t);qt.add(new String[4])
-    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
-    // 此时qt应为{[*,a, , ],[/,b,c,t1],[-,t1, , ],[*,d, , ]} symbol[*,(,-,*] s
-    // num[0,-1,2,3]
-    // *
-    // [E, T, Y, F, E, D, T, Y, F] f=e;
-    // e
-    // [E, T, Y, F, E, D, T, Y]
-    // [E, T, Y, F, E, D, T, Y, Y]
-    // [E, T, Y, F, E, D, T, Y]
-    // [E, T, Y, F, E, D, T]
-    // [E, T, Y, F, E, D]
-    // [E, T, Y, F, E, D, D]优先级比别人低的 else 
-    // 发现逻辑错误：这个时候前面不止一个*要处理，还有-应该处理，也就是比这个+优先度高的全应该处理！
-    // 更正为：else{while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))))
-    // {if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
-    // //这个时候qt应为{[*,a, , ],[/,b,c,t1],[-,t1, , ],[*,d,e,t2]} symbol[*,(,-] sy
-    // um=[0,-1,2] num=3;
-    // else{inqt=qt.get(synum.peek());inqt[2]="t".concat(String.valueOf(num-1));inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}}
-    // //为了知道这个-对应的到底是qt中的第几个四元式，所以与symbol同步维护一个栈synum用来存symbol栈内元素在qt里的序号
-    // qt.add(new String[4])
-    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]="t".concat(String.valueOf(num-1));symbol.push(t);synum.push(qt.size()-1);}
-    // 此时qt应为{[*,a, , ],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3, , ]} s
-    // mbol[*,(,+] synum[0,-1,4] num=4
-    // +
-    // [E, T, Y, F, E, D, D, T]
-    // [E, T, Y, F, E, D, D, T, F]
-    // f=f;遇到括号结束，括号里应该只有一个符号，所以把这个符号运算一遍
-    // inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();symbol.pop();synum.pop();
-    // 此时qt应为{[*,a, , ],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3,f,t4]} symbol[*] s
-    // 
-    //
-    //
-    // num[0] num=5
-    // f
-    // )
-    // [E, T, Y, F, E, D, D, T]
-    // [E, T, Y, F, E, D, D, T,
-    // Y]else{while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))))
-    // {if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
-    // else{inqt=qt.get(synum.peek());inqt[2]="t".concat(String.valueOf(num-1));inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}}
-    // qt.add(new String[4])
-    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]="t".concat(String.valueOf(num-1));symbol.push(t);synum.push(qt.size()-1);}
-    // 这里执行的是else的部分，inqt=qt.get(0),inqt[2]=t4,inqt[3]=t5,num=6,symbol=[],synum=[];再新建inqt,inqt[0]="/",inqt[1]=t5,symbol=[/],synum=[5]
-    // 此时qt应为{[*,a,t4,t5],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3,f,t4],[/,t5, , ]
-    // 
-    //
-    //
-    //
-    // /
-    // [E, T, Y, F, E, D, D, T, Y, F] t=g
-    // g
-    // [E, T, Y, F, E, D, D, T, Y]
-    // [E, T, Y, F, E, D, D, T, Y, Y]
-    // [E, T, Y, F, E, D, D, T, Y]
-    // [E, T, Y, F, E, D, D, T]
-    // [E, T, Y, F, E, D, D]
-    // [E, T, Y, F, E, D, D,
-    // D]else{while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))))
-    // {if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
-    // else{inqt=qt.get(synum.peek());inqt[2]="t".concat(String.valueOf(num-1));inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}}
-    // qt.add(new String[4])
-    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]="t".concat(String.valueOf(num-1));symbol.push(t);synum.push(qt.size()-1);}
-    // 这里执行的是if的部分，inqt=qt[5],inqt[2]="g";f=null;inqt[3]=t6;num=7;symbol[];synum[];再新建inqt,inqt[0]="-",inqt[1]=t6,symbol=[-],synum=[6]
-    // 此时qt应为{[*,a,t4,t5],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3,f,t4],[/,t5,g,t6],[-,t6, ,
-    // 
-    //
-    //
-    // ]}
-    // -
-    // [E, T, Y, F, E, D, D, D, T]
-    // [E, T, Y, F, E, D, D, D, T, F] f=h
-    // h
-    // [E, T, Y, F, E, D, D, D, T]
-    // [E, T, Y, F, E, D, D, D, T,
-    // Y]最终DY出栈时检查，if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
-    // h
-    // [E, T, Y, F, E, D, D, D, T]
-    // [E, T, Y, F, E, D, D, D]
-    // [E, T, Y, F, E, D, D, D, D]
-    // [E, T, Y, F, E, D, D, D]
-    // [E, T, Y, F, E, D, D]
-    // [E, T, Y, F, E, D]
-    // [E, T, Y, F, E]
-    // [E, T, Y, F]
-    // [E, T, Y]
-    // [E, T, Y, Y]
-    // h
-    // [E, T, Y]
-    // [E, T]
-    // [E]
-    // [E, D]
-    // [E]
-
-    // 总结，
-    // DY有效入栈时
-    // if(symbol.empty()){symbol.push(t);qt.add(new
-    // String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
-    // else
-    // if(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))
-    // {symbol.push(t);qt.add(new String[4])
-    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
-    // else{
-    // while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/")))))){
-    // if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
-    // else{inqt=qt.get(synum.peek());inqt[2]="t".concat(String.valueOf(num-1));inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
-    // }
-    // qt.add(new String[4])
-    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]="t".concat(String.valueOf(num-1));symbol.push(t);synum.push(qt.size()-1);
-    // }
-    // DY有效入栈的出栈时
-    // if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
-    // F有效入栈时，f=i;
-    // (时，symbol.push("(");synum.push(-1);
-    // )时，inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();symbol.pop();synum.pop();
     public static String getTraceInfo() { // 一个输出代码行号的函数，用来告诉我何时return也就是何时认为表达式出错了或者认为表达式结束了
         StringBuffer sb = new StringBuffer();
-
         StackTraceElement[] stacks = new Throwable().getStackTrace();
-        int stacksLen = stacks.length;
         sb.append("class: ").append(stacks[1].getClassName()).append("; method: ").append(stacks[1].getMethodName())
                 .append("; number: ").append(stacks[1].getLineNumber());
         return sb.toString();
@@ -635,32 +469,32 @@ public class four {
 
     public String answer() {
         E();
-        //printall();
-        String result="";
+        // printall();
+        String result = "";
         for (int aa = 0; aa < qt.size(); aa++) {
-            result=result.concat("[");
+            result = result.concat("[");
             for (int aaa = 0; aaa < 4; aaa++) {
-                result=result.concat(qt.get(aa)[aaa]);
+                result = result.concat(qt.get(aa)[aaa]);
                 if (aaa != 3)
-                result=result.concat(",");
+                    result = result.concat(",");
             }
-            result=result.concat("] ");
-            if(aa == qt.size()-1){
-                result=result.concat("\n").concat(Integer.toString(aa+2));
+            result = result.concat("] ");
+            if (aa == qt.size() - 1) {
+                result = result.concat("\n").concat(Integer.toString(aa + 2));
             }
         }
         System.out.println(result);
-        try{
-            String path_out="./out2.txt";
+        try {
+            String path_out = "./out2.txt";
             File writename = new File(path_out); // 如果没有则新建一个新的path_out的txt文件
-			writename.createNewFile(); // 创建新文件
-			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-			out.write(result); // 写入
-			out.flush(); // 把缓存区内容压入文件
-			out.close(); // 最后记得关闭文件
-        }catch (Exception e) {
-			e.printStackTrace();
-		}      
+            writename.createNewFile(); // 创建新文件
+            BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+            out.write(result); // 写入
+            out.flush(); // 把缓存区内容压入文件
+            out.close(); // 最后记得关闭文件
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (brackets != 0 || flag == 0 || now != step.length - 1)
             return "wrong";
         else
