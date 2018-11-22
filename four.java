@@ -6,137 +6,242 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.*;
 
-public class four{
-    public static int now=0,flag=1,num=1,brackets=0;
-    public static String[] step,i,C,S,c,k,p,inqt;
+public class four {
+    public static int now = 0, flag = 1, num = 1, brackets = 0;
+    public static String[] step, i, C, S, c, k, p, inqt;
     public static Stack<String> st = new Stack<String>();
     public static Stack<String> symbol = new Stack<String>();
+    public static Stack<Integer> synum = new Stack<Integer>();
     public static List<String[]> qt = new ArrayList<String[]>();
     public static String f;
+
     public static void main(String[] args) throws Exception {
         String path_in = "./in.txt";
         String path_out = "./out.txt";
-        //先进行语法分析,把结果存到out文件里：
         new analyzer().answer(path_in, path_out);
-        //打开out文件,读取step和参照表：
-        try{
+        try {
             File filename = new File(path_out);
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename)); // 建立一个输入流对象reader
-            BufferedReader br = new BufferedReader(reader);// 建立一个对象,它把文件内容转成计算机能读懂的语言
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
+            BufferedReader br = new BufferedReader(reader);
             String line = "";
-            line= br.readLine().substring(1);//out.txt的第一行是{c,0}……等,substring(1)是因为analyzer搞得第一个是空格,切的时候会多一个
-            step=line.split(" ");//切成数组
-            line=br.readLine();//读第二行的i变量名参照表,下面同理
-            i=line.substring(4,line.length()-1).replace(" ", "").split(",");//把参照表弄成数组
-            line=br.readLine();
-            C=line.substring(4,line.length()-1).replace(" ", "").split(",");
-            line=br.readLine();
-            S=line.substring(4,line.length()-1).replace(" ", "").split(",");
-            line=br.readLine();
-            c=line.substring(4,line.length()-1).replace(" ", "").split(",");
-            line=br.readLine();
-            k=line.substring(4,line.length()-1).replace(" ", "").split(",");
-            line=br.readLine();
-            p=line.substring(4,line.length()-1).replace(" ", "").split(",");
+            line = br.readLine().substring(1);
+            step = line.split(" ");
+            line = br.readLine();
+            i = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            C = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            S = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            c = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            k = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            p = line.substring(4, line.length() - 1).replace(" ", "").split(",");
             br.close();
-        }catch (Exception e) {
-			e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        //进行递归下降的生成四元组
-        System.out.println(new four().answer());;
+        System.out.println(new four().answer());
+        ;
     }
-    //文法：
-    //   E -> T D
-    //   D-> w T D|ε
-    //   T -> F Y
-    //   Y-> W F Y|ε
-    //   F -> I | ( E ) 
+    // 文法：
+    // E -> T D
+    // D-> w T D|ε
+    // T -> F Y
+    // Y-> W F Y|ε
+    // F -> I | ( E )
 
-    //四元组的生成,逻辑是：
-    //在进入一个函数的时候把它入栈,然后离开这个函数的时候出栈
-    //然后在E出栈的时候要生成一个四元组
-    //E入栈的时候也往qt加个四元组,然后往下进行,F依次加进1,2,W和w加到0
+    // 以a*(b/c-d*e+f)/g-h为例,最终输出[*,a,t4,t5][/,b,c,t1][-,t1,t2,t3][*,d,e,t2][+,t3,f,t4][/,t5,g,t6][-,t6,h,t7]
+    // [E]
+    // [E, T]
+    // [E, T, F] f=a;
+    // a
+    // [E, T]
+    // [E, T, Y] if(symbol.empty())
+    // {symbol.push(t);qt.add(new
+    // String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
+    // 此时qt应为{[*,a, , ]} symbol[*] synum[0]
+    // *
+    // [E, T, Y, F] symbol.push("(");synum.push(-1);
+    // (
+    // [E, T, Y, F, E]
+    // [E, T, Y, F, E, T]
+    // [E, T, Y, F, E, T, F] f=b;
+    // b
+    // [E, T, Y, F, E, T]
+    // [E, T, Y, F, E, T, Y] 虽然symbol不空，但优先级高else if(s
+    // mbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/")))) 
+    // {symbol.push(t);qt.add(new String[4])
+    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
+    // 此时qt应为{[*,a, , ],[/,b, , ]} symbol[*,(,/] synum[0,-1,1]
+    // /
+    // [E, T, Y, F, E, T, Y, F] f=c;
+    // c
+    // [E, T, Y, F, E, T, Y]
+    // [E, T, Y, F, E, T, Y, Y]
+    // [E, T, Y, F, E, T, Y]
+    // [E, T, Y, F, E, T]
+    // [E, T, Y, F, E]
+    // [E, T, Y, F, E, D] 优先级比别人低的 els
+    // {while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))))
+    // {if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
+    //
+    // 此时qt应为{[*,a, , ],[/,b,c,t1],[-,t1, , ]} symbol[*,(,-] synum[0,-1,2] num=2;
+    // -
+    // [E, T, Y, F, E, D, T]
+    // [E, T, Y, F, E, D, T, F] f=d;
+    // d
+    // [E, T, Y, F, E, D, T]
+    // [E, T, Y, F, E, D, T, Y]虽然symbol不空，但优先级高else if(s
+    // mbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/")))) 
+    // {symbol.push(t);qt.add(new String[4])
+    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
+    // 此时qt应为{[*,a, , ],[/,b,c,t1],[-,t1, , ],[*,d, , ]} symbol[*,(,-,*] s
+    // num[0,-1,2,3]
+    // *
+    // [E, T, Y, F, E, D, T, Y, F] f=e;
+    // e
+    // [E, T, Y, F, E, D, T, Y]
+    // [E, T, Y, F, E, D, T, Y, Y]
+    // [E, T, Y, F, E, D, T, Y]
+    // [E, T, Y, F, E, D, T]
+    // [E, T, Y, F, E, D]
+    // [E, T, Y, F, E, D, D]优先级比别人低的 else 
+    // 发现逻辑错误：这个时候前面不止一个*要处理，还有-应该处理，也就是比这个+优先度高的全应该处理！
+    // 更正为：else{while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))))
+    // {if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
+    // //这个时候qt应为{[*,a, , ],[/,b,c,t1],[-,t1, , ],[*,d,e,t2]} symbol[*,(,-] sy
+    // um=[0,-1,2] num=3;
+    // else{inqt=qt.get(synum.peek());inqt[2]="t".concat(String.valueOf(num-1));inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}}
+    // //为了知道这个-对应的到底是qt中的第几个四元式，所以与symbol同步维护一个栈synum用来存symbol栈内元素在qt里的序号
+    // qt.add(new String[4])
+    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]="t".concat(String.valueOf(num-1));symbol.push(t);synum.push(qt.size()-1);}
+    // 此时qt应为{[*,a, , ],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3, , ]} s
+    // mbol[*,(,+] synum[0,-1,4] num=4
+    // +
+    // [E, T, Y, F, E, D, D, T]
+    // [E, T, Y, F, E, D, D, T, F]
+    // f=f;遇到括号结束，括号里应该只有一个符号，所以把这个符号运算一遍
+    // inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();symbol.pop();synum.pop();
+    // 此时qt应为{[*,a, , ],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3,f,t4]} symbol[*] s
+    // num[0] num=5
+    // f
+    // )
+    // [E, T, Y, F, E, D, D, T]
+    // [E, T, Y, F, E, D, D, T,
+    // Y]else{while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))))
+    // {if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
+    // else{inqt=qt.get(synum.peek());inqt[2]="t".concat(String.valueOf(num-1));inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}}
+    // qt.add(new String[4])
+    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]="t".concat(String.valueOf(num-1));symbol.push(t);synum.push(qt.size()-1);}
+    // 这里执行的是else的部分，inqt=qt.get(0),inqt[2]=t4,inqt[3]=t5,num=6,symbol=[],synum=[];再新建inqt,inqt[0]="/",inqt[1]=t5,symbol=[/],synum=[5]
+    // 此时qt应为{[*,a,t4,t5],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3,f,t4],[/,t5, , ]
+    //  
+    // /
+    // [E, T, Y, F, E, D, D, T, Y, F] t=g
+    // g
+    // [E, T, Y, F, E, D, D, T, Y]
+    // [E, T, Y, F, E, D, D, T, Y, Y]
+    // [E, T, Y, F, E, D, D, T, Y]
+    // [E, T, Y, F, E, D, D, T]
+    // [E, T, Y, F, E, D, D]
+    // [E, T, Y, F, E, D, D,
+    // D]else{while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))))
+    // {if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
+    // else{inqt=qt.get(synum.peek());inqt[2]="t".concat(String.valueOf(num-1));inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}}
+    // qt.add(new String[4])
+    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]="t".concat(String.valueOf(num-1));symbol.push(t);synum.push(qt.size()-1);}
+    // 这里执行的是if的部分，inqt=qt[5],inqt[2]="g";f=null;inqt[3]=t6;num=7;symbol[];synum[];再新建inqt,inqt[0]="-",inqt[1]=t6,symbol=[-],synum=[6]
+    // 此时qt应为{[*,a,t4,t5],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3,f,t4],[/,t5,g,t6],[-,t6, ,
+    // ]} 
+    // -
+    // [E, T, Y, F, E, D, D, D, T]
+    // [E, T, Y, F, E, D, D, D, T, F] f=h
+    // h
+    // [E, T, Y, F, E, D, D, D, T]
+    // [E, T, Y, F, E, D, D, D, T,
+    // Y]最终DY出栈时检查，if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
+    // h
+    // [E, T, Y, F, E, D, D, D, T]
+    // [E, T, Y, F, E, D, D, D]
+    // [E, T, Y, F, E, D, D, D, D]
+    // [E, T, Y, F, E, D, D, D]
+    // [E, T, Y, F, E, D, D]
+    // [E, T, Y, F, E, D]
+    // [E, T, Y, F, E]
+    // [E, T, Y, F]
+    // [E, T, Y]
+    // [E, T, Y, Y]
+    // h
+    // [E, T, Y]
+    // [E, T]
+    // [E]
+    // [E, D]
+    // [E]
 
-    //以a*(b/c)为例
-    //入栈E,qt.add(new String[4]),目前qt是{{ , , , }}
-    //入栈T,
-    //入栈F,当前字符为a,inqt=qt.get(qt.size()-1);inqt[1]==null所以inqt[1]="a";目前qt是{{ ,"a", , }},出栈F
-    //入栈Y,当前字符为*,inqt[0]="*",目前qt是{{*,"a", , }}
-    //入栈F,当前字符为（
-    //入栈E,qt.add(new String[4]),目前qt是{{*,"a", , },{ , , , }}
-    //入栈T,
-    //入栈F,当前字符为b,inqt=qt.get(qt.size()-1);inqt[1]==null所以inqt[1]="b";
-    //     目前qt是{{*,"a", , },{ ,"b", , }},出栈F
-    //入栈Y,当前字符为/,inqt[0]="/",目前qt是{{*,"a", , },{/,"b", , }}
-    //入栈F,当前字符为c,inqt=qt.get(qt.size()-1);inqt[1]!=null所以inqt[2]="c";目前qt是{{*,"a", , },{/,"b","c", }}
-    //出栈出栈出栈出栈……
-    //出栈E,inqt=qt.get(qt.size()-num);inqt[3]="t".concat(String.valueOf(num));num++;
-    //     目前qt是{{*,"a", , },{/,"b","c",t1}}
-    //出栈出栈出栈出栈……
-    //出栈E,inqt=qt.get(qt.size()-num);if(inqt[2]==null) inqt[2]=qt.get(qt.size()-num+1)[3];
-    //     inqt[3]="t".concat(String.valueOf(num));num++;
-    //     目前qt是{{*,"a",t1,t2},{/,"b","c",t1}}
-
-    //总结,
-    //入栈E的操作：qt.add(new String[4])
-    //出栈E的操作：inqt=qt.get(qt.size()-num);if(inqt[2]==null) inqt[2]=qt.get(qt.size()-num+1)[3];
-    //            inqt[3]="t".concat(String.valueOf(num));num++;
-    //入栈Y和D的操作,当前字符为wW时,inqt[0]=+-*/
-    //入栈F,当前字符为i时,inqt=qt.get(qt.size()-1);if(inqt[1]==null) inqt[1]=i;else inqt[2]=i;
-
-    //错误！！！
-    //增加了+d后发现，不是在E时加四元组，而是在wW前一个的时候加
-    //所以应该在F时检查下一个是否为+-*/，是则执行qt.add(new String[4])
-    //有点算不明白何时执行"E出栈"的内容，重新推一下吧
-    //重新推的时候发现都没有符号优先级的确定，完全是错误的。而且并不是在F时检查下一个是+-*/就可以执行qt.add(new String[4])的。
-    //或许是入栈YD时操作的qt.add(new String[4])而预保留left的i
-
-    //重新以a*(b-c)为例检测
-    //入栈E，入栈T，
-    //入栈F，当前字符"a",预保留String f=a;
-    //出栈F，入栈T，
-    //入栈Y，当前字符"*",所以*入符号栈。qt.add(new String[4]) inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;
-    //入栈F，当前字符为（，（入符号栈。入栈E，入栈T，
-    //入栈F，当前字符"b",f=b，出栈F
-    //      （为什么这里的b不去填充上一个inqt[2]而是新建了一个四元组呢？）
-    //      （建立符号栈来描述优先级，所有的p类型包括+-*/（）。遇到符号时入栈，填写对应inqt[2]时该符号出栈。）
-    //入栈Y出栈Y，出栈T，
-    //入栈D，当前符号为"-",栈顶为括号，所以入符号栈，qt.add(new String[4]) inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;
-    //       那如果是a*b-c，-的优先级低，应该inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;
-    //                    再symbol.pop();symbol.push("-");
-    //                    再qt.add(new String[4]) inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=qt.get(qt.size()-num+1)[3];
-    //入栈T，
-    //入栈F，当前字符为"c",f=c,当前字符为）
-    //出栈F，入栈Y出栈Y，出栈T，
-    //出栈D,inqt=qt.get(qt.size()-num);if(inqt[2]==null) {
-    //       if(f==null) inqt[2]=qt.get(qt.size()-num+1)[3];else{inqt[2]=f;f=null;}}
-    //       if(inqt[3]==null) {inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();if(symbol.peek()=="(") symbol.pop();}
-    //出栈Y，inqt=qt.get(qt.size()-num);if(inqt[2]==null) {
-    //       if(f==null) inqt[2]=qt.get(qt.size()-num+1)[3];else{inqt[2]=f;f=null;}}
-    //       if(inqt[3]==null) {inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();if(symbol.peek()=="(") symbol.pop();}
-
-    //总结，
-    //入栈Y入栈D，当前符号为wW那种，if(symbol==null) {symbol.push(t);qt.add(new String[4]) inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;}
-    //           else if(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/")))) {symbol.push(t);qt.add(new String[4]) inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;}
-    //           else {inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;
-    //                 symbol.pop();symbol.push("-");
-    //                 qt.add(new String[4]) inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=qt.get(qt.size()-num+1)[3];}
-    //出栈Y出栈D，inqt=qt.get(qt.size()-num);if(inqt[2]==null) {
-    //       if(f==null) inqt[2]=qt.get(qt.size()-num+1)[3];else{inqt[2]=f;f=null;}}
-    //       if(inqt[3]==null) {inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();if(symbol.peek()=="(") symbol.pop();}
-    //入栈F，f=t;
-    private void E(){
-        if(flag==0) return;
+    // 总结，
+    // DY有效入栈时
+    // if(symbol.empty()){symbol.push(t);qt.add(new
+    // String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
+    // else
+    // if(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/"))))
+    // {symbol.push(t);qt.add(new String[4])
+    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;f=null;synum.push(qt.size()-1);}
+    // else{
+    // while((!symbol.empty())&&(!(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/")))))){
+    // if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
+    // else{inqt=qt.get(synum.peek());inqt[2]="t".concat(String.valueOf(num-1));inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
+    // }
+    // qt.add(new String[4])
+    // inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]="t".concat(String.valueOf(num-1));symbol.push(t);synum.push(qt.size()-1);
+    // }
+    // DY有效入栈的出栈时
+    // if(f!=null){inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();}
+    // F有效入栈时，f=i;
+    // (时，symbol.push("(");synum.push(-1);
+    // )时，inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();symbol.pop();synum.pop();
+    private void E() {
+        if (flag == 0)
+            return;
         st.push("E");
         System.out.println(st.toString());
         System.out.println(symbol.toString());
         T();
         D();
         st.pop();
+        if (st.empty() && (!symbol.empty())) {
+            while (!symbol.empty()) {
+                if (f != null) {
+                    inqt = qt.get(qt.size() - 1);
+                    inqt[2] = f;
+                    f = null;
+                    inqt[3] = "t".concat(String.valueOf(num));
+                    num++;
+                    symbol.pop();
+                    synum.pop();
+                } else {
+                    while((!synum.empty())&&synum.peek()==-1){
+                        symbol.pop();
+                        synum.pop();
+                    }
+                    if(!symbol.empty()){
+                        inqt = qt.get(synum.peek());
+                        inqt[2] = "t".concat(String.valueOf(num - 1));
+                        inqt[3] = "t".concat(String.valueOf(num));
+                        num++;
+                        symbol.pop();
+                        synum.pop();
+                    }
+                }
+            }
+        }
         System.out.println(st.toString());
     }
-    private void T(){
-        if(flag==0) return;
+
+    private void T() {
+        if (flag == 0)
+            return;
         st.push("T");
         System.out.println(st.toString());
         System.out.println(symbol.toString());
@@ -145,216 +250,358 @@ public class four{
         st.pop();
         System.out.println(st.toString());
     }
-    private void D(){
-        if(flag==0) return;
+
+    private void D() {
+        if (flag == 0)
+            return;
         st.push("D");
         System.out.println(symbol.toString());
         System.out.println(st.toString());
         String t;
-        switch(step[now].substring(1,2)){
-            case "i"://如果到D时step[now]是变量名,不造成错误,仍然继续
-            t=i[Integer.parseInt(step[now].substring(3,4))];//查表找出对应变量名
+        switch (step[now].substring(1, 2)) {
+        case "i":
+            t = i[Integer.parseInt(step[now].substring(3, 4))];
             st.pop();
+            System.out.println(st.toString());
             return;
-            case "c"://如果到D时step[now]是数字,不造成错误,仍然继续
-            t=c[Integer.parseInt(step[now].substring(3,4))];//查表找出对应数字
+        case "c":
+            t = c[Integer.parseInt(step[now].substring(3, 4))];
             st.pop();
+            System.out.println(st.toString());
             return;
-            case "p"://如果到D时step[now]是+-*/(),仍然继续,别的符号是错的
-            t=p[Integer.parseInt(step[now].substring(3,4))];//查表找出对应符号
-            if(t.equals("+")||t.equals("-")){
+        case "p":
+            t = p[Integer.parseInt(step[now].substring(3, 4))];
+            if (t.equals("+") || t.equals("-")) {
                 System.out.println(t);
-                if(now==step.length-1) {
-                    flag=0;
+                if (now == step.length - 1) {
+                    flag = 0;
                     return;
-                };
-                if(symbol.empty()) {symbol.push(t);qt.add(new String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;for(String[] aa:qt){
-                    for(String aaa:aa) System.out.println(aaa);
-                }}
-                else if(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/")))) {
-                    symbol.push(t);qt.add(new String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;
-                    for(String[] aa:qt){
-                    for(String aaa:aa) System.out.println(aaa);
-                }}
-                else {inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;
-                     symbol.pop();symbol.push("-");
-                     qt.add(new String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=qt.get(qt.size()-num+1)[3];for(String[] aa:qt){
-                        for(String aaa:aa) System.out.println(aaa);
-                    }}
-                now++;//+和-只在Y里消除,别的地方遇到都是错的
+                }
+                ;
+                if (symbol.empty()) {
+                    symbol.push(t);
+                    qt.add(new String[4]);
+                    inqt = qt.get(qt.size() - 1);
+                    inqt[0] = t;
+                    inqt[1] = f;
+                    f = null;
+                    synum.push(qt.size() - 1);
+                } else if (symbol.peek().equals("(") || ((symbol.peek().equals("+") || symbol.peek().equals("-"))
+                        && (t.equals("*") || t.equals("/")))) {
+                    symbol.push(t);
+                    qt.add(new String[4]);
+                    inqt = qt.get(qt.size() - 1);
+                    inqt[0] = t;
+                    inqt[1] = f;
+                    f = null;
+                    synum.push(qt.size() - 1);
+                } else {
+                    while ((!symbol.empty())
+                            && (!(symbol.peek().equals("(") || ((symbol.peek().equals("+") || symbol.peek().equals("-"))
+                                    && (t.equals("*") || t.equals("/")))))) {
+                        if (f != null) {
+                            inqt = qt.get(qt.size() - 1);
+                            inqt[2] = f;
+                            f = null;
+                            inqt[3] = "t".concat(String.valueOf(num));
+                            num++;
+                            symbol.pop();
+                            synum.pop();
+                        } else {
+                            inqt = qt.get(synum.peek());
+                            inqt[2] = "t".concat(String.valueOf(num - 1));
+                            inqt[3] = "t".concat(String.valueOf(num));
+                            num++;
+                            symbol.pop();
+                            synum.pop();
+                        }
+                    }
+                    qt.add(new String[4]);
+                    inqt = qt.get(qt.size() - 1);
+                    inqt[0] = t;
+                    inqt[1] = "t".concat(String.valueOf(num - 1));
+                    symbol.push(t);
+                    synum.push(qt.size() - 1);
+                }
+                now++;
                 T();
                 D();
                 break;
-            }
-            else if(t.equals("*")||t.equals("/")||t.equals("(")||t.equals(")")) {st.pop();return;}
-            else{
-                flag=0;
+            } else if (t.equals("*") || t.equals("/") || t.equals("(") || t.equals(")")) {
+                st.pop();
+                System.out.println(st.toString());
+                return;
+            } else {
+                flag = 0;
                 return;
             }
-            default:
-            flag=0;
+        default:
+            flag = 0;
             return;
-        }    
+        }
         st.pop();
         System.out.println(st.toString());
-        inqt=qt.get(qt.size()-num);if(inqt[2]==null) {
-            if(f==null) inqt[2]=qt.get(qt.size()-num+1)[3];else{inqt[2]=f;f=null;}for(String[] aa:qt){
-                for(String aaa:aa) System.out.println(aaa);
-            }}
-        if(inqt[3]==null) {inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();if(symbol.peek()=="(") symbol.pop();for(String[] aa:qt){
-            for(String aaa:aa) System.out.println(aaa);
-        }}
+        if (now == step.length - 1 && f != null) {
+            inqt = qt.get(qt.size() - 1);
+            inqt[2] = f;
+            f = null;
+            inqt[3] = "t".concat(String.valueOf(num));
+            num++;
+            symbol.pop();
+            synum.pop();
+        }
     }
-    private void Y(){
-        if(flag==0) return;
+
+    private void Y() {
+        if (flag == 0)
+            return;
         st.push("Y");
         System.out.println(st.toString());
         System.out.println(symbol.toString());
         String t;
-        switch(step[now].substring(1,2)){
-            case "i"://如果到D时step[now]是变量名,则应该转换为变量名
-            t=i[Integer.parseInt(step[now].substring(3,4))];//查表找出对应变量名
+        switch (step[now].substring(1, 2)) {
+        case "i":
+            t = i[Integer.parseInt(step[now].substring(3, 4))];
             System.out.println(t);
-            if(now==step.length-1) {st.pop();System.out.println(st.toString());return;} 
+            if (now == step.length - 1) {
+                st.pop();
+                System.out.println(st.toString());
+                return;
+            }
             now++;
             st.pop();
+            System.out.println(st.toString());
             return;
-            case "c"://如果到D时step[now]是数字,则应该转换为数字
-            t=c[Integer.parseInt(step[now].substring(3,4))];//查表找出对应数字
+        case "c":
+            t = c[Integer.parseInt(step[now].substring(3, 4))];
             System.out.println(t);
-            if(now==step.length-1) {st.pop();System.out.println(st.toString());return;} 
+            if (now == step.length - 1) {
+                st.pop();
+                System.out.println(st.toString());
+                return;
+            }
             now++;
             st.pop();
+            System.out.println(st.toString());
             return;
-            case "p"://如果到D时step[now]是+-*/(),仍然继续,别的符号是错的
-            t=p[Integer.parseInt(step[now].substring(3,4))];//查表找出对应符号
-            if(t.equals("*")||t.equals("/")){
+        case "p":
+            t = p[Integer.parseInt(step[now].substring(3, 4))];
+            if (t.equals("*") || t.equals("/")) {
                 System.out.println(t);
-                if(now==step.length-1) {
-                    flag=0;
+                if (now == step.length - 1) {
+                    flag = 0;
                     return;
-                };
-                if(symbol.empty()) {symbol.push(t);qt.add(new String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;for(String[] aa:qt){
-                    for(String aaa:aa) System.out.println(aaa);
-                }}
-                else if(symbol.peek().equals("(")||((symbol.peek().equals("+")||symbol.peek().equals("-"))&&(t.equals("*")||t.equals("/")))) {symbol.push(t);qt.add(new String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=f;for(String[] aa:qt){
-                    for(String aaa:aa) System.out.println(aaa);
-                }}
-                else {inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;
-                     symbol.pop();symbol.push("-");
-                     qt.add(new String[4]);inqt=qt.get(qt.size()-1);inqt[0]=t;inqt[1]=qt.get(qt.size()-num+1)[3];for(String[] aa:qt){
-                        for(String aaa:aa) System.out.println(aaa);
-                    }}
-                now++;//*和/只在Y里消除,别的地方遇到都是错的
+                }
+                ;
+                if (symbol.empty()) {
+                    symbol.push(t);
+                    qt.add(new String[4]);
+                    inqt = qt.get(qt.size() - 1);
+                    inqt[0] = t;
+                    inqt[1] = f;
+                    f = null;
+                    synum.push(qt.size() - 1);
+                } else if (symbol.peek().equals("(") || ((symbol.peek().equals("+") || symbol.peek().equals("-"))
+                        && (t.equals("*") || t.equals("/")))) {
+                    symbol.push(t);
+                    qt.add(new String[4]);
+                    inqt = qt.get(qt.size() - 1);
+                    inqt[0] = t;
+                    if (f != null)
+                        inqt[1] = f;
+                    else
+                        inqt[1] = "t".concat(String.valueOf(num - 1));
+                    f = null;
+                    synum.push(qt.size() - 1);
+                } else {
+                    while ((!symbol.empty())
+                            && (!(symbol.peek().equals("(") || ((symbol.peek().equals("+") || symbol.peek().equals("-"))
+                                    && (t.equals("*") || t.equals("/")))))) {
+                        if (f != null) {
+                            inqt = qt.get(qt.size() - 1);
+                            inqt[2] = f;
+                            f = null;
+                            inqt[3] = "t".concat(String.valueOf(num));
+                            num++;
+                            symbol.pop();
+                            synum.pop();
+                        } else {
+                            inqt = qt.get(synum.peek());
+                            inqt[2] = "t".concat(String.valueOf(num - 1));
+                            inqt[3] = "t".concat(String.valueOf(num));
+                            num++;
+                            symbol.pop();
+                            synum.pop();
+                        }
+                    }
+                    qt.add(new String[4]);
+                    inqt = qt.get(qt.size() - 1);
+                    inqt[0] = t;
+                    inqt[1] = "t".concat(String.valueOf(num - 1));
+                    symbol.push(t);
+                    synum.push(qt.size() - 1);
+                }
+                now++;
                 F();
                 Y();
                 break;
-            }
-            else if(t.equals("+")||t.equals("-")||t.equals("(")||t.equals(")")) {st.pop();return;}
-            else{
-                flag=0;
+            } else if (t.equals("+") || t.equals("-") || t.equals("(") || t.equals(")")) {
+                st.pop();
+                System.out.println(st.toString());
+                return;
+            } else {
+                flag = 0;
                 return;
             }
-            default:
-            flag=0;
+        default:
+            flag = 0;
             return;
-        }    
+        }
         st.pop();
         System.out.println(st.toString());
-        inqt=qt.get(qt.size()-num);if(inqt[2]==null) {
-        if(f==null) inqt[2]=qt.get(qt.size()-num+1)[3];else{inqt[2]=f;f=null;}for(String[] aa:qt){
-            for(String aaa:aa) System.out.println(aaa);
-        }}
-        if(inqt[3]==null) {inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();if(!symbol.empty()){if(symbol.peek()=="(") symbol.pop();} 
-        for(String[] aa:qt){
-            for(String aaa:aa) System.out.println(aaa);
-        }}
+        if (now == step.length - 1 && f != null) {
+            inqt = qt.get(qt.size() - 1);
+            inqt[2] = f;
+            f = null;
+            inqt[3] = "t".concat(String.valueOf(num));
+            num++;
+            symbol.pop();
+            synum.pop();
+        }
     }
 
-    //入栈F,当前字符为i时,inqt=qt.get(qt.size()-1);if(inqt[1]==null) inqt[1]=i;else inqt[2]=i;
-    private void F(){
+    private void F() {
         st.push("F");
         System.out.println(st.toString());
         System.out.println(symbol.toString());
-        if(flag==0) return;
+        if (flag == 0)
+            return;
         String t;
-        switch(step[now].substring(1,2)){
-            case "i":
-            t=i[Integer.parseInt(step[now].substring(3,4))];//查表找出对应变量名 
+        switch (step[now].substring(1, 2)) {
+        case "i":
+            t = i[Integer.parseInt(step[now].substring(3, 4))];
             System.out.println(t);
-            f=t;
-            if(now==step.length-1) {st.pop();System.out.println(st.toString());return;} 
+            f = t;
+            if (now == step.length - 1) {
+                st.pop();
+                System.out.println(st.toString());
+                return;
+            }
             now++;
-            if(step[now].substring(1,2).equals("p")){
-                t=p[Integer.parseInt(step[now].substring(3,4))];
-                if(t.equals(")")){
+            if (step[now].substring(1, 2).equals("p")) {
+                t = p[Integer.parseInt(step[now].substring(3, 4))];
+                if (t.equals(")")) {
                     brackets--;
                     System.out.println(t);
-                    if(now==step.length-1) {st.pop();System.out.println(st.toString());return;} 
+                    if (now == step.length - 1) {
+                        st.pop();
+                        System.out.println(st.toString());
+                        return;
+                    }
                     now++;
-                    if(brackets<0){
-                        flag=0;
+                    inqt = qt.get(qt.size() - 1);
+                    inqt[2] = f;
+                    f = null;
+                    inqt[3] = "t".concat(String.valueOf(num));
+                    num++;
+                    symbol.pop();
+                    synum.pop();
+                    symbol.pop();
+                    synum.pop();
+                    if (brackets < 0) {
+                        flag = 0;
                         return;
                     }
                 }
             }
             break;
-            case "c":
-            t=c[Integer.parseInt(step[now].substring(3,4))];//查表找出对应数字
+        case "c":
+            t = c[Integer.parseInt(step[now].substring(3, 4))];
             System.out.println(t);
-            f=t;
-            if(now==step.length-1) {st.pop();System.out.println(st.toString());return;} 
+            f = t;
+            if (now == step.length - 1) {
+                st.pop();
+                System.out.println(st.toString());
+                return;
+            }
             now++;
-            if(step[now].substring(1,2).equals("p")){
-                t=p[Integer.parseInt(step[now].substring(3,4))];
-                if(t.equals(")")){
+            if (step[now].substring(1, 2).equals("p")) {
+                t = p[Integer.parseInt(step[now].substring(3, 4))];
+                if (t.equals(")")) {
                     brackets--;
                     System.out.println(t);
-                    if(now==step.length-1) {st.pop();System.out.println(st.toString());return;} 
+                    inqt = qt.get(qt.size() - 1);
+                    inqt[2] = f;
+                    f = null;
+                    inqt[3] = "t".concat(String.valueOf(num));
+                    num++;
+                    symbol.pop();
+                    synum.pop();
+                    symbol.pop();
+                    synum.pop();
+                    if (now == step.length - 1) {
+                        st.pop();
+                        System.out.println(st.toString());
+                        return;
+                    }
                     now++;
-                    if(brackets<0){
-                        flag=0;
+                    if (brackets < 0) {
+                        flag = 0;
                         return;
                     }
                 }
             }
             break;
-            case "p"://如果到D时step[now]是符号,只接受（,别的都是错的
-            t=p[Integer.parseInt(step[now].substring(3,4))];//查表找出对应符号
-            if(t.equals("(")){
+        case "p":
+            t = p[Integer.parseInt(step[now].substring(3, 4))];
+            if (t.equals("(")) {
                 System.out.println(t);
-                if(now==step.length-1) {
-                    flag=0;
+                if (now == step.length - 1) {
+                    flag = 0;
                     return;
-                }
-                else if(step[now+1].substring(1,2).equals("p")&&p[Integer.parseInt(step[now+1].substring(3,4))].equals(")")){
-                    flag=0;
+                } else if (step[now + 1].substring(1, 2).equals("p")
+                        && p[Integer.parseInt(step[now + 1].substring(3, 4))].equals(")")) {
+                    flag = 0;
                     return;
                 }
                 now++;
                 brackets++;
                 symbol.push("(");
+                synum.push(-1);
                 E();
                 break;
-            }
-            else{
-                flag=0;
+            } else {
+                flag = 0;
                 return;
             }
-            default:
-            flag=0;
+        default:
+            flag = 0;
             return;
-        }   
+        }
         st.pop();
-        System.out.println(st.toString()); 
+        System.out.println(st.toString());
+        for (String[] aa : qt) {
+            System.out.print("[");
+            for (String aaa : aa)
+                System.out.print(aaa);
+            System.out.print("]");
+        }
     }
+
     public String answer() {
         E();
-        for(String[] aa:qt){
-            for(String aaa:aa) System.out.println(aaa);
+        for (String[] aa : qt) {
+            System.out.print("[");
+            for (int aaa = 0; aaa < 4; aaa++) {
+                System.out.print(aa[aaa]);
+                if (aaa != 3)
+                    System.out.print(",");
+            }
+            System.out.print("] ");
         }
-        System.out.println("结果应为* a t1 t2  - b c t1");
-        if(brackets!=0||flag==0||now!=step.length-1) return "wrong";
-        else return "right";
+        if (brackets != 0 || flag == 0 || now != step.length - 1)
+            return "wrong";
+        else
+            return "right";
     }
 }
