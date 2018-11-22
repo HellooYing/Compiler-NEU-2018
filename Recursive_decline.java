@@ -60,18 +60,27 @@ public class Recursive_decline{
     // E1是，如果到它这step是+/-，就变成+/- F T1,否则就直接去掉E1
     // T1是到它这step是*//,就*// E T1，否则删掉 
     // 如何在发生错误时立刻返回呢？设置flag，默认1，若flag=0则立刻返回
+
+    public static String getTraceInfo(){  //一个输出代码行号的函数，用来告诉我何时return也就是何时认为表达式出错了或者认为表达式结束了
+        StringBuffer sb = new StringBuffer();   
+          
+        StackTraceElement[] stacks = new Throwable().getStackTrace();  
+        int stacksLen = stacks.length;  
+        sb.append("class: " ).append(stacks[1].getClassName()).append("; method: ").append(stacks[1].getMethodName()).append("; number: ").append(stacks[1].getLineNumber());  
+        return sb.toString();  
+    }
     private void E(){
-        if(flag==0) return;
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         T();
         E1();
     }
     private void T(){
-        if(flag==0) return;
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         F();
         T1();
     }
     private void E1(){
-        if(flag==0) return;
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         String t;
         switch(step[now].substring(1,2)){
             case "i"://如果到E1时step[now]是变量名，不造成错误，仍然继续
@@ -86,7 +95,7 @@ public class Recursive_decline{
                 System.out.println(t);
                 if(now==step.length-1) {
                     flag=0;
-                    return;
+                    System.out.println(getTraceInfo());return;
                 };
                 now++;//+和-只在T1里消除，别的地方遇到都是错的
                 T();
@@ -96,28 +105,28 @@ public class Recursive_decline{
             else if(t.equals("*")||t.equals("/")||t.equals("(")||t.equals(")")) break;
             else{
                 flag=0;
-                return;
+                System.out.println(getTraceInfo());return;
             }
             default:
             flag=0;
-            return;
+            System.out.println(getTraceInfo());return;
         }    
     }
 
     private void T1(){
-        if(flag==0) return;
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         String t;
         switch(step[now].substring(1,2)){
             case "i"://如果到E1时step[now]是变量名，则应该转换为变量名
             t=i[Integer.parseInt(step[now].substring(3,4))];//查表找出对应变量名
             System.out.println(t);
-            if(now==step.length-1) return;
+            if(now==step.length-1) {System.out.println(getTraceInfo());return;}
             now++;
             break;
             case "c"://如果到E1时step[now]是数字，则应该转换为数字
             t=c[Integer.parseInt(step[now].substring(3,4))];//查表找出对应数字
             System.out.println(t);
-            if(now==step.length-1) return;
+            if(now==step.length-1) {System.out.println(getTraceInfo());return;}
             now++;
             break;
             case "p"://如果到E1时step[now]是+-*/(),仍然继续，别的符号是错的
@@ -126,7 +135,7 @@ public class Recursive_decline{
                 System.out.println(t);
                 if(now==step.length-1) {
                     flag=0;
-                    return;
+                    System.out.println(getTraceInfo());return;
                 };
                 now++;//*和/只在T1里消除，别的地方遇到都是错的
                 F();
@@ -136,52 +145,54 @@ public class Recursive_decline{
             else if(t.equals("+")||t.equals("-")||t.equals("(")||t.equals(")")) break;
             else{
                 flag=0;
-                return;
+                System.out.println(getTraceInfo());return;
             }
             default:
             flag=0;
-            return;
+            System.out.println(getTraceInfo());return;
         }    
     }
     private void F(){
-        if(flag==0) return;
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         String t;
         switch(step[now].substring(1,2)){
             case "i":
             t=i[Integer.parseInt(step[now].substring(3,4))];//查表找出对应变量名 
             System.out.println(t);     
-            if(now==step.length-1) return;
+            if(now==step.length-1) {System.out.println(getTraceInfo());return;}
             now++;
             if(step[now].substring(1,2).equals("p")){
                 t=p[Integer.parseInt(step[now].substring(3,4))];
-                if(t.equals(")")){
+                while(t.equals(")")){
                     brackets--;
                     System.out.println(t);
-                    if(now==step.length-1) return;
+                    if(now==step.length-1) {System.out.println(getTraceInfo());return;}
                     now++;
                     if(brackets<0){
                         flag=0;
-                        return;
+                        System.out.println(getTraceInfo());return;
                     }
+                    if(step[now].substring(1,2).equals("p")){t=p[Integer.parseInt(step[now].substring(3,4))];}
                 }
             }
             break;
             case "c":
             t=c[Integer.parseInt(step[now].substring(3,4))];//查表找出对应数字
             System.out.println(t);
-            if(now==step.length-1) return;
+            if(now==step.length-1) {System.out.println(getTraceInfo());return;}
             now++;
             if(step[now].substring(1,2).equals("p")){
                 t=p[Integer.parseInt(step[now].substring(3,4))];
-                if(t.equals(")")){
+                while(t.equals(")")){
                     brackets--;
                     System.out.println(t);
-                    if(now==step.length-1) return;
+                    if(now==step.length-1) {System.out.println(getTraceInfo());return;}
                     now++;
                     if(brackets<0){
                         flag=0;
-                        return;
+                        System.out.println(getTraceInfo());return;
                     }
+                    if(step[now].substring(1,2).equals("p")){t=p[Integer.parseInt(step[now].substring(3,4))];}
                 }
             }
             break;
@@ -191,11 +202,11 @@ public class Recursive_decline{
                 System.out.println(t);
                 if(now==step.length-1) {
                     flag=0;
-                    return;
+                    System.out.println(getTraceInfo());return;
                 }
                 else if(step[now+1].substring(1,2).equals("p")&&p[Integer.parseInt(step[now+1].substring(3,4))].equals(")")){
                     flag=0;
-                    return;
+                    System.out.println(getTraceInfo());return;
                 }
                 now++;
                 brackets++;
@@ -204,11 +215,11 @@ public class Recursive_decline{
             }
             else{
                 flag=0;
-                return;
+                System.out.println(getTraceInfo());return;
             }
             default:
             flag=0;
-            return;
+            System.out.println(getTraceInfo());return;
         }    
     }
     public String answer() {
