@@ -243,8 +243,6 @@ public class four {
         if (flag == 0)
             return;
         st.push("E");
-        System.out.println(st.toString());
-        System.out.println(symbol.toString());
         T();
         D();
         st.pop();
@@ -277,38 +275,30 @@ public class four {
                 }
             }
         }
-        System.out.println(st.toString());
     }
 
     private void T() {
         if (flag == 0)
             return;
         st.push("T");
-        System.out.println(st.toString());
-        System.out.println(symbol.toString());
         F();
         Y();
         st.pop();
-        System.out.println(st.toString());
     }
 
     private void D() {
         if (flag == 0)
             return;
         st.push("D");
-        System.out.println(symbol.toString());
-        System.out.println(st.toString());
         String t;
         switch (step[now].substring(1, 2)) {
         case "i":
             t = i[Integer.parseInt(step[now].substring(3, 4))];
             st.pop();
-            System.out.println(st.toString());
             return;
         case "c":
             t = c[Integer.parseInt(step[now].substring(3, 4))];
             st.pop();
-            System.out.println(st.toString());
             return;
         case "p":
             t = p[Integer.parseInt(step[now].substring(3, 4))];
@@ -379,7 +369,6 @@ public class four {
                 break;
             } else if (t.equals("*") || t.equals("/") || t.equals("(") || t.equals(")")) {
                 st.pop();
-                System.out.println(st.toString());
                 return;
             } else {
                 flag = 0;
@@ -390,7 +379,6 @@ public class four {
             return;
         }
         st.pop();
-        System.out.println(st.toString());
         if (now == step.length - 1 && f != null) {
             inqt = qt.get(qt.size() - 1);
             if (f != null)
@@ -409,8 +397,6 @@ public class four {
         if (flag == 0)
             return;
         st.push("Y");
-        System.out.println(st.toString());
-        System.out.println(symbol.toString());
         String t;
         switch (step[now].substring(1, 2)) {
         case "i":
@@ -418,24 +404,20 @@ public class four {
             System.out.println(t);
             if (now == step.length - 1) {
                 st.pop();
-                System.out.println(st.toString());
                 return;
             }
             now++;
             st.pop();
-            System.out.println(st.toString());
             return;
         case "c":
             t = c[Integer.parseInt(step[now].substring(3, 4))];
             System.out.println(t);
             if (now == step.length - 1) {
                 st.pop();
-                System.out.println(st.toString());
                 return;
             }
             now++;
             st.pop();
-            System.out.println(st.toString());
             return;
         case "p":
             t = p[Integer.parseInt(step[now].substring(3, 4))];
@@ -506,7 +488,6 @@ public class four {
                 break;
             } else if (t.equals("+") || t.equals("-") || t.equals("(") || t.equals(")")) {
                 st.pop();
-                System.out.println(st.toString());
                 return;
             } else {
                 flag = 0;
@@ -517,7 +498,6 @@ public class four {
             return;
         }
         st.pop();
-        System.out.println(st.toString());
         if (now == step.length - 1 && f != null) {
             inqt = qt.get(qt.size() - 1);
             if (f != null)
@@ -534,8 +514,6 @@ public class four {
 
     private void F() {
         st.push("F");
-        System.out.println(st.toString());
-        System.out.println(symbol.toString());
         if (flag == 0)
             return;
         String t;
@@ -546,7 +524,6 @@ public class four {
             f = t;
             if (now == step.length - 1) {
                 st.pop();
-                System.out.println(st.toString());
                 return;
             }
             now++;
@@ -557,7 +534,6 @@ public class four {
                     System.out.println(t);
                     if (now == step.length - 1) {
                         st.pop();
-                        System.out.println(st.toString());
                         return;
                     }
                     now++;
@@ -591,7 +567,6 @@ public class four {
             f = t;
             if (now == step.length - 1) {
                 st.pop();
-                System.out.println(st.toString());
                 return;
             }
             now++;
@@ -616,7 +591,6 @@ public class four {
                     }
                     if (now == step.length - 1) {
                         st.pop();
-                        System.out.println(st.toString());
                         return;
                     }
                     now++;
@@ -657,26 +631,36 @@ public class four {
             return;
         }
         st.pop();
-        System.out.println(st.toString());
-        for (String[] aa : qt) {
-            System.out.print("[");
-            for (String aaa : aa)
-                System.out.print(aaa);
-            System.out.print("]");
-        }
     }
 
     public String answer() {
         E();
-        for (String[] aa : qt) {
-            System.out.print("[");
+        //printall();
+        String result="";
+        for (int aa = 0; aa < qt.size(); aa++) {
+            result=result.concat("[");
             for (int aaa = 0; aaa < 4; aaa++) {
-                System.out.print(aa[aaa]);
+                result=result.concat(qt.get(aa)[aaa]);
                 if (aaa != 3)
-                    System.out.print(",");
+                result=result.concat(",");
             }
-            System.out.print("] ");
+            result=result.concat("] ");
+            if(aa == qt.size()-1){
+                result=result.concat("\n").concat(Integer.toString(aa+2));
+            }
         }
+        System.out.println(result);
+        try{
+            String path_out="./out2.txt";
+            File writename = new File(path_out); // 如果没有则新建一个新的path_out的txt文件
+			writename.createNewFile(); // 创建新文件
+			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+			out.write(result); // 写入
+			out.flush(); // 把缓存区内容压入文件
+			out.close(); // 最后记得关闭文件
+        }catch (Exception e) {
+			e.printStackTrace();
+		}      
         if (brackets != 0 || flag == 0 || now != step.length - 1)
             return "wrong";
         else
