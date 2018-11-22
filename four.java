@@ -126,6 +126,8 @@ public class four {
     // inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();symbol.pop();synum.pop();
     // 此时qt应为{[*,a, , ],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3,f,t4]} symbol[*] s
     // 
+    //
+    //
     // num[0] num=5
     // f
     // )
@@ -139,6 +141,8 @@ public class four {
     // 这里执行的是else的部分，inqt=qt.get(0),inqt[2]=t4,inqt[3]=t5,num=6,symbol=[],synum=[];再新建inqt,inqt[0]="/",inqt[1]=t5,symbol=[/],synum=[5]
     // 此时qt应为{[*,a,t4,t5],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3,f,t4],[/,t5, , ]
     // 
+    //
+    //
     //
     // /
     // [E, T, Y, F, E, D, D, T, Y, F] t=g
@@ -157,6 +161,8 @@ public class four {
     // 这里执行的是if的部分，inqt=qt[5],inqt[2]="g";f=null;inqt[3]=t6;num=7;symbol[];synum[];再新建inqt,inqt[0]="-",inqt[1]=t6,symbol=[-],synum=[6]
     // 此时qt应为{[*,a,t4,t5],[/,b,c,t1],[-,t1,t2,t3],[*,d,e,t2],[+,t3,f,t4],[/,t5,g,t6],[-,t6, ,
     // 
+    //
+    //
     // ]}
     // -
     // [E, T, Y, F, E, D, D, D, T]
@@ -204,6 +210,35 @@ public class four {
     // F有效入栈时，f=i;
     // (时，symbol.push("(");synum.push(-1);
     // )时，inqt=qt.get(qt.size()-1);inqt[2]=f;f=null;inqt[3]="t".concat(String.valueOf(num));num++;symbol.pop();synum.pop();symbol.pop();synum.pop();
+    public static String getTraceInfo() { // 一个输出代码行号的函数，用来告诉我何时return也就是何时认为表达式出错了或者认为表达式结束了
+        StringBuffer sb = new StringBuffer();
+
+        StackTraceElement[] stacks = new Throwable().getStackTrace();
+        int stacksLen = stacks.length;
+        sb.append("class: ").append(stacks[1].getClassName()).append("; method: ").append(stacks[1].getMethodName())
+                .append("; number: ").append(stacks[1].getLineNumber());
+        return sb.toString();
+    }
+
+    public static void printall() { // 打印symbol、synum、qt
+        System.out.println(symbol.toString());
+        System.out.println(synum.toString());
+        for (int aa = 0; aa < qt.size(); aa++) {
+            System.out.print("[");
+            for (int aaa = 0; aaa < 4; aaa++) {
+                System.out.print(qt.get(aa)[aaa]);
+                if (aaa != 3)
+                    System.out.print(",");
+                else {
+                    System.out.print(",");
+                    System.out.print(aa);
+                }
+            }
+            System.out.print("] ");
+        }
+        System.out.println();
+    }
+
     private void E() {
         if (flag == 0)
             return;
@@ -526,19 +561,6 @@ public class four {
                         return;
                     }
                     now++;
-                    // System.out.println(symbol.toString());
-                    // System.out.println(synum.toString());
-                    // for (int aa = 0; aa < qt.size(); aa++) {
-                    //     System.out.print("[");
-                    //     for (int aaa = 0; aaa < 4; aaa++) {
-                    //         System.out.print(qt.get(aa)[aaa]);
-                    //         if (aaa != 3)
-                    //             System.out.print(",");
-                    //         else{System.out.print(",");System.out.print(aa);}
-                    //     }
-                    //     System.out.print("] ");
-                    // }
-                    while(synum.peek()==-1){symbol.pop();synum.pop();}
                     inqt = qt.get(synum.peek());
                     if (f != null)
                         inqt[2] = f;
@@ -549,13 +571,7 @@ public class four {
                     num++;
                     symbol.pop();
                     synum.pop();
-                    symbol.pop();
-                    synum.pop();
-                    if (!symbol.empty()&&synum.peek()!=-1) {
-                        inqt = qt.get(synum.peek());
-                        inqt[2] = "t".concat(String.valueOf(num - 1));
-                        inqt[3] = "t".concat(String.valueOf(num));
-                        num++;
+                    if (synum.peek() == -1) {
                         symbol.pop();
                         synum.pop();
                     }
@@ -594,51 +610,23 @@ public class four {
                     num++;
                     symbol.pop();
                     synum.pop();
-                    symbol.pop();
-                    synum.pop();
-                    if(now==step.length-1) {System.out.println(getTraceInfo());return;}
-                    now++;
-                    if(brackets<0){
-                        flag=0;
-                        System.out.println(getTraceInfo());return;
+                    if (synum.peek() == -1) {
+                        symbol.pop();
+                        synum.pop();
                     }
-                    if(step[now].substring(1,2).equals("p")){t=p[Integer.parseInt(step[now].substring(3,4))];}
-                    // brackets--;
-                    // System.out.println(t);
-                    // while(!symbol.empty()&&synum.peek()!=-1){symbol.pop();synum.pop();}
-                    // inqt = qt.get(synum.peek());
-                    // if (f != null)
-                    //     inqt[2] = f;
-                    // else
-                    //     inqt[2] = "t".concat(String.valueOf(num - 1));
-                    // f = null;
-                    // inqt[3] = "t".concat(String.valueOf(num));
-                    // num++;
-                    // symbol.pop();
-                    // synum.pop();
-                    // symbol.pop();
-                    // synum.pop();
-                    // if (now == step.length - 1) {
-                    //     st.pop();
-                    //     System.out.println(st.toString());
-                    //     return;
-                    // }
-                    // now++;
-                    // if (!symbol.empty()&&synum.peek()!=-1) {
-                    //     inqt = qt.get(synum.peek());
-                    //     inqt[2] = "t".concat(String.valueOf(num - 1));
-                    //     inqt[3] = "t".concat(String.valueOf(num));
-                    //     num++;
-                    //     symbol.pop();
-                    //     synum.pop();
-                    // }
-                    // if (brackets < 0) {
-                    //     flag = 0;
-                    //     return;
-                    // }
-                    // if (step[now].substring(1, 2).equals("p")) {
-                    //     t = p[Integer.parseInt(step[now].substring(3, 4))];
-                    // }
+                    if (now == step.length - 1) {
+                        st.pop();
+                        System.out.println(st.toString());
+                        return;
+                    }
+                    now++;
+                    if (brackets < 0) {
+                        flag = 0;
+                        return;
+                    }
+                    if (step[now].substring(1, 2).equals("p")) {
+                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    }
                 }
             }
             break;
