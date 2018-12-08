@@ -5,25 +5,48 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.*;
-
-public class four {
+public class exp_four {
     public static int now = 0, flag = 1, num = 1, brackets = 0;
     public static String[] step, i, C, S, c, k, p, inqt;
-    public static Stack<String> st = new Stack<String>();
-    public static Stack<String> symbol = new Stack<String>();
-    public static Stack<Integer> synum = new Stack<Integer>();
-    public static List<String[]> qt = new ArrayList<String[]>();
+    public static Stack<String> st = new Stack<String>();//栈
+    public static Stack<String> symbol = new Stack<String>();//符号栈
+    public static Stack<Integer> synum = new Stack<Integer>();//符号对应四元式的位置
+    public static List<String[]> qt = new ArrayList<String[]>();//存四元式
     public static String f;
+    public static List<Integer> qtok = new ArrayList<Integer>();
 
-
+    //四元式组的顺序在后面是有需要的，所以重构一下这部分内容。原先是，生成四元式的时候就把它加进qt。现在则需要在完成时才这样做。
+    //新建一个完成序列，代表第几个四元式是第几个完成的，然后最后对四元式按此顺序重新读取就ok啦
+    //同时还要改一下输入输出，answer的输入别从文件读取了，改成输入token序列和iCSckp，输出qt
     public static void main(String[] args) throws Exception {
         String path_in = "./in.txt";
         String path_out = "./out.txt";
-        String path_out2 = "./out2.txt";
         new analyzer().answer(path_in, path_out);
-        System.out.println(new four().answer(path_out,path_out2));
+        try {
+            File filename = new File(path_out);
+            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
+            BufferedReader br = new BufferedReader(reader);
+            String line = "";
+            line = br.readLine().substring(1);
+            step = line.split(" ");
+            line = br.readLine();
+            i = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            C = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            S = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            c = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            k = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            line = br.readLine();
+            p = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        String[][] r1=new exp_four().answer(step, i, C, S, c, k, p);
     }
-
     public static String getTraceInfo() {
         StringBuffer sb = new StringBuffer();
         StackTraceElement[] stacks = new Throwable().getStackTrace();
@@ -68,6 +91,7 @@ public class four {
                         inqt[2] = "t".concat(String.valueOf(num - 1));
                     f = null;
                     inqt[3] = "t".concat(String.valueOf(num));
+                    qtok.add(synum.peek());
                     num++;
                     symbol.pop();
                     synum.pop();
@@ -80,6 +104,7 @@ public class four {
                         inqt = qt.get(synum.peek());
                         inqt[2] = "t".concat(String.valueOf(num - 1));
                         inqt[3] = "t".concat(String.valueOf(num));
+                        qtok.add(synum.peek());
                         num++;
                         symbol.pop();
                         synum.pop();
@@ -156,6 +181,7 @@ public class four {
                                 inqt[2] = "t".concat(String.valueOf(num - 1));
                             f = null;
                             inqt[3] = "t".concat(String.valueOf(num));
+                            qtok.add(synum.peek());
                             num++;
                             symbol.pop();
                             synum.pop();
@@ -163,6 +189,7 @@ public class four {
                             inqt = qt.get(synum.peek());
                             inqt[2] = "t".concat(String.valueOf(num - 1));
                             inqt[3] = "t".concat(String.valueOf(num));
+                            qtok.add(synum.peek());
                             num++;
                             symbol.pop();
                             synum.pop();
@@ -199,6 +226,7 @@ public class four {
                 inqt[2] = "t".concat(String.valueOf(num - 1));
             f = null;
             inqt[3] = "t".concat(String.valueOf(num));
+            qtok.add(synum.peek());
             num++;
             symbol.pop();
             synum.pop();
@@ -275,6 +303,7 @@ public class four {
                                 inqt[2] = "t".concat(String.valueOf(num - 1));
                             f = null;
                             inqt[3] = "t".concat(String.valueOf(num));
+                            qtok.add(synum.peek());
                             num++;
                             symbol.pop();
                             synum.pop();
@@ -282,6 +311,7 @@ public class four {
                             inqt = qt.get(synum.peek());
                             inqt[2] = "t".concat(String.valueOf(num - 1));
                             inqt[3] = "t".concat(String.valueOf(num));
+                            qtok.add(synum.peek());
                             num++;
                             symbol.pop();
                             synum.pop();
@@ -318,6 +348,7 @@ public class four {
                 inqt[2] = "t".concat(String.valueOf(num - 1));
             f = null;
             inqt[3] = "t".concat(String.valueOf(num));
+            qtok.add(synum.peek());
             num++;
             symbol.pop();
             synum.pop();
@@ -356,6 +387,7 @@ public class four {
                         inqt[2] = "t".concat(String.valueOf(num - 1));
                     f = null;
                     inqt[3] = "t".concat(String.valueOf(num));
+                    qtok.add(synum.peek());
                     num++;
                     symbol.pop();
                     synum.pop();
@@ -394,6 +426,7 @@ public class four {
                         inqt[2] = "t".concat(String.valueOf(num - 1));
                     f = null;
                     inqt[3] = "t".concat(String.valueOf(num));
+                    qtok.add(synum.peek());
                     num++;
                     symbol.pop();
                     synum.pop();
@@ -445,48 +478,38 @@ public class four {
         st.pop();
     }
 
-    public String answer(String path_in, String path_out) {
-        try {
-            File filename = new File(path_in);
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-            BufferedReader br = new BufferedReader(reader);
-            String line = "";
-            line = br.readLine().substring(1);
-            step = line.split(" ");
-            line = br.readLine();
-            i = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            C = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            S = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            c = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            k = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            p = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            br.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public String[][] answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1) {
+        step=step1;
+        i=i1;
+        C=C1;
+        S=S1;
+        c=c1;
+        k=k1;
+        p=p1;
         E();
         // printall();
+        String[][] final_qt = new String[qt.size()][4];
+        for(int aa=0;aa<final_qt.length;aa++){
+            final_qt[aa][0]=qt.get(qtok.get(aa))[0];
+            final_qt[aa][1]=qt.get(qtok.get(aa))[1];
+            final_qt[aa][2]=qt.get(qtok.get(aa))[2];
+            final_qt[aa][3]=qt.get(qtok.get(aa))[3];
+        }
         String result = "";
-        for (int aa = 0; aa < qt.size(); aa++) {
+        for (int aa = 0; aa < final_qt.length; aa++) {
             result = result.concat("[");
             for (int aaa = 0; aaa < 4; aaa++) {
-                result = result.concat(qt.get(aa)[aaa]);
+                result = result.concat(final_qt[aa][aaa]);
                 if (aaa != 3)
                     result = result.concat(",");
             }
             result = result.concat("] ");
-            if (aa == qt.size() - 1) {
+            if (aa == final_qt.length - 1) {
                 result = result.concat("\n").concat(Integer.toString(aa + 1));
             }
         }
-        System.out.println(result);
         try {
-            File writename = new File(path_out);
+            File writename = new File("./out2.txt");
             writename.createNewFile();
             BufferedWriter out = new BufferedWriter(new FileWriter(writename));
             out.write(result);
@@ -495,9 +518,6 @@ public class four {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (brackets != 0 || flag == 0 || now != step.length - 1)
-            return "wrong";
-        else
-            return "right";
+        return final_qt;
     }
 }

@@ -101,7 +101,7 @@ public class LL1{
             flag_t=0;
             pe=st.pop();
             System.out.println("出栈".concat(pe));
-            System.out.println("栈内还有：".concat(st.toString()));
+            //System.out.println("栈内还有：".concat(st.toString()));
             //如果pe是符合step[now]的，就now++，pe再出栈一个
             //符合的情况按照step[now]的类型分为好几种，其中i和c都对应i，p对应w和W
             //如果step[now]是变量名或者数字，则匹配意味着出栈就是i
@@ -126,7 +126,7 @@ public class LL1{
             }
             //判断完了pe符合不符合step[now],开始执行符合了要干啥和不符合要干啥
             if(flag_t==1){//如果pe是符合step[now]的,也就是说pe是W而step[now]是*/之类的
-                System.out.println("匹配上了");
+                //System.out.println("匹配上了");
                 switch(step[now].substring(1,2)){
                     case "i":
                     System.out.println(i[Integer.parseInt(step[now].substring(3,4))]);//查表找出对应变量名
@@ -144,20 +144,20 @@ public class LL1{
                 continue;
             }
             else{
-                System.out.println("没匹配上");
+                //System.out.println("没匹配上");
                 if(t.equals("+")||t.equals("-")) t="w";//将t从+-变成w
                 else if(t.equals("*")||t.equals("/")) t="W";//将t从*/变成W
-                System.out.println("x:".concat(pe).concat(" "+getx(pe)).concat("   y:").concat(t).concat(" "+gety(t)));
+                //System.out.println("x:".concat(pe).concat(" "+getx(pe)).concat("   y:").concat(t).concat(" "+gety(t)));
                 t=M[getx(pe)][gety(t)];//获取M矩阵中对应的值，也就是出栈元素应该推倒出来的东西，比如说E->TD
                 if(t==null) return "wrong";
                 else if(!t.equals(" ")){
-                    System.out.println("执行的栈操作是".concat(pe).concat("->").concat(t));//输出执行的栈操作。
+                   // System.out.println("执行的栈操作是".concat(pe).concat("->").concat(t));//输出执行的栈操作。
                     for(int j=t.length();j>0;j--){//逆序压栈，如WFY就压成YFW
                         System.out.println("入栈".concat(t.substring(j-1,j)));
                         st.push(t.substring(j-1,j));
                     }
                 }
-                else System.out.println("执行的栈操作是".concat(pe).concat("->").concat("ε"));//输出执行的栈操作。
+                //else System.out.println("执行的栈操作是".concat(pe).concat("->").concat("ε"));//输出执行的栈操作。
             }
         }
         //还差最后一步，检查栈能不能是空

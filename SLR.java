@@ -9,7 +9,7 @@ import java.util.*;
 public class SLR{
     public static int now=0,brackets=0;
     public static String[] stept,i,C,S,c,k,p;
-    public static String[] SLRGY = { "", "E->EwT", "E->T", "T->TWF", "T->F", "F->(E)", "F->i" };
+    public static String[] SLRGY = { "", "E->EwT", "E->T", "T->TWF", "T->F", "F->(E)", "F->i" };//归约
     //文法：
     //   E -> TD
     //   D-> wTD|ε
