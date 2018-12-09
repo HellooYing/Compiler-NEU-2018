@@ -1,1 +1,2 @@
-课设开始前放实验  课设完了看情况定
+1.analyzer输入c语言代码，输出token序列和iCSckp表
+2.exp_four输入token序列和iCSckp表，输出四元式中间代码
