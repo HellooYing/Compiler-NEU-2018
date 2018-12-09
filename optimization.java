@@ -119,6 +119,26 @@ public class optimization{
             }
         }
         printLS(r);
+        String result = "";
+        for (int aa = 0; aa < r.size(); aa++) {
+            result = result.concat("[");
+            for (int aaa = 0; aaa < 4; aaa++) {
+                result = result.concat(r.get(aa)[aaa]);
+                if (aaa != 3)
+                    result = result.concat(",");
+            }
+            result = result.concat("] ");
+        }
+        try {
+            File writename = new File("./z.优化后的四元式.txt");
+            writename.createNewFile();
+            BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+            out.write(result);
+            out.flush();
+            out.close(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return r;        
     }
     void printLS(List<String[]> r){
