@@ -19,8 +19,8 @@ public class exp_four {
     //新建一个完成序列，代表第几个四元式是第几个完成的，然后最后对四元式按此顺序重新读取就ok啦
     //同时还要改一下输入输出，answer的输入别从文件读取了，改成输入token序列和iCSckp，输出qt
     public static void main(String[] args) throws Exception {
-        String path_in = "./in.txt";
-        String path_out = "./out.txt";
+        String path_in = "./z.c语言代码输入.txt";
+        String path_out = "./z.token序列.txt";
         new analyzer().answer(path_in, path_out);
         try {
             File filename = new File(path_out);
@@ -140,7 +140,6 @@ public class exp_four {
         case "p":
             t = p[Integer.parseInt(step[now].substring(3, 4))];
             if (t.equals("+") || t.equals("-")) {
-                System.out.println(t);
                 if (now == step.length - 1) {
                     flag = 0;
                     return;
@@ -241,7 +240,6 @@ public class exp_four {
         switch (step[now].substring(1, 2)) {
         case "i":
             t = i[Integer.parseInt(step[now].substring(3, 4))];
-            System.out.println(t);
             if (now == step.length - 1) {
                 st.pop();
                 return;
@@ -251,7 +249,6 @@ public class exp_four {
             return;
         case "c":
             t = c[Integer.parseInt(step[now].substring(3, 4))];
-            System.out.println(t);
             if (now == step.length - 1) {
                 st.pop();
                 return;
@@ -262,7 +259,6 @@ public class exp_four {
         case "p":
             t = p[Integer.parseInt(step[now].substring(3, 4))];
             if (t.equals("*") || t.equals("/")) {
-                System.out.println(t);
                 if (now == step.length - 1) {
                     flag = 0;
                     return;
@@ -363,7 +359,6 @@ public class exp_four {
         switch (step[now].substring(1, 2)) {
         case "i":
             t = i[Integer.parseInt(step[now].substring(3, 4))];
-            System.out.println(t);
             f = t;
             if (now == step.length - 1) {
                 st.pop();
@@ -374,7 +369,6 @@ public class exp_four {
                 t = p[Integer.parseInt(step[now].substring(3, 4))];
                 while (t.equals(")")) {
                     brackets--;
-                    System.out.println(t);
                     if (now == step.length - 1) {
                         st.pop();
                         return;
@@ -407,7 +401,6 @@ public class exp_four {
             break;
         case "c":
             t = c[Integer.parseInt(step[now].substring(3, 4))];
-            System.out.println(t);
             f = t;
             if (now == step.length - 1) {
                 st.pop();
@@ -418,7 +411,6 @@ public class exp_four {
                 t = p[Integer.parseInt(step[now].substring(3, 4))];
                 while (t.equals(")")) {
                     brackets--;
-                    System.out.println(t);
                     inqt = qt.get(synum.peek());
                     if (f != null)
                         inqt[2] = f;
@@ -452,7 +444,6 @@ public class exp_four {
         case "p":
             t = p[Integer.parseInt(step[now].substring(3, 4))];
             if (t.equals("(")) {
-                System.out.println(t);
                 if (now == step.length - 1) {
                     flag = 0;
                     return;
@@ -509,7 +500,7 @@ public class exp_four {
             }
         }
         try {
-            File writename = new File("./out2.txt");
+            File writename = new File("./z.四元式.txt");
             writename.createNewFile();
             BufferedWriter out = new BufferedWriter(new FileWriter(writename));
             out.write(result);

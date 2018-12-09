@@ -1,7 +1,0 @@
- {i,0} {p,0} {i,1} {p,1} {i,2} {p,2} {i,3} {p,0} {p,3} {c,0} {p,0} {i,0} {p,4}
-	i:[a, b, c, d]
-	C:[]
-	S:[]
-	c:[12]
-	k:[main, void, if, else, while, for, int, char, string]
-	p:[+, -, *, (, )]

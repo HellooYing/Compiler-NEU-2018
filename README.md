@@ -1,2 +1,3 @@
-1.analyzer输入c语言代码，输出token序列和iCSckp表
-2.exp_four输入token序列和iCSckp表，输出四元式中间代码
+0.编译实验文件夹是编译课的实验，当前目录下的是编译课的课设
+1.analyzer输入c语言代码，输出c语言的token序列和iCSckp表
+2.exp_four输入算数表达式的token序列和iCSckp表，输出四元式中间代码

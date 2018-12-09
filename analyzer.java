@@ -12,7 +12,7 @@ public class analyzer {
     List<String> i=new ArrayList<String>();//变量名
     List<String> C=new ArrayList<String>();//字符
     List<String> S=new ArrayList<String>();//字符串
-    List<Integer> c=new ArrayList<Integer>();//数字
+    List<Double> c=new ArrayList<Double>();//数字
     List<String> p=new ArrayList<String>();//界符
     // 逻辑是，从头到尾读取String r也就是while(j<r.length)，switch(ascii码)
     // case0，是空格(32)，j++
@@ -27,8 +27,8 @@ public class analyzer {
     // 构建list p，{p,n},j++
     // default，输出来我看看是啥异常情况？j++
     public static void main(String[] args) throws Exception {
-        String path_in = "./in.txt";
-        String path_out = "./out.txt";
+        String path_in = "./z.c语言代码输入.txt";
+        String path_out = "./z.token序列.txt";
         new analyzer().answer(path_in, path_out);
     }
 
@@ -57,7 +57,7 @@ public class analyzer {
             if(r.charAt(0)==' ') r=r.substring(1);//删去首部空格
             if(r.charAt(r.length()-1)==' ') r=r.substring(0,r.length()-1);//删去尾部空格
 
-            System.out.println(r);
+            //System.out.println(r);
 
             
             while(j<r.length()){
@@ -132,7 +132,7 @@ public class analyzer {
                     jj=j;
                     if(j!=r.length()){
                         t=(int)r.charAt(j);
-                        while(t>=48&&t<=57&&j<r.length()-1){
+                        while(((t>=48&&t<=57)||t==46)&&j<r.length()-1){
                             j++;
                             t=(int)r.charAt(j);
                             if(j==r.length()-1) {
@@ -146,16 +146,16 @@ public class analyzer {
                     if(jj==j) j++;
                     word=r.substring(jj,j);
                     if(c==null){
-                        c.add(Integer.parseInt(word));
+                        c.add(Double.valueOf(word));
                         result=result.concat(" {c,0}");
                     }
                     else{
-                        if(c.contains(Integer.parseInt(word))){
-                            result=result.concat(" {c,").concat(String.valueOf(c.indexOf(Integer.parseInt(word)))).concat("}");
+                        if(c.contains(Double.valueOf(word))){
+                            result=result.concat(" {c,").concat(String.valueOf(c.indexOf(Double.valueOf(word)))).concat("}");
                         }
                         else{
-                            c.add(Integer.parseInt(word));
-                            result=result.concat(" {c,").concat(String.valueOf(c.indexOf(Integer.parseInt(word)))).concat("}");
+                            c.add(Double.valueOf(word));
+                            result=result.concat(" {c,").concat(String.valueOf(c.indexOf(Double.valueOf(word)))).concat("}");
                         }
                     }
                     //System.out.println(word);
