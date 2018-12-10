@@ -143,6 +143,21 @@ public class object_code{
             RDL=inqt[3];
         }//这里把所有的都执行完了，再判断最后留在寄存器里的变量是否活跃，活跃就弹出
         if(active[qt.size()-1][3]) code.add("ST R,".concat(RDL));
+
+        String result = "";
+        for (int i = 0; i < code.size(); i++) {
+            result=result.concat(code.get(i)).concat("\n");
+        }
+        try {
+            File writename = new File("./z.目标代码.txt");
+            writename.createNewFile();
+            BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+            out.write(result);
+            out.flush();
+            out.close(); 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return code;
     }
 

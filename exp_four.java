@@ -495,9 +495,6 @@ public class exp_four {
                     result = result.concat(",");
             }
             result = result.concat("] ");
-            if (aa == final_qt.length - 1) {
-                result = result.concat("\n").concat(Integer.toString(aa + 1));
-            }
         }
         try {
             File writename = new File("./z.四元式.txt");
