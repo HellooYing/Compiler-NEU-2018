@@ -6,8 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.*;
 public class optimization{
-    public static List<String[]> qt = new ArrayList<String[]>();
     public static void main(String[] args) throws Exception{
+        List<String[]> qt = new ArrayList<String[]>();
         String[] t={},ttt;
         String tt;
         try {
@@ -27,6 +27,7 @@ public class optimization{
         qt.add(ttt);
         }
         List<String[]> r=new optimization().answer(qt);
+        
     }
     List<String[]> answer(List<String[]> qt){
         List<String[]> r=qt;
@@ -112,7 +113,6 @@ public class optimization{
                 i--;
             }
         }
-        printLS(r);
         String result = "";
         for (int aa = 0; aa < r.size(); aa++) {
             result = result.concat("[");
@@ -135,7 +135,7 @@ public class optimization{
         }
         return r;        
     }
-    void printLS(List<String[]> r){
+    static void printLS(List<String[]> r){
         for(String[] a:r){
             for(String aa:a){
                 System.out.print(aa);

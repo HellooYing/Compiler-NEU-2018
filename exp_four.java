@@ -1,9 +1,9 @@
-import java.io.File;
-import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.*;
 public class exp_four {
     public static int now = 0, flag = 1, num = 1, brackets = 0;
@@ -21,7 +21,7 @@ public class exp_four {
     public static void main(String[] args) throws Exception {
         String path_in = "./z.c语言代码输入.txt";
         String path_out = "./z.token序列.txt";
-        new analyzer().answer(path_in, path_out);
+        new analyzer().answer(path_in);
         try {
             File filename = new File(path_out);
             InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
@@ -30,23 +30,24 @@ public class exp_four {
             line = br.readLine().substring(1);
             step = line.split(" ");
             line = br.readLine();
-            i = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            i = line.substring(3, line.length() - 1).replace(" ", "").split(",");
             line = br.readLine();
-            C = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            C = line.substring(3, line.length() - 1).replace(" ", "").split(",");
             line = br.readLine();
-            S = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            S = line.substring(3, line.length() - 1).replace(" ", "").split(",");
             line = br.readLine();
-            c = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            c = line.substring(3, line.length() - 1).replace(" ", "").split(",");
             line = br.readLine();
-            k = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            k = line.substring(3, line.length() - 1).replace(" ", "").split(",");
             line = br.readLine();
-            p = line.substring(4, line.length() - 1).replace(" ", "").split(",");
+            p = line.substring(3, line.length() - 1).replace(" ", "").split(",");
             br.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String[][] r1=new exp_four().answer(step, i, C, S, c, k, p);
+        List<String[]> r1=new exp_four().answer(step, i, C, S, c, k, p);
     }
+    
     public static String getTraceInfo() {
         StringBuffer sb = new StringBuffer();
         StackTraceElement[] stacks = new Throwable().getStackTrace();
@@ -469,7 +470,7 @@ public class exp_four {
         st.pop();
     }
 
-    public String[][] answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1) {
+    public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1) {
         step=step1;
         i=i1;
         C=C1;
@@ -506,6 +507,10 @@ public class exp_four {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return final_qt;
+        List<String[]> rr=new ArrayList<String[]>();
+        for(int j=0;j<final_qt.length;j++){
+            rr.add(final_qt[j]);
+        }
+        return rr;
     }
 }

@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.util.*;
 public class object_code{
     public static void main(String[] args) throws Exception{
+        //从文件读取四元式：
         List<String[]> qt = new ArrayList<String[]>();
         String[] t={},ttt;
         String tt;

@@ -28,16 +28,15 @@ public class analyzer {
     // default，输出来我看看是啥异常情况？j++
     public static void main(String[] args) throws Exception {
         String path_in = "./z.c语言代码输入.txt";
-        String path_out = "./z.token序列.txt";
-        new analyzer().answer(path_in, path_out);
+        new analyzer().answer(path_in);
     }
 
-    public void answer(String path_in, String path_out) {
+    public String answer(String path_in) {
+        String result="";
         try{
             File filename = new File(path_in);
             InputStreamReader reader = new InputStreamReader(new FileInputStream(filename)); // 建立一个输入流对象reader
             BufferedReader br = new BufferedReader(reader);// 建立一个对象，它把文件内容转成计算机能读懂的语言
-            String result="";
             String r = "";
             String line = "";
             int j=0;
@@ -249,14 +248,16 @@ public class analyzer {
             show_c="c:".concat(c.toString());
             show_k="k:[main, void, if, else, while, for, int, char, string]";
             show_p="p:".concat(p.toString());
-            File writename = new File(path_out); // 如果没有则新建一个新的path_out的txt文件
+            File writename = new File("./z.token序列.txt"); // 如果没有则新建一个新的path_out的txt文件
 			writename.createNewFile(); // 创建新文件
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-			out.write(result.concat("\n\t").concat(show_i).concat("\n\t").concat(show_C).concat("\n\t").concat(show_S).concat("\n\t").concat(show_c).concat("\n\t").concat(show_k).concat("\n\t").concat(show_p)); // 写入
+            result=result.concat("\n").concat(show_i).concat("\n").concat(show_C).concat("\n").concat(show_S).concat("\n").concat(show_c).concat("\n").concat(show_k).concat("\n").concat(show_p);
+			out.write(result); // 写入
 			out.flush(); // 把缓存区内容压入文件
 			out.close(); // 最后记得关闭文件
         }catch (Exception e) {
 			e.printStackTrace();
-		}      
+		}  
+        return result;    
     }
 }

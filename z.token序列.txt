@@ -1,7 +1,7 @@
  {c,0} {p,0} {c,1} {p,1} {p,2} {c,2} {p,0} {c,3} {p,3}
-	i:[]
-	C:[]
-	S:[]
-	c:[2.0, 3.0, 4.0, 5.0]
-	k:[main, void, if, else, while, for, int, char, string]
-	p:[+, *, (, )]
+i:[]
+C:[]
+S:[]
+c:[2.0, 3.0, 4.0, 5.0]
+k:[main, void, if, else, while, for, int, char, string]
+p:[+, *, (, )]
