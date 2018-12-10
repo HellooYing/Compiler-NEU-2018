@@ -10,7 +10,6 @@ public class optimization{
     public static void main(String[] args) throws Exception{
         String[] t={},ttt;
         String tt;
-        int num=0;
         try {
             File filename = new File("./z.四元式.txt");
             InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
@@ -18,19 +17,14 @@ public class optimization{
             String line = "";
             line = br.readLine();
             t = line.split(" ");
-            line = br.readLine();
-            num = Integer.valueOf(line);
             br.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(num==0) System.out.println("四元式.txt无内容");
-        else{
-            for(int j=0;j<num;j++){
-            tt=t[j].substring(1,t[j].length()-1);
-            ttt=tt.split(",");
-            qt.add(ttt);
-            }
+        for(int j=0;j<t.length;j++){
+        tt=t[j].substring(1,t[j].length()-1);
+        ttt=tt.split(",");
+        qt.add(ttt);
         }
         List<String[]> r=new optimization().answer(qt);
     }
