@@ -1,0 +1,1 @@
+INDEX VERSION 1.131+D:\code\Compiler-NEU-2018\.metadata\.plugins\org.eclipse.jdt.core
