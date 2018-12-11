@@ -1,4 +1,4 @@
-### .java文件说明
+### 文档
 
  - analyzer 输入c语言代码（目前是输入算数表达式），输出c语言的token序列和iCSckp表
       - 输入：String path_in
@@ -44,7 +44,7 @@
       
              [+,29.0,c,t4] [*,d,3.0,t5] [-,t4,t5,a] 
       
-      - 输出：List<String> code
+      - 输出：List< String > code
       
              LD R,29.0
              ADD R,c
@@ -61,7 +61,7 @@
       
              "./z.c语言代码输入.txt"（txt内容如：a=2+3*(4+5)+c-d*3）
              
-      - 输出：List<String> code
+      - 输出：List< String > code
       
              LD R,29.0
              ADD R,c
