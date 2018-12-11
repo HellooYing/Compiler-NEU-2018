@@ -471,46 +471,52 @@ public class exp_four {
     }
 
     public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1) {
-        step=step1;
         i=i1;
         C=C1;
         S=S1;
         c=c1;
         k=k1;
         p=p1;
-        E();
-        // printall();
-        String[][] final_qt = new String[qt.size()][4];
-        for(int aa=0;aa<final_qt.length;aa++){
-            final_qt[aa][0]=qt.get(qtok.get(aa))[0];
-            final_qt[aa][1]=qt.get(qtok.get(aa))[1];
-            final_qt[aa][2]=qt.get(qtok.get(aa))[2];
-            final_qt[aa][3]=qt.get(qtok.get(aa))[3];
-        }
-        String result = "";
-        for (int aa = 0; aa < final_qt.length; aa++) {
-            result = result.concat("[");
-            for (int aaa = 0; aaa < 4; aaa++) {
-                result = result.concat(final_qt[aa][aaa]);
-                if (aaa != 3)
-                    result = result.concat(",");
+        List<String[]> final_qt = new ArrayList<String[]>();
+        if(p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")){
+            step=Arrays.copyOfRange(step1,2,step1.length);
+            E();
+            // printall();
+            for(int aa=0;aa<qt.size();aa++){
+                inqt=new String[4];
+                inqt[0]=qt.get(qtok.get(aa))[0];
+                inqt[1]=qt.get(qtok.get(aa))[1];
+                inqt[2]=qt.get(qtok.get(aa))[2];
+                inqt[3]=qt.get(qtok.get(aa))[3];
+                final_qt.add(inqt);
             }
-            result = result.concat("] ");
+            inqt=new String[4];
+            inqt[0]="=";
+            inqt[1]=final_qt.get(final_qt.size()-1)[3];
+            inqt[2]="_";
+            inqt[3]=i[0];
+            final_qt.add(inqt);
+            String result = "";
+            for (int aa = 0; aa < final_qt.size(); aa++) {
+                result = result.concat("[");
+                for (int aaa = 0; aaa < 4; aaa++) {
+                    result = result.concat(final_qt.get(aa)[aaa]);
+                    if (aaa != 3)
+                        result = result.concat(",");
+                }
+                result = result.concat("] ");
+            }
+            try {
+                File writename = new File("./z.四元式.txt");
+                writename.createNewFile();
+                BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+                out.write(result);
+                out.flush();
+                out.close(); 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        try {
-            File writename = new File("./z.四元式.txt");
-            writename.createNewFile();
-            BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-            out.write(result);
-            out.flush();
-            out.close(); 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        List<String[]> rr=new ArrayList<String[]>();
-        for(int j=0;j<final_qt.length;j++){
-            rr.add(final_qt[j]);
-        }
-        return rr;
+        return final_qt;
     }
 }

@@ -40,6 +40,5 @@ public class Main{
         List<String> code = new object_code().answer(qt);
         for(String s:code) System.out.println(s);
     }
-    
 }
 

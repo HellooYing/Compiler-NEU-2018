@@ -1,3 +1,9 @@
-LD R,3.0
-MUL R,9.0
-ADD R,2.0
+LD R,29.0
+ADD R,c
+ST R,t4
+LD R,d
+MUL R,3.0
+ST R,t5
+LD R,t4
+SUB R,t5
+ST R,a

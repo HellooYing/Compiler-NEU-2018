@@ -141,9 +141,24 @@ public class object_code{
                     code.add("DIV R,".concat(inqt[2]));
                 }
             }
+            else if(inqt[0].equals("=")){
+                //无变量的常数表达式最终运算结果会存到t里
+                if(RDL==""){
+                    code.add("LD R,".concat(inqt[1]));
+                    code.add("ST R,".concat(inqt[3]));
+                }
+                else if(RDL.equals(inqt[1])){
+                    code.add("ST R,".concat(inqt[3]));
+                }
+                else{
+                    if(active[i-1][3]) code.add("ST R,".concat(RDL));
+                    code.add("LD R,".concat(inqt[1]));
+                    code.add("ST R,".concat(inqt[3]));
+                }
+            }
             RDL=inqt[3];
         }//这里把所有的都执行完了，再判断最后留在寄存器里的变量是否活跃，活跃就弹出
-        if(active[qt.size()-1][3]) code.add("ST R,".concat(RDL));
+        if(active[qt.size()-1][3]&&(!qt.get(qt.size()-1)[0].equals("="))) code.add("ST R,".concat(RDL));
 
         String result = "";
         for (int i = 0; i < code.size(); i++) {
