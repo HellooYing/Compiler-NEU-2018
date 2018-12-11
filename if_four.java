@@ -111,6 +111,7 @@ public class if_four {
 		//如果不是c+d而是c*(10+a)/b*d-100+f，会有很多四元式产生，所以记得下一步[>,t1,t2,t3]的t1 t2是t几很重要
 		//然后qt应该是[+,a,b,t1] [+,c,d,t2] [>,t1,t2,t3]。记得printqt();可以输出qt看
 		//然后再加上[if,t3,_,_],if就ok了，我觉得你应该也能想出来else怎么写了
+		//当然 [+,a,b,t1] [+,c,d,t2] [>,t1,t2,t3] [if,t3,_,_]后面要加上List<String[]> qtt=new block().answer(step_son,i,C,S,c,k,p)搞出来的{……}部分四元式，还要记得reset_t(qtt,n)
 
 
 
