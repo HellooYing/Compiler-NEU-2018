@@ -527,7 +527,45 @@ public class exp_four {
 				e.printStackTrace();
 			}
 		}
-		
+		else{
+			step=step1;
+			E();
+			// printall();
+			for(int aa=0;aa<qt.size();aa++){
+				inqt=new String[4];
+				inqt[0]=qt.get(qtok.get(aa))[0];
+				inqt[1]=qt.get(qtok.get(aa))[1];
+				inqt[2]=qt.get(qtok.get(aa))[2];
+				inqt[3]=qt.get(qtok.get(aa))[3];
+				final_qt.add(inqt);
+			}
+			// inqt=new String[4];
+			// inqt[0]="=";
+			// inqt[1]=final_qt.get(final_qt.size()-1)[3];
+			// inqt[2]="_";
+			// inqt[3]="t".concat(String.valueOf(num));
+			// final_qt.add(inqt);
+			String result = "";
+			for (int aa = 0; aa < final_qt.size(); aa++) {
+				result = result.concat("[");
+				for (int aaa = 0; aaa < 4; aaa++) {
+					result = result.concat(final_qt.get(aa)[aaa]);
+					if (aaa != 3)
+						result = result.concat(",");
+				}
+				result = result.concat("] ");
+			}
+			try {
+				File writename = new File("./z.四元式.txt");
+				writename.createNewFile();
+				BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+				out.write(result);
+				out.flush();
+				out.close(); 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return final_qt;
 	}
 	static void printLS(List<String[]> r){

@@ -214,7 +214,6 @@ public class block{
 				}
 			}
 		}
-		
 	}
 	static void printLS(List<String[]> r){
 		for(String[] a:r){
