@@ -215,7 +215,7 @@ public class analyzer {
 						t=(int)r.charAt(j+1);
 						if((t>=33&&t<=47&&t!=34&&t!=39)||(t>=58&&t<=64)||(t>=91&&t<=96)||(t>=123&&t<=126))
 						{
-							if((r.charAt(j)=='&'&&r.charAt(j+1)=='&')||(r.charAt(j)=='|'&&r.charAt(j+1)=='|')||(r.charAt(j)=='>'&&r.charAt(j+1)=='=')||(r.charAt(j)=='<'&&r.charAt(j+1)=='=')||(r.charAt(j)=='='&&r.charAt(j+1)=='='))
+							if((r.charAt(j)=='&'&&r.charAt(j+1)=='&')||(r.charAt(j)=='|'&&r.charAt(j+1)=='|')||(r.charAt(j)=='>'&&r.charAt(j+1)=='=')||(r.charAt(j)=='<'&&r.charAt(j+1)=='=')||(r.charAt(j)=='='&&r.charAt(j+1)=='=')||(r.charAt(j)=='!'&&r.charAt(j+1)=='='))
 							{
 								word=r.substring(j,j+2);
 								j++;
