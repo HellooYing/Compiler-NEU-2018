@@ -35,7 +35,7 @@ public class Main{
 		n++;
 		line=t[n];
 		p = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-		List<String[]> qt = new exp_four().answer(step, i, C, S, c, k, p);
+		List<String[]> qt = new block().answer(step, i, C, S, c, k, p);
 		qt = new optimization().answer(qt);
 		List<String> code = new object_code().answer(qt);
 		for(String s:code) System.out.println(s);

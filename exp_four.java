@@ -477,6 +477,16 @@ public class exp_four {
 		c=c1;
 		k=k1;
 		p=p1;
+		qt.clear();
+		now = 0;
+		flag = 1;
+		num = 1;
+		brackets = 0;
+		st = new Stack<String>();//栈
+		symbol = new Stack<String>();//符号栈
+		synum = new Stack<Integer>();//符号对应四元式的位置
+		qt = new ArrayList<String[]>();//存四元式
+		qtok = new ArrayList<Integer>();
 		List<String[]> final_qt = new ArrayList<String[]>();
 		if(p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")){
 			step=Arrays.copyOfRange(step1,2,step1.length);
@@ -494,7 +504,7 @@ public class exp_four {
 			inqt[0]="=";
 			inqt[1]=final_qt.get(final_qt.size()-1)[3];
 			inqt[2]="_";
-			inqt[3]=i[0];
+			inqt[3]=i[Integer.parseInt(step1[0].substring(3, 4))];
 			final_qt.add(inqt);
 			String result = "";
 			for (int aa = 0; aa < final_qt.size(); aa++) {
@@ -517,6 +527,16 @@ public class exp_four {
 				e.printStackTrace();
 			}
 		}
+		
 		return final_qt;
+	}
+	static void printLS(List<String[]> r){
+		for(String[] a:r){
+			for(String aa:a){
+				System.out.print(aa);
+				System.out.print(" ");
+			}
+			System.out.println();
+		}
 	}
 }
