@@ -1,1 +1,7 @@
-a=5;
+int a;
+/*
+int a=10;
+int a=b;
+int a,b,c;
+int a=10,b=5;
+*/

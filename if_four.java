@@ -208,18 +208,22 @@ public class if_four {
 			System.out.println();
 		}
     }
-	static void reset_t(List<String[]> qtt,int n){//避免临时变量的冲突，在每次往qt加qtt的时候都要重置所有t后面的值
+	static int reset_t(List<String[]> qtt,int n){//避免临时变量的冲突，在每次往qt加qtt的时候都要重置所有t后面的值
 		String[] inqtt;
+		int num,max=0;
 		for(int j=0;j<qtt.size();j++){
 			inqtt=qtt.get(j);
 			for(int jj=1;jj<4;jj++){
 				if(inqtt[jj].length()>=2){
 					if(inqtt[jj].substring(0,1).equals("t")&&is_c(inqtt[jj].substring(1))){
-						inqtt[jj]="t".concat(Integer.toString(Double.valueOf(inqtt[jj].substring(1)).intValue()+n));
+						num=Double.valueOf(inqtt[jj].substring(1)).intValue();
+						if(m<num) m=num;
+						inqtt[jj]="t".concat(Integer.toString(num+n));
 					}
 				}
 			}
 		}
+		return max+n;
 	}
 	static boolean is_c(String c){
 		try{
