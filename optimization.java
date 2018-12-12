@@ -66,7 +66,7 @@ public class optimization{
 						if(inqt[2].equals(replace.get(j))) inqt[2]=replace.get(j+1);
 					}
 				}
-				if(r.get(r.size()-1)[0].equals("=")&&r.get(r.size()-1)[1].equals(r.get(r.size()-2)[3])){
+				if(r.size()>1&&r.get(r.size()-1)[0].equals("=")&&r.get(r.size()-1)[1].equals(r.get(r.size()-2)[3])){
 					r.get(r.size()-2)[3]=r.get(r.size()-1)[3];
 					r.remove(r.size()-1);
 				}

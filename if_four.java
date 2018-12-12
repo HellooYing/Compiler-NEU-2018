@@ -221,4 +221,13 @@ public class if_four {
 			}
 		}
 	}
+	static boolean is_c(String c){
+		try{
+			Double.valueOf(c);
+		}
+		catch(Exception e){
+			return false;
+		}
+		return true;
+	}
 }

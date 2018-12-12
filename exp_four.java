@@ -488,7 +488,7 @@ public class exp_four {
 		qt = new ArrayList<String[]>();//存四元式
 		qtok = new ArrayList<Integer>();
 		List<String[]> final_qt = new ArrayList<String[]>();
-		if(p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")){
+		if(p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")&&step1.length>4){
 			step=Arrays.copyOfRange(step1,2,step1.length);
 			E();
 			// printall();
@@ -506,26 +506,29 @@ public class exp_four {
 			inqt[2]="_";
 			inqt[3]=i[Integer.parseInt(step1[0].substring(3, 4))];
 			final_qt.add(inqt);
-			String result = "";
-			for (int aa = 0; aa < final_qt.size(); aa++) {
-				result = result.concat("[");
-				for (int aaa = 0; aaa < 4; aaa++) {
-					result = result.concat(final_qt.get(aa)[aaa]);
-					if (aaa != 3)
-						result = result.concat(",");
-				}
-				result = result.concat("] ");
+		}
+		else if(p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")){
+			step=step1;
+			final_qt = new ArrayList<String[]>();
+			inqt=new String[4];
+			inqt[0]=p[Integer.parseInt(step[1].substring(3, 4))];
+			String t;
+        	switch (step[2].substring(1, 2)) {
+			case "i":
+				inqt[1] = i[Integer.parseInt(step[2].substring(3, 4))];
+        	    break;
+			case "c":
+				inqt[1] = c[Integer.parseInt(step[2].substring(3, 4))];
+        	    break;
+        	//case "C":
+        	//case "S":
+        	default:
+				System.out.println("输入错误！请检查c语言代码输入.txt");
 			}
-			try {
-				File writename = new File("./z.四元式.txt");
-				writename.createNewFile();
-				BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-				out.write(result);
-				out.flush();
-				out.close(); 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			inqt[2]="_";
+			inqt[3]=i[Integer.parseInt(step[0].substring(3, 4))];
+			final_qt.add(inqt);
+			
 		}
 		else{
 			step=step1;
@@ -545,7 +548,9 @@ public class exp_four {
 			// inqt[2]="_";
 			// inqt[3]="t".concat(String.valueOf(num));
 			// final_qt.add(inqt);
-			String result = "";
+			
+		}
+		String result = "";
 			for (int aa = 0; aa < final_qt.size(); aa++) {
 				result = result.concat("[");
 				for (int aaa = 0; aaa < 4; aaa++) {
@@ -565,7 +570,6 @@ public class exp_four {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
 		return final_qt;
 	}
 	static void printLS(List<String[]> r){
