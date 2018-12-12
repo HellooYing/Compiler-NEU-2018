@@ -211,7 +211,7 @@ public class block{
 				if(inqtt[jj].length()>=2){
 					if(inqtt[jj].substring(0,1).equals("t")&&is_c(inqtt[jj].substring(1))){
 						num=Double.valueOf(inqtt[jj].substring(1)).intValue();
-						if(m<num) m=num;
+						if(max<num) max=num;
 						inqtt[jj]="t".concat(Integer.toString(num+n));
 					}
 				}

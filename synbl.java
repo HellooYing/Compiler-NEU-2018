@@ -5,37 +5,48 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.*;
-public class optimization{
+public class synbl{
 	public static void main(String[] args) throws Exception{
 		String path_in = "./z.c语言代码输入.txt";
-        new analyzer().answer(path_in);
-        try {
-			File filename = new File(path_out);
-			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-			BufferedReader br = new BufferedReader(reader);
-			String line = "";
-			line = br.readLine().substring(1);
-			step = line.split(" ");
-			line = br.readLine();
-			i = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			C = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			S = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			c = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			k = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			p = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			br.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		String anal=new analyzer().answer(path_in);
+		String[] t=anal.split("\n");
+		String[] step, i, C, S, c, k, p;
+		int n=0;
+		String line=t[n];
+		step = line.substring(1).split(" ");
+		n++;
+		line=t[n];
+		i = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+		n++;
+		line=t[n];
+		C = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+		n++;
+		line=t[n];
+		S = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+		n++;
+		line=t[n];
+		c = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+		n++;
+		line=t[n];
+		k = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+		n++;
+		line=t[n];
+		p = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+        //new synbl.answer(step, i, C, S, c, k, p);
 	}
-	List<String[]> answer(List<String[]> qt){
-		
-		String result = "";
+	List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1){
+		String[] step, i, C, S, c, k, p;
+		step=step1;//token序列
+        i=i1;//变量
+		C=C1;//字符
+		S=S1;//字符串
+		c=c1;//数字常量
+		k=k1;//关键字
+		p=p1;//符号
+		List<String[]> r=new ArrayList<String[]>();
+        //目前只需要
+
+        String result = "";
 		for (int aa = 0; aa < r.size(); aa++) {
 			result = result.concat("[");
 			for (int aaa = 0; aaa < 4; aaa++) {
@@ -46,7 +57,7 @@ public class optimization{
 			result = result.concat("] ");
 		}
 		try {
-			File writename = new File("./z.优化后的四元式.txt");
+			File writename = new File("./z.符号表.txt");
 			writename.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			out.write(result);
