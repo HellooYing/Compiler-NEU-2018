@@ -1,7 +1,12 @@
-int a;
 /*
+a=5;
 int a=10;
 int a=b;
 int a,b,c;
 int a=10,b=5;
+x=(a+b)*2*3+t;
+x=20;
+t=40;
 */
+
+t=((a+b)*2)/(a-b)*(a+b);
