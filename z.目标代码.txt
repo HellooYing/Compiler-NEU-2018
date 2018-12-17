@@ -1,9 +1,6 @@
-LD R,a
-ADD R,b
-ST R,t1
-LD R,c
-ADD R,x1
+LD R,b
+SUB R,1.0
 ST R,_
-LD R,10.0
-ADD R,dd
-ST R,b
+LD R,a
+SUB R,1.0
+ST R,_

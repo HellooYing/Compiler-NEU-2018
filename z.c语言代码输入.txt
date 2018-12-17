@@ -7,4 +7,7 @@ int a=10,b=5;
 
 */
 
-a+1
+while(a>b-1){
+    a=a-1;
+    break;
+}

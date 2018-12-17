@@ -55,7 +55,6 @@ public class block{
 		for(int j=0;j<step.length;j++){
 			//先找if
 			if(step[j].substring(1, 2).equals("k")){//是关键字
-			
 				if(k[Integer.parseInt(step[j].substring(3, 4))].equals("if")){//是if
 				
 					int jj;
@@ -112,6 +111,14 @@ public class block{
 					sentence.add(Arrays.copyOfRange(step, j, jj+1));//sentence把整个while的一大句话加进去
 					j=jj;//开始找下面的
 				}
+				else if(k[Integer.parseInt(step[j].substring(3, 4))].equals("break")){
+					sentence.add(Arrays.copyOfRange(step, j, j+2));
+					j=j+1;
+				}
+				else if(k[Integer.parseInt(step[j].substring(3, 4))].equals("continue")){
+					sentence.add(Arrays.copyOfRange(step, j, j+2));
+					j=j+1;
+				}
 			}
 			//else if(是i 在function列表里)
 			else if(step[j].substring(1, 2).equals("p")){
@@ -128,7 +135,7 @@ public class block{
 			}
 		}
 		printLS(sentence);
-
+		System.out.println();
 		int l=0;
 		for(String[] s:sentence) l+=s.length;
 		if(l!=step.length) System.out.println("出现了未知的语句，请检查输入代码是否正确");//检查是否所有单词都有句子可加，没有就说明有问题
@@ -140,6 +147,12 @@ public class block{
 					qtt=new if_four().answer(sentence.get(j), i, C, S, c, k, p);
 					reset_t(qtt,n);
 					qt.addAll(qtt);
+					String[] inqt=new String[4];
+					inqt[0]="ie";
+					inqt[1]="_";
+					inqt[2]="_";
+					inqt[3]="_";
+					qt.add(inqt);
 					int m=0;
 					for(int jj=1;jj<4;jj++){
 						if(qtt.get(qtt.size()-1)[jj].length()>=2){
@@ -155,6 +168,12 @@ public class block{
 					qtt=new while_four().answer(sentence.get(j), i, C, S, c, k, p);
 					reset_t(qtt,n);
 					qt.addAll(qtt);
+					String[] inqt=new String[4];
+					inqt[0]="we";
+					inqt[1]="_";
+					inqt[2]="_";
+					inqt[3]="_";
+					qt.add(inqt);
 					int m=0;
 					for(int jj=1;jj<4;jj++){
 						if(qtt.get(qtt.size()-1)[jj].length()>=2){
@@ -165,6 +184,22 @@ public class block{
 						}
 					}
 					n=n+m;
+				}
+				else if(k[Integer.parseInt(sentence.get(j)[0].substring(3, 4))].equals("break")){
+					String[] inqt=new String[4];
+					inqt[0]="bk";
+					inqt[1]="_";
+					inqt[2]="_";
+					inqt[3]="_";
+					qt.add(inqt);
+				}
+				else if(k[Integer.parseInt(sentence.get(j)[0].substring(3, 4))].equals("continue")){
+					String[] inqt=new String[4];
+					inqt[0]="ct";
+					inqt[1]="_";
+					inqt[2]="_";
+					inqt[3]="_";
+					qt.add(inqt);
 				}
 			}
 			
@@ -188,8 +223,7 @@ public class block{
 				}
 			}
 		}
-		
-		printLS(qt);
+		printLS(qt);System.out.println();
 		String result = "";
 			for (int aa = 0; aa < qt.size(); aa++) {
 				result = result.concat("[");

@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.util.*;
 
 public class analyzer {
-	String[] k = { "main", "void", "if", "else", "while", "for", "int", "char", "string" };// 关键字放到数组里
+	String[] k = { "main", "void", "if", "else", "while", "for", "int", "char", "string", "break", "continue" };// 关键字放到数组里
 	List<String> i=new ArrayList<String>();//变量名
 	List<String> C=new ArrayList<String>();//字符
 	List<String> S=new ArrayList<String>();//字符串
@@ -246,7 +246,7 @@ public class analyzer {
 			show_C="C:".concat(C.toString());
 			show_S="S:".concat(S.toString());
 			show_c="c:".concat(c.toString());
-			show_k="k:[main, void, if, else, while, for, int, char, string]";
+			show_k="k:[main, void, if, else, while, for, int, char, string, break, continue]";
 			show_p="p:".concat(p.toString());
 			File writename = new File("./z.token序列.txt"); // 如果没有则新建一个新的path_out的txt文件
 			writename.createNewFile(); // 创建新文件

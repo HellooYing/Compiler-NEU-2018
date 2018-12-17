@@ -1,7 +1,7 @@
- {k,4} {p,0} {i,0} {p,1} {i,1} {p,2} {p,3} {i,0} {p,4} {i,0} {p,5} {c,0} {p,6} {p,7}
+ {k,4} {p,0} {i,0} {p,1} {i,1} {p,2} {c,0} {p,3} {p,4} {i,0} {p,5} {i,0} {p,2} {c,0} {p,6} {k,9} {p,6} {p,7}
 i:[a, b]
 C:[]
 S:[]
 c:[1.0]
-k:[main, void, if, else, while, for, int, char, string]
-p:[(, >, ), {, =, -, ;, }]
+k:[main, void, if, else, while, for, int, char, string, break, continue]
+p:[(, >, -, ), {, =, ;, }]

@@ -10,6 +10,7 @@ public class while_four
     public static String[] step, i, C, S, c, k, p;//输入
     public static List<String[]> qt = new ArrayList<String[]>();//存四元式
     public static int n=0, now=0, startn;                 //n:临时变量tn序号，now：token串序号，startn：暂存step_on开始token串位置
+    public static String LROT,RROT,P;     //保存代表左式的临时变量，保存代表右式的临时变量，保存比较的符号
 
     public static void main(String[] args) throws Exception
     {
@@ -17,7 +18,7 @@ public class while_four
         String path_out = "./z.token序列.txt";
 
         //执行了分析器程序，它将根据"z.while代码.txt"中输入的代码更新"z.token序列.txt"
-        new analyzer().answer(path_in);
+        //new analyzer().answer(path_in);
 
         //这一段从"z.token序列.txt"文件读取了需要用到的输入，即token序列(我把它取名为step)和i, C, S, c, k, p表
         try
@@ -52,7 +53,6 @@ public class while_four
         List<String[]> r1=new while_four().answer(step, i, C, S, c, k, p);
     }
 
-
     public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1)
     {
         step=step1;//token序列
@@ -62,13 +62,14 @@ public class while_four
         c=c1;//数字常量
         k=k1;//关键字
         p=p1;//符号
+
         String t;           //Token的值
         String[] step_son;  //各阶段的子token序列
         List<String[]> qtt; //各阶段生成的四元式
-        String T1,T2,P;     //保存代表左式的临时变量，保存代表右式的临时变量，保存比较的符号
+        
         String tn;          //临时变量
         int braceNum=1;     //"{"个数，用来统计while{}的结束
-        
+
         switch (step[now].substring(1, 2))
         {
         case "k":
@@ -84,16 +85,6 @@ public class while_four
                     case "p":
                         t = p[Integer.parseInt(step[now].substring(3, 4))];
                         break;
-                    case "i":
-                        break;
-                    case "c":
-                        break;
-                    case "k":
-                        break;
-                    case "C":
-                        break;
-                    case "S":
-                        break;
                     default:
                         break;
                     }
@@ -104,15 +95,31 @@ public class while_four
                     }
                 }
                 step_son = Arrays.copyOfRange(step, startn, now);
-
-                qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
-                n=reset_t(qtt,n);           //获得当前临时变量tn的n值
-                T1=qtt.get(qtt.size()-1)[3];//暂存比较的左式的临时变量
-                for(int j=0; j<qtt.size(); j++)//将比较的左式四元式序列送入四元式区
+                if(step_son.length==1)//判断左式有一个标识符
                 {
-                    qt.add(qtt.get(j));
+                    P=t;
+                    switch (step[now-1].substring(1, 2))
+                    {
+                    case "i":
+                        LROT=i[Integer.parseInt(step[now-1].substring(3, 4))];
+                        break;
+                    case "c":
+                        LROT=c[Integer.parseInt(step[now-1].substring(3, 4))];
+                        break;
+                    default:
+                        break;
+                    }
                 }
-
+                else//左式多于一个标示符
+                {
+                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                    n=reset_t(qtt,n);           //获得当前临时变量tn的n值
+                    LROT=qtt.get(qtt.size()-1)[3];//暂存比较的左式的临时变量
+                    for(int j=0; j<qtt.size(); j++)//将比较的左式四元式序列送入四元式区
+                    {
+                        qt.add(qtt.get(j));
+                    }
+                }
 
                 startn=now+1;//暂存右式step_on首Token串的序号
                 while(true)
@@ -123,16 +130,6 @@ public class while_four
                     case "p":
                         t = p[Integer.parseInt(step[now].substring(3, 4))];
                         break;
-                    case "i":
-                        break;
-                    case "c":
-                        break;
-                    case "k":
-                        break;
-                    case "C":
-                        break;
-                    case "S":
-                        break;
                     default:
                         break;
                     }
@@ -140,19 +137,34 @@ public class while_four
                         break;
                 }
                 step_son=Arrays.copyOfRange(step, startn, now-1);
-                qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
-                n=reset_t(qtt,n)+1;//获得当前临时变量tn的n值
-                T2=qtt.get(qtt.size()-1)[3];//暂存比较的右式的临时变量
-                for(int j=0; j<qtt.size(); j++)//将比较的右式四元式序列送入四元式区
+                if(step_son.length==1)//判断右式有一个标识符
                 {
-                    qt.add(qtt.get(j));
+                    switch (step[now-2].substring(1, 2))
+                    {
+                    case "i":
+                        RROT=i[Integer.parseInt(step[now-2].substring(3, 4))];
+                        break;
+                    case "c":
+                    RROT=c[Integer.parseInt(step[now-2].substring(3, 4))];
+                    break;
+                    default:
+                        break;
+                    }
+                }
+                else//右式多于一个标示符
+                {
+                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                    n=reset_t(qtt,n)+1;//获得当前临时变量tn的n值
+                    RROT=qtt.get(qtt.size()-1)[3];//暂存比较的右式的临时变量
+                    for(int j=0; j<qtt.size(); j++)//将比较的右式四元式序列送入四元式区
+                    {
+                        qt.add(qtt.get(j));
+                    }
                 }
                 tn="t".concat(String.valueOf(n));
                 n=0;                   //进入下一个基本块，n置零
-                addqt(P,T1,T2,tn);     //生成比较四元式
+                addqt(P,LROT,RROT,tn);     //生成比较四元式
                 addqt("wh",tn,"_","_");//生成while四元式
-
-
 
                 startn=now+1;//暂存while{}内程序开始位置
                 t="zhaozhiyi";//强制给t赋予某个值，使其不为“{”，防止下面判断while{}内首个token发生错误
@@ -163,16 +175,6 @@ public class while_four
                     {
                     case "p":
                         t = p[Integer.parseInt(step[now].substring(3, 4))];
-                        break;
-                    case "i":
-                        break;
-                    case "c":
-                        break;
-                    case "k":
-                        break;
-                    case "C":
-                        break;
-                    case "S":
                         break;
                     default:
                         break;
@@ -196,16 +198,6 @@ public class while_four
                     qt.add(qtt.get(j));
                 }
             }
-        case "i":
-            break;
-        case "c":
-            break;
-        case "p":
-            break;
-        case "C":
-            break;
-        case "S":
-            break;
         default:
             break;
         }
@@ -236,7 +228,7 @@ public class while_four
             e.printStackTrace();
         }
         //写入完毕
-        printqt();
+
         return qt;
     }
 
@@ -297,15 +289,4 @@ public class while_four
         }
         return true;
     }
-    void printLS(List<String[]> r){
-		for(String[] a:r){
-			for(String aa:a){
-				System.out.print(aa);
-				System.out.print(" ");
-			}
-			System.out.println();
-		}
-	}
 }
-
-
