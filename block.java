@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.*;
 public class block{
 	public static void main(String[] args) throws Exception{
@@ -186,6 +192,27 @@ public class block{
 		}
 		
 		printLS(qt);
+		String result = "";
+			for (int aa = 0; aa < qt.size(); aa++) {
+				result = result.concat("[");
+				for (int aaa = 0; aaa < 4; aaa++) {
+					result = result.concat(qt.get(aa)[aaa]);
+					if (aaa != 3)
+						result = result.concat(",");
+				}
+				result = result.concat("] ");
+			}
+			try {
+				File writename = new File("./z.四元式.txt");
+				writename.createNewFile();
+				BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+				out.write(result);
+				out.flush();
+				out.close(); 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        
 		return qt;
 		// List<String[]> qt = new exp_four().answer(step, i, C, S, c, k, p);
 		// qt = new optimization().answer(qt);

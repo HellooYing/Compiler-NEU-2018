@@ -34,6 +34,9 @@ public class optimization{
 		String[] inqt;
 		String[] t;
 		List<String> replace=new ArrayList<String>();
+		int flag=1;//如果整体循环都没有新的需要优化的地方，才代表真正优化完毕。
+		while(flag==1){
+			flag=0;
 		replace.add(" ");//为了下面的循环可以进入
 		while (replace.size() > 0) {// 第二遍循环，如果t2和t4的符号、操作数、目标操作数都一样，那么t4=t2，t4那条四元式删除
 			replace.clear();
@@ -61,6 +64,7 @@ public class optimization{
 					continue;
 				}
 				if(replace.size()>0){//如果replace不是空，就检查当前四元式是否要把t1替换成6.28之类的
+					flag=1;
 					for(int j=0;j<replace.size()/2;j=j+2){//因为replace是成对加的
 						if(inqt[1].equals(replace.get(j))) inqt[1]=replace.get(j+1);
 						if(inqt[2].equals(replace.get(j))) inqt[2]=replace.get(j+1);
@@ -97,6 +101,7 @@ public class optimization{
 					}
 				}
 			}
+			if(replace.size()>0) flag=1;
 		}
 
 		int flag_appear12;//代表t1这样的结果，是否在下面的第一位和第二位出现过。出现过就代表被使用过，不是无效赋值。
@@ -112,12 +117,31 @@ public class optimization{
 				}
 				if(t[3].equals(inqt[3])){
 					flag_appear3=1;
+					break;
 				}
 			}
 			if(flag_appear12==0&&flag_appear3==1){
 				r.remove(i);
 				i--;
 			}
+		}
+		//第四遍循环，删去无引用的临时变量：逆序，从第一个非最终返回的临时变量找起，找这后面有没有它的引用，没有就删去它
+		for(int i=r.size()-2;i>=0;i--){
+			inqt=r.get(i);
+			if(!is_t(inqt[3])) continue;
+			flag_appear12=0;
+			for(int j=i+1;j<r.size();j++){
+				t=r.get(j);
+				if(t[1].equals(inqt[3])||t[2].equals(inqt[3])){
+					flag_appear12=1;
+				}
+			}
+			if(flag_appear12==0){
+				r.remove(i);
+				i++;
+			}
+		}
+
 		}
 		String result = "";
 		for (int aa = 0; aa < r.size(); aa++) {
@@ -157,6 +181,12 @@ public class optimization{
 		catch(Exception e){
 			return false;
 		}
+		return true;
+	}
+	boolean is_t(String t){
+		if(t.length()<2) return false;
+		if(!t.substring(0,1).equals("t")) return false;
+		if(!is_c(t.substring(1))) return false;
 		return true;
 	}
 }

@@ -55,10 +55,28 @@ public class exp_four {
 		flag = 1;
 		num = 1;
 		brackets = 0;//清除上一次留下的值
-        String finalout;
+        String finalout="";
         if(step1[1].substring(1,2).equals("p")&&p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")&&step1.length>4){
             finalout=i[Integer.parseInt(step1[0].substring(3, 4))];
             step=Arrays.copyOfRange(step1,2,step1.length);
+        }
+        else if(step1[1].substring(1,2).equals("p")&&p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")&&step1.length<=4){//赋值语句
+            inqt=new String[4];
+			inqt[0]="=";
+            switch(step1[2].substring(1,2)){
+                case "i":
+                    inqt[1]=i[Integer.parseInt(step1[2].substring(3,4))];
+                    break;
+                case "c":
+                    inqt[1]=c[Integer.parseInt(step1[2].substring(3,4))];
+                    break;
+                default:
+                    System.out.println("输入表达式无效，请检查z.c语言代码输入.txt");
+            }
+            inqt[2]="_";
+			inqt[3]=i[Integer.parseInt(step1[0].substring(3,4))];
+			qt.add(inqt);
+            return qt;
         }
         else step=step1;
 		//符号栈与元素栈，遇到元素就加进元素栈，遇到符号就加进符号栈
@@ -82,7 +100,9 @@ public class exp_four {
 			    st1.add(inqt[3]);
 			    qt.add(inqt);
 		    }
-        
+            inqt=qt.get(qt.size()-1);
+            if(!finalout.equals("")) inqt[3]=finalout;
+
 		    String result = "";
 			for (int aa = 0; aa < qt.size(); aa++) {
 				result = result.concat("[");

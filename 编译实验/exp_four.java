@@ -1,523 +1,337 @@
-import java.io.File;
-import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.util.*;
 public class exp_four {
     public static int now = 0, flag = 1, num = 1, brackets = 0;
     public static String[] step, i, C, S, c, k, p, inqt;
-    public static Stack<String> st = new Stack<String>();//栈
-    public static Stack<String> symbol = new Stack<String>();//符号栈
-    public static Stack<Integer> synum = new Stack<Integer>();//符号对应四元式的位置
+    public static Stack<String> st1 = new Stack<String>();//元素栈
+	public static Stack<String> st2 = new Stack<String>();//符号栈
     public static List<String[]> qt = new ArrayList<String[]>();//存四元式
-    public static String f;
-    public static List<Integer> qtok = new ArrayList<Integer>();
-
-    //四元式组的顺序在后面是有需要的，所以重构一下这部分内容。原先是，生成四元式的时候就把它加进qt。现在则需要在完成时才这样做。
-    //新建一个完成序列，代表第几个四元式是第几个完成的，然后最后对四元式按此顺序重新读取就ok啦
-    //同时还要改一下输入输出，answer的输入别从文件读取了，改成输入token序列和iCSckp，输出qt
+	public static String f;
     public static void main(String[] args) throws Exception {
-        String path_in = "./in.txt";
-        String path_out = "./out.txt";
-        new analyzer().answer(path_in, path_out);
-        try {
-            File filename = new File(path_out);
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-            BufferedReader br = new BufferedReader(reader);
-            String line = "";
-            line = br.readLine().substring(1);
-            step = line.split(" ");
-            line = br.readLine();
-            i = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            C = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            S = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            c = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            k = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            p = line.substring(4, line.length() - 1).replace(" ", "").split(",");
-            br.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+		String path_in = "./z.c语言代码输入.txt";
+		String path_out = "./z.token序列.txt";
+		new analyzer().answer(path_in);
+		try {
+			File filename = new File(path_out);
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
+			BufferedReader br = new BufferedReader(reader);
+			String line = "";
+			line = br.readLine().substring(1);
+			step = line.split(" ");
+			line = br.readLine();
+			i = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+			line = br.readLine();
+			C = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+			line = br.readLine();
+			S = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+			line = br.readLine();
+			c = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+			line = br.readLine();
+			k = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+			line = br.readLine();
+			p = line.substring(3, line.length() - 1).replace(" ", "").split(",");
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		List<String[]> r1=new exp_four().answer(step, i, C, S, c, k, p);
+	}
+    public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1){
+        i=i1;
+		C=C1;
+		S=S1;
+		c=c1;
+		k=k1;
+		p=p1;
+		qt.clear();
+        st1.clear();
+        st2.clear();
+		now = 0;
+		flag = 1;
+		num = 1;
+		brackets = 0;//清除上一次留下的值
+        String finalout;
+        if(step1[1].substring(1,2).equals("p")&&p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")&&step1.length>4){
+            finalout=i[Integer.parseInt(step1[0].substring(3, 4))];
+            step=Arrays.copyOfRange(step1,2,step1.length);
         }
-        String[][] r1=new exp_four().answer(step, i, C, S, c, k, p);
-    }
-    public static String getTraceInfo() {
-        StringBuffer sb = new StringBuffer();
-        StackTraceElement[] stacks = new Throwable().getStackTrace();
-        sb.append("class: ").append(stacks[1].getClassName()).append("; method: ").append(stacks[1].getMethodName())
-                .append("; number: ").append(stacks[1].getLineNumber());
-        return sb.toString();
+        else step=step1;
+		//符号栈与元素栈，遇到元素就加进元素栈，遇到符号就加进符号栈
+		//遇到符号的时候要跟符号栈的栈顶元素比较，操作是：
+		//遇+- 栈顶+-*/，出栈  空或（ 入栈
+		//遇*/ 栈顶+-（空 入栈   */出栈
+		//遇） 出栈到（
+		//出栈的意思是，inqt[0]=st2.pop();inqt[2]=st1.pop();inqt[1]=st1.pop();inqt[3]="t".concat(String.valueOf(num));num++;st1.add(inqt[3]);
+		//入栈的意思是，st2.add(符号)
+		//遇到元素全直接入栈
+		E();
+        if(flag==0) System.out.println("输入表达式无效，请检查z.c语言代码输入.txt");
+		else{
+            while(!st2.empty()){
+			    inqt=new String[4];
+			    inqt[0]=st2.pop();
+			    inqt[2]=st1.pop();
+			    inqt[1]=st1.pop();
+			    inqt[3]="t".concat(String.valueOf(num));
+			    num++;
+			    st1.add(inqt[3]);
+			    qt.add(inqt);
+		    }
+        
+		    String result = "";
+			for (int aa = 0; aa < qt.size(); aa++) {
+				result = result.concat("[");
+				for (int aaa = 0; aaa < 4; aaa++) {
+					result = result.concat(qt.get(aa)[aaa]);
+					if (aaa != 3)
+						result = result.concat(",");
+				}
+				result = result.concat("] ");
+			}
+			try {
+				File writename = new File("./z.四元式.txt");
+				writename.createNewFile();
+				BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+				out.write(result);
+				out.flush();
+				out.close(); 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        }
+		return qt;
     }
 
-    public static void printall() {
-        System.out.println(symbol.toString());
-        System.out.println(synum.toString());
-        for (int aa = 0; aa < qt.size(); aa++) {
-            System.out.print("[");
-            for (int aaa = 0; aaa < 4; aaa++) {
-                System.out.print(qt.get(aa)[aaa]);
-                if (aaa != 3)
-                    System.out.print(",");
-                else {
-                    System.out.print(",");
-                    System.out.print(aa);
-                }
-            }
-            System.out.print("] ");
-        }
-        System.out.println();
+	public static String getTraceInfo(){  //一个输出代码行号的函数，用来告诉我何时return也就是何时认为表达式出错了或者认为表达式结束了
+        StringBuffer sb = new StringBuffer();   
+          
+        StackTraceElement[] stacks = new Throwable().getStackTrace();  
+        int stacksLen = stacks.length;  
+        sb.append("class: " ).append(stacks[1].getClassName()).append("; method: ").append(stacks[1].getMethodName()).append("; number: ").append(stacks[1].getLineNumber());  
+        return sb.toString();  
     }
 
-    private void E() {
-        if (flag == 0)
-            return;
-        st.push("E");
+    private void E(){
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         T();
-        D();
-        st.pop();
-        if (st.empty() && (!symbol.empty())) {
-            while (!symbol.empty()) {
-                if (f != null) {
-                    inqt = qt.get(qt.size() - 1);
-                    if (f != null)
-                        inqt[2] = f;
-                    else
-                        inqt[2] = "t".concat(String.valueOf(num - 1));
-                    f = null;
-                    inqt[3] = "t".concat(String.valueOf(num));
-                    qtok.add(synum.peek());
-                    num++;
-                    symbol.pop();
-                    synum.pop();
-                } else {
-                    while ((!synum.empty()) && synum.peek() == -1) {
-                        symbol.pop();
-                        synum.pop();
-                    }
-                    if (!symbol.empty()) {
-                        inqt = qt.get(synum.peek());
-                        inqt[2] = "t".concat(String.valueOf(num - 1));
-                        inqt[3] = "t".concat(String.valueOf(num));
-                        qtok.add(synum.peek());
-                        num++;
-                        symbol.pop();
-                        synum.pop();
-                    }
-                }
-            }
-        }
+        E1();
     }
 
-    private void T() {
-        if (flag == 0)
-            return;
-        st.push("T");
+    private void T(){
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         F();
-        Y();
-        st.pop();
+        T1();
     }
 
-    private void D() {
-        if (flag == 0)
-            return;
-        st.push("D");
+	private void E1(){
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         String t;
-        switch (step[now].substring(1, 2)) {
-        case "i":
-            t = i[Integer.parseInt(step[now].substring(3, 4))];
-            st.pop();
+        switch(step[now].substring(1,2)){
+            case "i":
             return;
-        case "c":
-            t = c[Integer.parseInt(step[now].substring(3, 4))];
-            st.pop();
+            case "c":
             return;
-        case "p":
-            t = p[Integer.parseInt(step[now].substring(3, 4))];
-            if (t.equals("+") || t.equals("-")) {
-                System.out.println(t);
-                if (now == step.length - 1) {
-                    flag = 0;
+            case "p":
+            t=p[Integer.parseInt(step[now].substring(3,4))];
+            if(t.equals("+")||t.equals("-")){
+				if(st2.empty()||st2.peek().equals("(")){
+					st2.add(t);
+				}
+				else if(st2.peek().equals("+")||st2.peek().equals("-")||st2.peek().equals("*")||st2.peek().equals("/")){
+					inqt=new String[4];
+					inqt[0]=st2.pop();
+					inqt[2]=st1.pop();
+					inqt[1]=st1.pop();
+					inqt[3]="t".concat(String.valueOf(num));
+					num++;
+					st1.add(inqt[3]);
+					qt.add(inqt);
+                    st2.add(t);
+				}
+                //System.out.println(t);
+                if(now==step.length-1) {
+                    flag=0;
+                    System.out.println(getTraceInfo());
                     return;
-                }
-                ;
-                if (symbol.empty()) {
-                    symbol.push(t);
-                    qt.add(new String[4]);
-                    inqt = qt.get(qt.size() - 1);
-                    inqt[0] = t;
-                    if (f != null)
-                        inqt[1] = f;
-                    else
-                        inqt[1] = "t".concat(String.valueOf(num - 1));
-                    f = null;
-                    synum.push(qt.size() - 1);
-                } else if (symbol.peek().equals("(") || ((symbol.peek().equals("+") || symbol.peek().equals("-"))
-                        && (t.equals("*") || t.equals("/")))) {
-                    symbol.push(t);
-                    qt.add(new String[4]);
-                    inqt = qt.get(qt.size() - 1);
-                    inqt[0] = t;
-                    if (f != null)
-                        inqt[1] = f;
-                    else
-                        inqt[1] = "t".concat(String.valueOf(num - 1));
-                    f = null;
-                    synum.push(qt.size() - 1);
-                } else {
-                    while ((!symbol.empty())
-                            && (!(symbol.peek().equals("(") || ((symbol.peek().equals("+") || symbol.peek().equals("-"))
-                                    && (t.equals("*") || t.equals("/")))))) {
-                        if (f != null) {
-                            inqt = qt.get(qt.size() - 1);
-                            if (f != null)
-                                inqt[2] = f;
-                            else
-                                inqt[2] = "t".concat(String.valueOf(num - 1));
-                            f = null;
-                            inqt[3] = "t".concat(String.valueOf(num));
-                            qtok.add(synum.peek());
-                            num++;
-                            symbol.pop();
-                            synum.pop();
-                        } else {
-                            inqt = qt.get(synum.peek());
-                            inqt[2] = "t".concat(String.valueOf(num - 1));
-                            inqt[3] = "t".concat(String.valueOf(num));
-                            qtok.add(synum.peek());
-                            num++;
-                            symbol.pop();
-                            synum.pop();
-                        }
-                    }
-                    qt.add(new String[4]);
-                    inqt = qt.get(qt.size() - 1);
-                    inqt[0] = t;
-                    inqt[1] = "t".concat(String.valueOf(num - 1));
-                    symbol.push(t);
-                    synum.push(qt.size() - 1);
-                }
-                now++;
+                };
+                now++;//+和-只在T1里消除，别的地方遇到都是错的
                 T();
-                D();
+                E1();
                 break;
-            } else if (t.equals("*") || t.equals("/") || t.equals("(") || t.equals(")")) {
-                st.pop();
-                return;
-            } else {
-                flag = 0;
+            }
+            else if(t.equals("*")||t.equals("/")||t.equals("(")||t.equals(")")||t.equals(";")) return;
+            else{
+                flag=0;
+                System.out.println(getTraceInfo());
                 return;
             }
-        default:
-            flag = 0;
+            default:
+            flag=0;
+            System.out.println(getTraceInfo());
             return;
-        }
-        st.pop();
-        if (now == step.length - 1 && f != null) {
-            inqt = qt.get(qt.size() - 1);
-            if (f != null)
-                inqt[2] = f;
-            else
-                inqt[2] = "t".concat(String.valueOf(num - 1));
-            f = null;
-            inqt[3] = "t".concat(String.valueOf(num));
-            qtok.add(synum.peek());
-            num++;
-            symbol.pop();
-            synum.pop();
-        }
+        }    
     }
-
-    private void Y() {
-        if (flag == 0)
-            return;
-        st.push("Y");
+	private void T1(){
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         String t;
-        switch (step[now].substring(1, 2)) {
-        case "i":
-            t = i[Integer.parseInt(step[now].substring(3, 4))];
-            System.out.println(t);
-            if (now == step.length - 1) {
-                st.pop();
-                return;
-            }
-            now++;
-            st.pop();
+        switch(step[now].substring(1,2)){
+            case "i":
             return;
-        case "c":
-            t = c[Integer.parseInt(step[now].substring(3, 4))];
-            System.out.println(t);
-            if (now == step.length - 1) {
-                st.pop();
-                return;
-            }
-            now++;
-            st.pop();
+            case "c":
             return;
-        case "p":
-            t = p[Integer.parseInt(step[now].substring(3, 4))];
-            if (t.equals("*") || t.equals("/")) {
-                System.out.println(t);
-                if (now == step.length - 1) {
-                    flag = 0;
-                    return;
-                }
-                ;
-                if (symbol.empty()) {
-                    symbol.push(t);
-                    qt.add(new String[4]);
-                    inqt = qt.get(qt.size() - 1);
-                    inqt[0] = t;
-                    if (f != null)
-                        inqt[1] = f;
-                    else
-                        inqt[1] = "t".concat(String.valueOf(num - 1));
-                    f = null;
-                    synum.push(qt.size() - 1);
-                } else if (symbol.peek().equals("(") || ((symbol.peek().equals("+") || symbol.peek().equals("-"))
-                        && (t.equals("*") || t.equals("/")))) {
-                    symbol.push(t);
-                    qt.add(new String[4]);
-                    inqt = qt.get(qt.size() - 1);
-                    inqt[0] = t;
-                    if (f != null)
-                        inqt[1] = f;
-                    else
-                        inqt[1] = "t".concat(String.valueOf(num - 1));
-                    f = null;
-                    synum.push(qt.size() - 1);
-                } else {
-                    while ((!symbol.empty())
-                            && (!(symbol.peek().equals("(") || ((symbol.peek().equals("+") || symbol.peek().equals("-"))
-                                    && (t.equals("*") || t.equals("/")))))) {
-                        if (f != null) {
-                            inqt = qt.get(qt.size() - 1);
-                            if (f != null)
-                                inqt[2] = f;
-                            else
-                                inqt[2] = "t".concat(String.valueOf(num - 1));
-                            f = null;
-                            inqt[3] = "t".concat(String.valueOf(num));
-                            qtok.add(synum.peek());
-                            num++;
-                            symbol.pop();
-                            synum.pop();
-                        } else {
-                            inqt = qt.get(synum.peek());
-                            inqt[2] = "t".concat(String.valueOf(num - 1));
-                            inqt[3] = "t".concat(String.valueOf(num));
-                            qtok.add(synum.peek());
-                            num++;
-                            symbol.pop();
-                            synum.pop();
-                        }
-                    }
-                    qt.add(new String[4]);
-                    inqt = qt.get(qt.size() - 1);
-                    inqt[0] = t;
-                    inqt[1] = "t".concat(String.valueOf(num - 1));
-                    symbol.push(t);
-                    synum.push(qt.size() - 1);
-                }
-                now++;
+            case "p":
+            t=p[Integer.parseInt(step[now].substring(3,4))];
+            if(t.equals("*")||t.equals("/")){
+				if(st2.empty()||st2.peek().equals("+")||st2.peek().equals("-")||st2.peek().equals("(")){
+					st2.add(t);
+				}
+				else if(st2.peek().equals("*")||st2.peek().equals("/")){
+					inqt=new String[4];
+					inqt[0]=st2.pop();
+					inqt[2]=st1.pop();
+					inqt[1]=st1.pop();
+					inqt[3]="t".concat(String.valueOf(num));
+					num++;
+					st1.add(inqt[3]);
+					qt.add(inqt);
+                    st2.add(t);
+				}
+                //System.out.println(t);
+                if(now==step.length-1) {
+                    flag=0;
+                    System.out.println(getTraceInfo());
+					return;
+                };
+                now++;//*和/只在T1里消除，别的地方遇到都是错的
                 F();
-                Y();
-                break;
-            } else if (t.equals("+") || t.equals("-") || t.equals("(") || t.equals(")")) {
-                st.pop();
-                return;
-            } else {
-                flag = 0;
+                T1();
                 return;
             }
-        default:
-            flag = 0;
+            else if(t.equals("+")||t.equals("-")||t.equals("(")||t.equals(")")||t.equals(";")) return;
+            else{
+                flag=0;
+                System.out.println(getTraceInfo());
+                return;
+            }
+            default:
+            flag=0;
+            System.out.println(getTraceInfo());
             return;
-        }
-        st.pop();
-        if (now == step.length - 1 && f != null) {
-            inqt = qt.get(qt.size() - 1);
-            if (f != null)
-                inqt[2] = f;
-            else
-                inqt[2] = "t".concat(String.valueOf(num - 1));
-            f = null;
-            inqt[3] = "t".concat(String.valueOf(num));
-            qtok.add(synum.peek());
-            num++;
-            symbol.pop();
-            synum.pop();
-        }
+        }    
     }
-
-    private void F() {
-        st.push("F");
-        if (flag == 0)
-            return;
+    
+	private void F(){
+        if(flag==0) {System.out.println(getTraceInfo());return;}
         String t;
-        switch (step[now].substring(1, 2)) {
-        case "i":
-            t = i[Integer.parseInt(step[now].substring(3, 4))];
-            System.out.println(t);
-            f = t;
-            if (now == step.length - 1) {
-                st.pop();
-                return;
-            }
-            now++;
-            if (step[now].substring(1, 2).equals("p")) {
-                t = p[Integer.parseInt(step[now].substring(3, 4))];
-                while (t.equals(")")) {
-                    brackets--;
-                    System.out.println(t);
-                    if (now == step.length - 1) {
-                        st.pop();
-                        return;
-                    }
-                    now++;
-                    inqt = qt.get(synum.peek());
-                    if (f != null)
-                        inqt[2] = f;
-                    else
-                        inqt[2] = "t".concat(String.valueOf(num - 1));
-                    f = null;
-                    inqt[3] = "t".concat(String.valueOf(num));
-                    qtok.add(synum.peek());
-                    num++;
-                    symbol.pop();
-                    synum.pop();
-                    if (synum.peek() == -1) {
-                        symbol.pop();
-                        synum.pop();
-                    }
-                    if (brackets < 0) {
-                        flag = 0;
-                        return;
-                    }
-                    if (step[now].substring(1, 2).equals("p")) {
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
-                    }
-                }
-            }
-            break;
-        case "c":
-            t = c[Integer.parseInt(step[now].substring(3, 4))];
-            System.out.println(t);
-            f = t;
-            if (now == step.length - 1) {
-                st.pop();
-                return;
-            }
-            now++;
-            if (step[now].substring(1, 2).equals("p")) {
-                t = p[Integer.parseInt(step[now].substring(3, 4))];
-                while (t.equals(")")) {
-                    brackets--;
-                    System.out.println(t);
-                    inqt = qt.get(synum.peek());
-                    if (f != null)
-                        inqt[2] = f;
-                    else
-                        inqt[2] = "t".concat(String.valueOf(num - 1));
-                    f = null;
-                    inqt[3] = "t".concat(String.valueOf(num));
-                    qtok.add(synum.peek());
-                    num++;
-                    symbol.pop();
-                    synum.pop();
-                    if (synum.peek() == -1) {
-                        symbol.pop();
-                        synum.pop();
-                    }
-                    if (now == step.length - 1) {
-                        st.pop();
-                        return;
-                    }
-                    now++;
-                    if (brackets < 0) {
-                        flag = 0;
-                        return;
-                    }
-                    if (step[now].substring(1, 2).equals("p")) {
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
-                    }
-                }
-            }
-            break;
-        case "p":
-            t = p[Integer.parseInt(step[now].substring(3, 4))];
-            if (t.equals("(")) {
-                System.out.println(t);
-                if (now == step.length - 1) {
-                    flag = 0;
+        switch(step[now].substring(1,2)){
+            case "i":
+            t=i[Integer.parseInt(step[now].substring(3,4))];
+            //System.out.println(t);     
+            st1.add(t);
+            if(now==step.length-1) {
+                    flag=0;
+                    System.out.println(getTraceInfo());
                     return;
-                } else if (step[now + 1].substring(1, 2).equals("p")
-                        && p[Integer.parseInt(step[now + 1].substring(3, 4))].equals(")")) {
-                    flag = 0;
+            }
+            now++;
+            if(step[now].substring(1,2).equals("p")){
+                t=p[Integer.parseInt(step[now].substring(3,4))];
+                while(t.equals(")")){
+                    brackets--;
+                    //System.out.println(t);
+                    if(brackets<0){
+                        flag=0;
+                        System.out.println(getTraceInfo());
+                        return;
+                    }
+					while(!st2.peek().equals("(")){
+						inqt=new String[4];
+						inqt[0]=st2.pop();
+						inqt[2]=st1.pop();
+						inqt[1]=st1.pop();
+						inqt[3]="t".concat(String.valueOf(num));
+						num++;
+						st1.add(inqt[3]);
+						qt.add(inqt);
+					}
+					st2.pop();
+                    if(now==step.length-1) {return;}
+                    now++;
+                    if(step[now].substring(1,2).equals("p")){t=p[Integer.parseInt(step[now].substring(3,4))];}
+                }
+            }
+            break;
+            case "c":
+            t=c[Integer.parseInt(step[now].substring(3,4))];
+            //System.out.println(t);
+			st1.add(t);
+            if(now==step.length-1){
+                    flag=0;
+                    System.out.println(getTraceInfo());
+                    return;
+            }
+            now++;
+            if(step[now].substring(1,2).equals("p")){
+                t=p[Integer.parseInt(step[now].substring(3,4))];
+                while(t.equals(")")){
+                    brackets--;
+                    //System.out.println(t);
+                    if(brackets<0){
+                        flag=0;
+                        System.out.println(getTraceInfo());
+                        return;
+                    }
+					while(!st2.peek().equals("(")){
+						inqt=new String[4];
+						inqt[0]=st2.pop();
+						inqt[2]=st1.pop();
+						inqt[1]=st1.pop();
+						inqt[3]="t".concat(String.valueOf(num));
+						num++;
+						st1.add(inqt[3]);
+						qt.add(inqt);
+					}
+					st2.pop();
+                    if(now==step.length-1) {return;}
+                    now++;
+                    if(step[now].substring(1,2).equals("p")){t=p[Integer.parseInt(step[now].substring(3,4))];}
+                }
+            }
+            break;
+            case "p":
+            t=p[Integer.parseInt(step[now].substring(3,4))];
+            if(t.equals("(")){
+                //System.out.println(t);
+                if(now==step.length-1) {
+                    flag=0;
+                    System.out.println(getTraceInfo());
+                    return;
+                }
+                else if(step[now+1].substring(1,2).equals("p")&&p[Integer.parseInt(step[now+1].substring(3,4))].equals(")")){
+                    flag=0;
+                    System.out.println(getTraceInfo());
                     return;
                 }
                 now++;
                 brackets++;
-                symbol.push("(");
-                synum.push(-1);
+				st2.add(t);
                 E();
                 break;
-            } else {
-                flag = 0;
+            }
+            else{
+                flag=0;
+                System.out.println(getTraceInfo());
                 return;
             }
-        default:
-            flag = 0;
+            default:
+            flag=0;
+            System.out.println(getTraceInfo());
             return;
-        }
-        st.pop();
-    }
-
-    public String[][] answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1) {
-        step=step1;
-        i=i1;
-        C=C1;
-        S=S1;
-        c=c1;
-        k=k1;
-        p=p1;
-        E();
-        // printall();
-        String[][] final_qt = new String[qt.size()][4];
-        for(int aa=0;aa<final_qt.length;aa++){
-            final_qt[aa][0]=qt.get(qtok.get(aa))[0];
-            final_qt[aa][1]=qt.get(qtok.get(aa))[1];
-            final_qt[aa][2]=qt.get(qtok.get(aa))[2];
-            final_qt[aa][3]=qt.get(qtok.get(aa))[3];
-        }
-        String result = "";
-        for (int aa = 0; aa < final_qt.length; aa++) {
-            result = result.concat("[");
-            for (int aaa = 0; aaa < 4; aaa++) {
-                result = result.concat(final_qt[aa][aaa]);
-                if (aaa != 3)
-                    result = result.concat(",");
-            }
-            result = result.concat("] ");
-            if (aa == final_qt.length - 1) {
-                result = result.concat("\n").concat(Integer.toString(aa + 1));
-            }
-        }
-        try {
-            File writename = new File("./out2.txt");
-            writename.createNewFile();
-            BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-            out.write(result);
-            out.flush();
-            out.close(); 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return final_qt;
+        }    
     }
 }
