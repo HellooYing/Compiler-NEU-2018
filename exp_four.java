@@ -56,7 +56,7 @@ public class exp_four {
 		num = 1;
 		brackets = 0;//清除上一次留下的值
         String finalout="";
-        if(step1[1].substring(1,2).equals("p")&&p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")&&step1.length>4){
+        if(step1.length>4&&step1[1].substring(1,2).equals("p")&&p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")){
             finalout=i[Integer.parseInt(step1[0].substring(3, 4))];
             step=Arrays.copyOfRange(step1,2,step1.length);
         }
@@ -71,7 +71,7 @@ public class exp_four {
                     inqt[1]=c[Integer.parseInt(step1[2].substring(3,4))];
                     break;
                 default:
-                    System.out.println("输入表达式无效，请检查z.c语言代码输入.txt");
+                    System.out.println("输入表达式无效");
             }
             inqt[2]="_";
 			inqt[3]=i[Integer.parseInt(step1[0].substring(3,4))];
@@ -88,7 +88,7 @@ public class exp_four {
 		//入栈的意思是，st2.add(符号)
 		//遇到元素全直接入栈
 		E();
-        if(flag==0) System.out.println("输入表达式无效，请检查z.c语言代码输入.txt");
+        if(flag==0) System.out.println("输入表达式无效");
 		else{
             while(!st2.empty()){
 			    inqt=new String[4];
@@ -253,11 +253,7 @@ public class exp_four {
             t=i[Integer.parseInt(step[now].substring(3,4))];
             //System.out.println(t);     
             st1.add(t);
-            if(now==step.length-1) {
-                    flag=0;
-                    System.out.println(getTraceInfo());
-                    return;
-            }
+            if(now==step.length-1) return;
             now++;
             if(step[now].substring(1,2).equals("p")){
                 t=p[Integer.parseInt(step[now].substring(3,4))];
@@ -291,8 +287,6 @@ public class exp_four {
             //System.out.println(t);
 			st1.add(t);
             if(now==step.length-1){
-                    flag=0;
-                    System.out.println(getTraceInfo());
                     return;
             }
             now++;

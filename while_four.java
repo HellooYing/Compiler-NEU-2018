@@ -9,15 +9,14 @@ public class while_four
 {
     public static String[] step, i, C, S, c, k, p;//输入
     public static List<String[]> qt = new ArrayList<String[]>();//存四元式
-    public static String T1,T2,P;//保存左式临时变量，保存右式临时变量，保存比较符号
-    public static int n=0,now=0,startn;//n:临时变量tn序号，now：token串序号，startn：暂存step_on开始token串位置
+    public static int n=0, now=0, startn;                 //n:临时变量tn序号，now：token串序号，startn：暂存step_on开始token串位置
 
     public static void main(String[] args) throws Exception
     {
         String path_in = "./z.while代码.txt";
         String path_out = "./z.token序列.txt";
 
-        //这一句执行了我写的分析器程序，它将根据你在"z.while代码.txt"中输入的代码更新"z.token序列.txt"
+        //执行了分析器程序，它将根据"z.while代码.txt"中输入的代码更新"z.token序列.txt"
         new analyzer().answer(path_in);
 
         //这一段从"z.token序列.txt"文件读取了需要用到的输入，即token序列(我把它取名为step)和i, C, S, c, k, p表
@@ -63,19 +62,16 @@ public class while_four
         c=c1;//数字常量
         k=k1;//关键字
         p=p1;//符号
-
-        String t;
-        String[] step_son;
-        List<String[]> qtt;
-        String[] qttt;
-        String tn;
-        int braceNum=0;//"{"个数，统计大括号{}结束
-
-
+        String t;           //Token的值
+        String[] step_son;  //各阶段的子token序列
+        List<String[]> qtt; //各阶段生成的四元式
+        String T1,T2,P;     //保存代表左式的临时变量，保存代表右式的临时变量，保存比较的符号
+        String tn;          //临时变量
+        int braceNum=1;     //"{"个数，用来统计while{}的结束
+        
         switch (step[now].substring(1, 2))
         {
         case "k":
-
             t = k[Integer.parseInt(step[now].substring(3, 4))];
             if(t.equals("while"))
             {
@@ -101,19 +97,21 @@ public class while_four
                     default:
                         break;
                     }
-                    if(t==">="||t=="<="||t=="=="||t=="!="||t=="<"||t==">")
+                    if(t.equals(">=")||t.equals("<=")||t.equals("==")||t.equals("!=")||t.equals("<")||t.equals(">"))
                     {
                         P=t;//暂存比较符号
                         break;
                     }
                 }
                 step_son = Arrays.copyOfRange(step, startn, now);
-                qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
-                n=reset_t(qtt,n)+1;//*********获得n
-                T1=qtt.get(qtt.size()-1)[3];//暂存比较的左式的临时变量
 
-                qttt=qtt.toArray(new String[qtt.size()]);
-                qt.add(qttt);
+                qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                n=reset_t(qtt,n);           //获得当前临时变量tn的n值
+                T1=qtt.get(qtt.size()-1)[3];//暂存比较的左式的临时变量
+                for(int j=0; j<qtt.size(); j++)//将比较的左式四元式序列送入四元式区
+                {
+                    qt.add(qtt.get(j));
+                }
 
 
                 startn=now+1;//暂存右式step_on首Token串的序号
@@ -138,21 +136,26 @@ public class while_four
                     default:
                         break;
                     }
-                    if(t=="{")
+                    if(t.equals("{"))
                         break;
                 }
                 step_son=Arrays.copyOfRange(step, startn, now-1);
                 qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
-                n=reset_t(qtt,n)+1;//*********获得n
+                n=reset_t(qtt,n)+1;//获得当前临时变量tn的n值
                 T2=qtt.get(qtt.size()-1)[3];//暂存比较的右式的临时变量
-                qttt=qtt.toArray(new String[qtt.size()]);
-                qt.add(qttt);
+                for(int j=0; j<qtt.size(); j++)//将比较的右式四元式序列送入四元式区
+                {
+                    qt.add(qtt.get(j));
+                }
                 tn="t".concat(String.valueOf(n));
-                n=0;
-                addqt(P,T1,T2,tn);
-                addqt("wh",tn,"_","_");
+                n=0;                   //进入下一个基本块，n置零
+                addqt(P,T1,T2,tn);     //生成比较四元式
+                addqt("wh",tn,"_","_");//生成while四元式
+
+
 
                 startn=now+1;//暂存while{}内程序开始位置
+                t="zhaozhiyi";//强制给t赋予某个值，使其不为“{”，防止下面判断while{}内首个token发生错误
                 while(true)
                 {
                     now++;
@@ -174,11 +177,11 @@ public class while_four
                     default:
                         break;
                     }
-                    if(t=="{")
+                    if(t.equals("{"))
                     {
                         braceNum++;
                     }
-                    if(t=="}")
+                    if(t.equals("}"))
                     {
                         braceNum--;
                         if(braceNum==0)
@@ -188,8 +191,10 @@ public class while_four
                 step_son=Arrays.copyOfRange(step, startn, now);
                 qtt=new block().answer(step_son,i,C,S,c,k,p);
                 reset_t(qtt,n);
-                qttt=qtt.toArray(new String[qtt.size()]);
-                qt.add(qttt);
+                for(int j=0; j<qtt.size(); j++)
+                {
+                    qt.add(qtt.get(j));
+                }
             }
         case "i":
             break;
@@ -231,7 +236,7 @@ public class while_four
             e.printStackTrace();
         }
         //写入完毕
-
+        printqt();
         return qt;
     }
 
@@ -292,6 +297,15 @@ public class while_four
         }
         return true;
     }
+    void printLS(List<String[]> r){
+		for(String[] a:r){
+			for(String aa:a){
+				System.out.print(aa);
+				System.out.print(" ");
+			}
+			System.out.println();
+		}
+	}
 }
 
 

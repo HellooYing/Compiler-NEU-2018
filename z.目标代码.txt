@@ -1,7 +1,9 @@
-LD R,20.0
-ST R,x
-LD R,40.0
-ST R,t
-LD R,x
-SUB R,t
-ST R,c
+LD R,a
+ADD R,b
+ST R,t1
+LD R,c
+ADD R,x1
+ST R,_
+LD R,10.0
+ADD R,dd
+ST R,b

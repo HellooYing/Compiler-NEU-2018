@@ -92,10 +92,9 @@ public class block{
 					sentence.add(Arrays.copyOfRange(step, j, jj+1));//sentence把整个if的一大句话加进去
 					j=jj;//开始找下面的
 				}
-			}
-			//再找while
-			else if(step[j].substring(1, 2).equals("k")){
-				if(k[Integer.parseInt(step[j].substring(3, 4))].equals("while")){
+				//再找while
+				else if(k[Integer.parseInt(step[j].substring(3, 4))].equals("while")){
+
 					int jj;
 					for(jj=j+1;jj<step.length;jj++){//找到while{}的前大括号
 						if(step[jj].substring(1, 2).equals("p")){
@@ -152,9 +151,7 @@ public class block{
 					}
 					n=n+m;
 				}
-			}
-			else if(sentence.get(j)[0].substring(1, 2).equals("k")){
-				if(k[Integer.parseInt(sentence.get(j)[0].substring(3, 4))].equals("while")){
+				else if(k[Integer.parseInt(sentence.get(j)[0].substring(3, 4))].equals("while")){
 					qtt=new while_four().answer(sentence.get(j), i, C, S, c, k, p);
 					reset_t(qtt,n);
 					qt.addAll(qtt);
@@ -170,6 +167,7 @@ public class block{
 					n=n+m;
 				}
 			}
+			
 			else if(sentence.get(j)[1].substring(1, 2).equals("p")){
 				if(p[Integer.parseInt(sentence.get(j)[1].substring(3, 4))].equals("=")){
 					qtt=new exp_four().answer(sentence.get(j), i, C, S, c, k, p);
