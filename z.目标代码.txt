@@ -1,2 +1,7 @@
-LD R,5.0
-ST R,a
+LD R,20.0
+ST R,x
+LD R,40.0
+ST R,t
+LD R,x
+SUB R,t
+ST R,c

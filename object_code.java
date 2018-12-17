@@ -145,15 +145,15 @@ public class object_code{
 				//无变量的常数表达式最终运算结果会存到t里
 				if(RDL==""){
 					code.add("LD R,".concat(inqt[1]));
-					code.add("ST R,".concat(inqt[3]));
+					//code.add("ST R,".concat(inqt[3]));
 				}
 				else if(RDL.equals(inqt[1])){
-					code.add("ST R,".concat(inqt[3]));
+					//code.add("ST R,".concat(inqt[3]));
 				}
 				else{
 					if(active[i-1][3]) code.add("ST R,".concat(RDL));
 					code.add("LD R,".concat(inqt[1]));
-					code.add("ST R,".concat(inqt[3]));
+					//code.add("ST R,".concat(inqt[3]));
 				}
 			}
 			RDL=inqt[3];
