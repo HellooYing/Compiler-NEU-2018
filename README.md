@@ -131,7 +131,7 @@
  - 定义全局变量：在数据段中定义
  
        DATAS SEGMENT
-           DATA	DB	1D,2D ———————————— 数组DATA初始化，[1,2]
+           DATA	DB 1D,2D ———————————— 数组DATA初始化，[1,2]
            a DB 0D ———————————— int a=0；
        DATAS ENDS
        
@@ -143,7 +143,7 @@
 - 定义局部变量：在堆栈段定义，通过活动记录读写
  
        STACKS SEGMENT
-           STK		DB	200 DUP (0) ———————————— 定义一个堆栈段
+           STK DB 200 DUP (0) ———————————— 定义一个堆栈段
        STACKS ENDS
        
        MOV AX,32D
@@ -162,4 +162,5 @@
        
        MOV BP,SP
        MOV AX,SS:[BP] ———————————— AX=6，SS:[BP]对应的是栈顶元素
-	      MOV AX,SS:[BP+5] ———————————— AX=1，SS:[BP+5]对应的是倒数第五个元素1
+       MOV AX,SS:[BP+5] ———————————— AX=1，SS:[BP+5]对应的是倒数第五个元素1
+
