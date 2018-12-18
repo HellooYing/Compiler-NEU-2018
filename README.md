@@ -1,4 +1,4 @@
-### 函数功能、输入、输出设计：
+### 编译器前端设计：
 
  - analyzer 输入c语言代码（目前是输入算数表达式），输出c语言的token序列和iCSckp表
       - 输入：String path_in
@@ -185,4 +185,66 @@
 
 - 分支结构：
 
-       MOV
+       MOV AH,03D
+       MOV AL,02D
+       CMP AH,AL
+       JE JUMP1 ———————————— 如果AH==AL则跳转到JUMP1,否则向下执行
+       MOV DL,32H
+       MOV AH,02H
+       INT 21H 
+       JMP JUMP2 ———————————— 避免再次执行JUMP1,要调到JUMP1的下面
+       JUMP1: ———————————— JUMP1要执行的内容
+       MOV DL,31H
+       MOV AH,02H
+       INT 21H
+       JUMP2: ———————————— JUMP2要执行的内容
+       MOV AH,4CH
+       INT 21H
+
+       可以用在这里的转移指令：
+       JA  ———————————— 大于
+       JAE ———————————— 大于等于
+       JB  ———————————— 小于
+       JBE ———————————— 小于等于
+       JE  ———————————— 等于
+       JNE ———————————— 不等于
+
+- 循环结构：
+
+       MOV AX,DATAS
+       MOV DS,AX
+    
+       MOV AL,0H
+       MOV BL,39H
+       MOV CX,6H
+    
+       WH: ———————————— while{}中的内容
+       CMP BL,37H
+       JE CT
+       CMP AL,4
+       JE BK
+       DEC BL
+       INC AL
+       LOOP WH
+       JMP ED ———————————— 为了避免执行CT和BK部分代码，要跳到他们后面去
+    
+       CT: ———————————— continue
+       DEC BL
+       DEC CX
+       JMP WH
+    
+       BK: ———————————— break
+       MOV CX,0H
+    
+       ED:
+       MOV DL,AL
+       ADD DL,30H
+       MOV AH,02H
+       INT 21H
+
+       MOV AH,4CH
+       INT 21H
+      
+- 子程序：
+
+太晚了先睡觉了，明天再写
