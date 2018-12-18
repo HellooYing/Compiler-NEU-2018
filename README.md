@@ -126,12 +126,12 @@
        未选定
 
 
-### 目标代码说明：目标代码为8086汇编语言
+### 目标代码说明：8086汇编语言
 
  - 定义全局变量：在数据段中定义
  
        DATAS SEGMENT
-           DATA	DB 1D,2D ———————————— 数组DATA初始化，[1,2]
+           DATA DB 1D,2D ———————————— 数组DATA初始化，[1,2]
            a DB 0D ———————————— int a=0；
        DATAS ENDS
        
@@ -164,3 +164,25 @@
        MOV AX,SS:[BP] ———————————— AX=6，SS:[BP]对应的是栈顶元素
        MOV AX,SS:[BP+5] ———————————— AX=1，SS:[BP+5]对应的是倒数第五个元素1
 
+- 加减乘除基本运算：
+       
+       MOV AX,49D
+       MOV BX,1D
+       ADD AX,BX ———————————— 加法运算，结果保存在AX
+       
+       MOV AX,50D
+       MOV BX,1D
+       SUB AX,BX ———————————— 除法运算，结果保存在AX
+    
+       MOV AX,7D
+       MOV BX,7D
+       MUL BX    ———————————— 乘法运算，结果保存在AX
+       
+       MOV DX,0D
+       MOV AX,345D
+       MOV BX,7D
+       DIV BX    ———————————— 除法运算，结果保存在AX，余数保留在DX
+
+- 分支结构：
+
+       MOV
