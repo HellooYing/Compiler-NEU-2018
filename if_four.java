@@ -8,9 +8,10 @@ import java.util.*;
 public class if_four {
 	public static String[] step, i, C, S, c, k, p;//输入
 	public static List<String[]> qt = new ArrayList<String[]>();//存四元式
+	public static int n=0, now=0, startn, startw, noww;                 //n:临时变量tn序号，now：token串序号，startn：暂存step_on开始token串位置
 
 	public static void main(String[] args) throws Exception {
-		String path_in = "./z.if代码.txt";
+		String path_in = "./z.c语言代码输入.txt";
 		String path_out = "./z.token序列.txt";
 
         //这一句执行了我写的分析器程序，它将根据你在"z.if代码.txt"中输入的代码更新"z.token序列.txt"
@@ -68,9 +69,220 @@ public class if_four {
 
 
 
-
 		//你应该在这里填充你的代码
+		String t;           //Token的值
+        String[] step_son;  //各阶段的子token序列
+        List<String[]> qtt; //各阶段生成的四元式
+        String T1,T2,P;     //保存代表左式的临时变量，保存代表右式的临时变量，保存比较的符号
+        String tn;          //临时变量
+        int braceNum=1;     //"{"个数，用来统计while{}的结束
 
+        switch (step[now].substring(1, 2))
+        {
+        case "k":
+            t = k[Integer.parseInt(step[now].substring(3, 4))];
+            if(t.equals("if"))
+            {
+                startn=now+2;//暂存左式step_on首Token串的序号
+                while(true)
+                {
+                    now++;
+                    switch (step[now].substring(1, 2))
+                    {
+                    case "p":
+                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        break;
+                    case "i":
+                        break;
+                    case "c":
+                        break;
+                    case "k":
+                        break;
+                    case "C":
+                        break;
+                    case "S":
+                        break;
+                    default:
+                        break;
+                    }
+                    if(t.equals(">=")||t.equals("<=")||t.equals("==")||t.equals("!=")||t.equals("<")||t.equals(">"))
+                    {
+                        P=t;//暂存比较符号
+                        break;
+                    }
+                }
+                step_son = Arrays.copyOfRange(step, startn, now);
+                qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                n=reset_t(qtt,n);           //获得当前临时变量tn的n值
+                T1=qtt.get(qtt.size()-1)[3];//暂存比较的左式的临时变量
+                for(int j=0; j<qtt.size(); j++)//将比较的左式四元式序列送入四元式区
+                {
+                    qt.add(qtt.get(j));
+                }
+
+
+                startn=now+1;//暂存右式step_on首Token串的序号
+                while(true)
+                {
+                    now++;
+                    switch (step[now].substring(1, 2))
+                    {
+                    case "p":
+                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        break;
+                    case "i":
+                        break;
+                    case "c":
+                        break;
+                    case "k":
+                        break;
+                    case "C":
+                        break;
+                    case "S":
+                        break;
+                    default:
+                        break;
+                    }
+                    if(t.equals("{"))
+                        break;
+                }
+                step_son=Arrays.copyOfRange(step, startn, now-1);
+                qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+				n=reset_t(qtt,n)+1;//获得当前临时变量tn的n值
+                T2=qtt.get(qtt.size()-1)[3];//暂存比较的右式的临时变量
+                for(int j=0; j<qtt.size(); j++)//将比较的右式四元式序列送入四元式区
+                {
+                    qt.add(qtt.get(j));
+                }
+                tn="t".concat(String.valueOf(n));
+                addqt(P,T1,T2,tn);     //生成比较四元式
+                addqt("if",tn,"_","_");//生成while四元式
+
+
+
+                startn=now+1;//暂存while{}内程序开始位置
+                t="hh";//强制给t赋予某个值，使其不为“{”，防止下面判断while{}内首个token发生错误
+                while(true)
+                {
+                    now++;
+                    switch (step[now].substring(1, 2))
+                    {
+                    case "p":
+                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        break;
+                    case "i":
+                        break;
+                    case "c":
+                        break;
+                    case "k":
+                        break;
+                    case "C":
+                        break;
+                    case "S":
+                        break;
+                    default:
+                        break;
+                    }
+                    if(t.equals("{"))
+                    {
+                        braceNum++;
+                    }
+                    if(t.equals("}"))
+                    {
+                        braceNum--;
+                        if(braceNum==0)
+                            break;
+                    }
+                }
+                step_son=Arrays.copyOfRange(step, startn, now);
+                qtt=new block().answer(step_son,i,C,S,c,k,p);
+                reset_t(qtt,n);
+                for(int j=0; j<qtt.size(); j++)
+                {
+                    qt.add(qtt.get(j));
+                }
+
+
+                now=now+1;
+                t = k[Integer.parseInt(step[now].substring(3, 4))];
+			if(t.equals("else"))
+			{
+                braceNum=0;
+                n=n+1;//获得当前临时变量tn的n值
+                tn="t".concat(String.valueOf(n));
+                addqt("es",tn,"_","_");
+                startn=now+2;//暂存else{}内程序开始位置
+                t="hh";//强制给t赋予某个值，使其不为“{”，防止下面判断while{}内首个token发生错误
+                while(true)
+                {
+                    now++;
+                    switch (step[now].substring(1, 2))
+                    {
+                    case "p":
+                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        //System.out.println(t);
+                        //System.out.println(now);
+                        break;
+                    case "i":
+                    t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    //System.out.println(t);
+                   // System.out.println(now);
+                        break;
+                    case "c":
+                    t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    //System.out.println(t);
+                    //System.out.println(now);
+                        break;
+                    case "k":
+                    //t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    //System.out.println(t);
+                        break;
+                    case "C":
+                    //t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    //System.out.println(t);
+                        break;
+                    case "S":
+                    //t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    //System.out.println(t);
+                        break;
+                    default:
+                        break;
+                    }
+                    if(t.equals("{"))
+                    {
+                        braceNum++;
+                    }
+                    if(t.equals("}"))
+                    {
+                        braceNum--;
+                        if(braceNum==0)
+                            break;
+                    }
+                }
+                step_son=Arrays.copyOfRange(step, startn, now);
+                qtt=new block().answer(step_son,i,C,S,c,k,p);
+                for(int j=0; j<qtt.size(); j++)
+                {
+                    qt.add(qtt.get(j));
+                }
+                n=reset_t(qtt,n)+1;//获得当前临时变量tn的n值
+                tn="t".concat(String.valueOf(n));
+                addqt("ie",tn,"_","_");
+            }
+            }
+        case "i":
+            break;
+        case "c":
+            break;
+        case "p":
+            break;
+        case "C":
+            break;
+        case "S":
+            break;
+        default:
+            break;
+        }
 
         
 
@@ -208,22 +420,28 @@ public class if_four {
 			System.out.println();
 		}
     }
-	static int reset_t(List<String[]> qtt,int n){//避免临时变量的冲突，在每次往qt加qtt的时候都要重置所有t后面的值
+	static int reset_t(List<String[]> qtt,int n)
+	{//避免临时变量的冲突，在每次往qt加qtt的时候都要重置所有t后面的值
 		String[] inqtt;
-		int num,max=0;
-		for(int j=0;j<qtt.size();j++){
-			inqtt=qtt.get(j);
-			for(int jj=1;jj<4;jj++){
-				if(inqtt[jj].length()>=2){
-					if(inqtt[jj].substring(0,1).equals("t")&&is_c(inqtt[jj].substring(1))){
-						num=Double.valueOf(inqtt[jj].substring(1)).intValue();
-						if(max<num) max=num;
-						inqtt[jj]="t".concat(Integer.toString(num+n));
-					}
-				}
-			}
-		}
-		return max+n;
+        int num,max=0;
+        for(int j=0; j<qtt.size(); j++)
+        {
+            inqtt=qtt.get(j);
+            for(int jj=1; jj<4; jj++)
+            {
+                if(inqtt[jj].length()>=2)
+                {
+                    if(inqtt[jj].substring(0,1).equals("t")&&is_c(inqtt[jj].substring(1)))
+                    {
+                        num=Double.valueOf(inqtt[jj].substring(1)).intValue();
+                        if(max<num)
+                            max=num;
+                        inqtt[jj]="t".concat(Integer.toString(num+n));
+                    }
+                }
+            }
+        }
+        return max+n;
 	}
 	static boolean is_c(String c){
 		try{

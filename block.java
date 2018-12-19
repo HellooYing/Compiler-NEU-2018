@@ -168,12 +168,6 @@ public class block{
 					qtt=new while_four().answer(sentence.get(j), i, C, S, c, k, p);
 					reset_t(qtt,n);
 					qt.addAll(qtt);
-					String[] inqt=new String[4];
-					inqt[0]="we";
-					inqt[1]="_";
-					inqt[2]="_";
-					inqt[3]="_";
-					qt.add(inqt);
 					int m=0;
 					for(int jj=1;jj<4;jj++){
 						if(qtt.get(qtt.size()-1)[jj].length()>=2){

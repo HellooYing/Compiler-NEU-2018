@@ -5,7 +5,13 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.util.*;
-public class synbl{
+public class define_four{
+	List<String[]> synbl;//总表
+	List<String[]> tapel;//类型表
+	List<String[]> ainfl;//数组表
+	List<String[]> pfinfl;//函数表
+	List<String> vall;//活动记录
+
 	public static void main(String[] args) throws Exception{
 		String path_in = "./z.c语言代码输入.txt";
 		String anal=new analyzer().answer(path_in);
@@ -32,7 +38,7 @@ public class synbl{
 		n++;
 		line=t[n];
 		p = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-        //new synbl.answer(step, i, C, S, c, k, p);
+        //new define.answer(step, i, C, S, c, k, p);
 	}
 	List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1){
 		String[] step, i, C, S, c, k, p;
@@ -44,7 +50,15 @@ public class synbl{
 		k=k1;//关键字
 		p=p1;//符号
 		List<String[]> r=new ArrayList<String[]>();
-        //目前只需要
+        //符号表，在定义变量或函数时加入新的
+		List<String[]> synbl=new ArrayList<String[]>();//总表
+		List<String[]> tapel=new ArrayList<String[]>();//类型表
+		List<String[]> ainfl=new ArrayList<String[]>();//数组表
+		List<String[]> pfinfl=new ArrayList<String[]>();//函数表
+		List<String> vall=new ArrayList<String[]>();//活动记录
+
+
+
 
         String result = "";
 		for (int aa = 0; aa < r.size(); aa++) {
