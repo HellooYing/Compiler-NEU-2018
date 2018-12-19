@@ -15,7 +15,7 @@
              k:[main, void, if, else, while, for, int, char, string]
              p:[=, +, *, (, ), -]
              
- - exp_four 输入算数表达式的token序列和iCSckp表，输出算数表达式的四元式中间代码
+ - exp_four、while_four、for_four、if_four、function_four 输入token序列和iCSckp表，输出四元式中间代码
       - 输入：String[] step, i, C, S, c, k, p;
       
              step:{i,0} {p,0} {c,0} {p,1} {c,1} {p,2} {p,3} {c,2} {p,1} {c,3} {p,4} {p,1} {i,1} {p,5} {i,2} {p,2} {c,1}
@@ -30,7 +30,26 @@
       
              [+,4.0,5.0,t1] [*,3.0,t1,t2] [+,2.0,t2,t3] [+,t3,c,t4] [*,d,3.0,t5] [-,t4,t5,t6] [=,t6,_,a] 
              
- - block 输入算数表达式和if和while混合的token序列和iCSckp表，输出四元式中间代码。在此方法中，if、while、算数表达式的求中间代码都是通过引用if_four.java while_four.java exp_four.java实现的。
+ - define_local、define_global 输入类似于"int a;"的代码对应的token序列、iCSckp表、符号表-总表、符号表-函数表、符号表-活动记录，输出修改后的符号表。
+      - 输入：String[] step, i, C, S, c, k, p; List<List<String[]>> table(内容为List<String[]> synbl, pfinfl, vall);
+      
+             step: {k,6} {i,0} {p,0} {i,1} {p,1} {k,6} {i,0} {p,2} {i,1} {p,2} {i,2} {p,1}
+             i:[a, b, c]
+             C:[]
+             S:[]
+             c:[]
+             k:[main, void, if, else, while, for, int, char, string, break, continue]
+             p:[=, ;, ,]
+             synbl:[]
+             pfinfl:[]
+             vall:[]
+      
+      - 输出：List<List<String[]>> table
+      
+             [synbl, pfinfl, vall] 
+             
+             
+ - block 输入基本块token序列和iCSckp表，输出四元式中间代码。在此方法中，if、while、算数表达式等求中间代码都是通过引用其他_four.java实现的。
       - 输入：String[] step, i, C, S, c, k, p;
       
              step:{i,0} {p,0} {c,0} {p,1} {c,1} {p,2} {p,3} {c,2} {p,1} {c,3} {p,4} {p,1} {i,1} {p,5} {i,2} {p,2} {c,1}
@@ -44,7 +63,8 @@
       - 输出：List<String[]> qt
       
              [+,4.0,5.0,t1] [*,3.0,t1,t2] [+,2.0,t2,t3] [+,t3,c,t4] [*,d,3.0,t5] [-,t4,t5,t6] [=,t6,_,a] 
- - optimization 输入算数表达式的四元式中间代码，输出算数表达式的优化后的四元式
+             
+ - optimization 输入四元式中间代码，输出优化后的四元式
       - 输入：List<String[]> qt
       
              [+,4.0,5.0,t1] [*,3.0,t1,t2] [+,2.0,t2,t3] [+,t3,c,t4] [*,d,3.0,t5] [-,t4,t5,t6] [=,t6,_,a] 
@@ -53,7 +73,7 @@
       
              [+,29.0,c,t4] [*,d,3.0,t5] [-,t4,t5,a] 
              
- - object_code 输入算数表达式的优化后的四元式，输出算数表达式的汇编代码
+ - object_code 输入优化后的四元式，输出8086汇编代码
       - 输入：List<String[]> qt
       
              [+,29.0,c,t4] [*,d,3.0,t5] [-,t4,t5,a] 
@@ -70,7 +90,7 @@
              SUB R,t5
              ST R,a
  
- - Main 调用1,2,3,4，也就是输入算数表达式的c语言代码，输出算数表达式的汇编代码
+ - Main 调用1,2,3,4，也就是输入c语言代码，输出8086汇编代码
       - 输入：String path_in
       
              "./z.c语言代码输入.txt"（txt内容如：a=2+3*(4+5)+c-d*3;b=3;）暂时没支持if while
@@ -86,6 +106,29 @@
              LD R,t4
              SUB R,t5
              ST R,a
+
+ - table 符号表：
+ 
+      - 符号表结构：
+       
+             public class table{
+                 class synbl{//全局变量表
+                     String name;//变量名
+                     String tp;//类型
+                     String ofad;//偏移地址
+                     String other;//（如类型为函数，则指向函数表中的某一个。如类型为数组，则存放数组长度）
+                 }
+
+                 class pfinfl{//函数表
+                     String name;//函数名
+                     List<String> xctp;//形参类型
+                     List<String> xcname;//形参名
+                     List<synbl> vt;//函数中的临时变量
+                 }
+
+                 synbl synbl;
+                 pfinfl pfinfl;
+             }
 
 
 ### 中间代码设计：
@@ -123,7 +166,7 @@
        
  - function(a,b,c)
  
-       未选定
+       [ fun, _, _, _] ———————————— for
 
 
 ### 目标代码说明：8086汇编语言
@@ -135,21 +178,32 @@
            a DB 0D ———————————— int a=0；
        DATAS ENDS
        
+       这部分目标代码是通过符号表-总表的信息生成的
+       
+- 读取全局变量：
+
+       MOV AX,DS:[0] ———————————— 取到数据段第一个，也就是DATA[0],1D
+       MOV AX,DS:[2] ———————————— 取到数据段第三个，也就是a，0D
+       
+       在符号表-总表中，可以查到某全局变量在数据段中的偏移地址
+       
  - 修改全局变量的值：
  
        MOV a,OFFSET 1D ———————————— a=1；
        MOV [DATA+1],offset 3D ———————————— DATA[1]=3;
        
+       可以直接通过变量名修改变量的值而不需要通过符号表查询偏移地址
+       
 - 定义局部变量：在堆栈段定义，通过活动记录读写
  
        STACKS SEGMENT
-           STK DB 200 DUP (0) ———————————— 定义一个堆栈段
+           STK DB 100 DUP (0) ———————————— 定义一个堆栈段
        STACKS ENDS
        
-       MOV AX,32D
-       PUSH AX ———————————— 将变量值加入堆栈段
+       MOV AX,2D
+       PUSH AX ———————————— 将变量值加入堆栈段。假设这句目标代码的原代码是int b=2,则活动记录将会记录当前偏移地址是存放变量b的
        
-       POP AX ———————————— 清除堆栈段的变量
+       POP AX ———————————— 在子程序的最后，清除堆栈段，释放临时变量
        
 - 读取局部变量：
 
@@ -163,6 +217,15 @@
        MOV BP,SP
        MOV AX,SS:[BP] ———————————— AX=6，SS:[BP]对应的是栈顶元素
        MOV AX,SS:[BP+5] ———————————— AX=1，SS:[BP+5]对应的是倒数第五个元素1
+       
+       查询符号表-函数表可获取局部变量在堆栈段中的偏移地址
+       
+- 修改局部变量的值：
+ 
+       MOV AX,33H
+       MOV SS:[BP+1],AX
+       
+       与全局变量不同的是，在这里仍然需要通过查询符号表-函数表来获取偏移地址才能修改局部变量的值
 
 - 加减乘除基本运算：
        
@@ -172,7 +235,7 @@
        
        MOV AX,50D
        MOV BX,1D
-       SUB AX,BX ———————————— 除法运算，结果保存在AX
+       SUB AX,BX ———————————— 减法运算，结果保存在AX
     
        MOV AX,7D
        MOV BX,7D
@@ -211,38 +274,24 @@
 
 - 循环结构：
 
-       MOV AX,DATAS
-       MOV DS,AX
-    
        MOV AL,0H
        MOV BL,39H
-       MOV CX,6H
+       MOV CX,02H
     
-       WH: ———————————— while{}中的内容
-       CMP BL,37H
-       JE CT
-       CMP AL,4
-       JE BK
+       WH: ———————————— while开始
+       INC CX ———————————— 避免循环自动终结
+       CMP AL,08H ———————————— while终止的条件，等价于最开始的while(?)和break的功能
+       JE WE
+       INC AL
        DEC BL
+       CMP BL,37H
+       JE WH ———————————— 等价于continue
        INC AL
        LOOP WH
-       JMP ED ———————————— 为了避免执行CT和BK部分代码，要跳到他们后面去
-    
-       CT: ———————————— continue
-       DEC BL
-       DEC CX
-       JMP WH
-    
-       BK: ———————————— break
-       MOV CX,0H
-    
-       ED:
+       WE: ———————————— while终结
        MOV DL,AL
        ADD DL,30H
        MOV AH,02H
-       INT 21H
-
-       MOV AH,4CH
        INT 21H
       
 - 子程序：
