@@ -1,12 +1,8 @@
 /*
 a=5;
-int a=10;
-int a=b;
+int a;
 int a,b,c;
-int a=10,b=5;
 
 */
 
-for(i=0;i<5;i=i+1){
-    i=i+2;
-}
+int a,b,c;
