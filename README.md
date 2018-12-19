@@ -247,4 +247,39 @@
       
 - 子程序：
 
-太晚了先睡觉了，明天再写
+       DATAS SEGMENT
+           R DB 31H ———————————— 约定存放结果的全局变量
+       DATAS ENDS
+
+       STACKS SEGMENT
+           STK DB 20 DUP(0)
+       STACKS ENDS
+
+       CODES SEGMENT
+           ASSUME CS:CODES,DS:DATAS,SS:STACKS
+
+       F PROC NEAR ———————————— 子函数
+           MOV R,OFFSET 32H
+           RET
+       F ENDP
+
+       START: ———————————— 主函数
+           MOV AX,DATAS
+           MOV DS,AX
+    
+           MOV DL,R
+           MOV AH,02H
+           INT 21H
+    
+           CALL F ———————————— 调用子函数
+    
+           MOV DL,R
+           MOV AH,02H
+           INT 21H
+    
+           MOV AH,4CH
+           INT 21H
+       CODES ENDS
+           END START
+    
+
