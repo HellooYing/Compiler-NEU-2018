@@ -107,6 +107,29 @@
              SUB R,t5
              ST R,a
 
+ - table 符号表：
+ 
+      - 符号表结构：
+       
+             public class table{
+                 class synbl{//全局变量表
+                     String name;//变量名
+                     String tp;//类型
+                     String ofad;//偏移地址
+                     String other;//（如类型为函数，则指向函数表中的某一个。如类型为数组，则存放数组长度）
+                 }
+
+                 class pfinfl{//函数表
+                     String name;//函数名
+                     List<String> xctp;//形参类型
+                     List<String> xcname;//形参名
+                     List<synbl> vt;//函数中的临时变量
+                 }
+
+                 synbl synbl;
+                 pfinfl pfinfl;
+             }
+
 
 ### 中间代码设计：
 
