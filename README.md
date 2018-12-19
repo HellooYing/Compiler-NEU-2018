@@ -15,7 +15,7 @@
              k:[main, void, if, else, while, for, int, char, string]
              p:[=, +, *, (, ), -]
              
- - exp_four 输入算数表达式的token序列和iCSckp表，输出算数表达式的四元式中间代码
+ - exp_four、while_four、for_four、if_four、function_four 输入token序列和iCSckp表，输出四元式中间代码
       - 输入：String[] step, i, C, S, c, k, p;
       
              step:{i,0} {p,0} {c,0} {p,1} {c,1} {p,2} {p,3} {c,2} {p,1} {c,3} {p,4} {p,1} {i,1} {p,5} {i,2} {p,2} {c,1}
@@ -30,7 +30,26 @@
       
              [+,4.0,5.0,t1] [*,3.0,t1,t2] [+,2.0,t2,t3] [+,t3,c,t4] [*,d,3.0,t5] [-,t4,t5,t6] [=,t6,_,a] 
              
- - block 输入算数表达式和if和while混合的token序列和iCSckp表，输出四元式中间代码。在此方法中，if、while、算数表达式的求中间代码都是通过引用if_four.java while_four.java exp_four.java实现的。
+ - define_local、define_global 输入类似于"int a;"的代码对应的token序列、iCSckp表、符号表-总表、符号表-函数表、符号表-活动记录，输出修改后的符号表。
+      - 输入：String[] step, i, C, S, c, k, p; List<List<String[]>> table(内容为List<String[]> synbl, pfinfl, vall);
+      
+             step: {k,6} {i,0} {p,0} {i,1} {p,1} {k,6} {i,0} {p,2} {i,1} {p,2} {i,2} {p,1}
+             i:[a, b, c]
+             C:[]
+             S:[]
+             c:[]
+             k:[main, void, if, else, while, for, int, char, string, break, continue]
+             p:[=, ;, ,]
+             synbl:[]
+             pfinfl:[]
+             vall:[]
+      
+      - 输出：List<List<String[]>> table
+      
+             [synbl, pfinfl, vall] 
+             
+             
+ - block 输入基本块token序列和iCSckp表，输出四元式中间代码。在此方法中，if、while、算数表达式等求中间代码都是通过引用其他_four.java实现的。
       - 输入：String[] step, i, C, S, c, k, p;
       
              step:{i,0} {p,0} {c,0} {p,1} {c,1} {p,2} {p,3} {c,2} {p,1} {c,3} {p,4} {p,1} {i,1} {p,5} {i,2} {p,2} {c,1}
@@ -44,7 +63,8 @@
       - 输出：List<String[]> qt
       
              [+,4.0,5.0,t1] [*,3.0,t1,t2] [+,2.0,t2,t3] [+,t3,c,t4] [*,d,3.0,t5] [-,t4,t5,t6] [=,t6,_,a] 
- - optimization 输入算数表达式的四元式中间代码，输出算数表达式的优化后的四元式
+             
+ - optimization 输入四元式中间代码，输出优化后的四元式
       - 输入：List<String[]> qt
       
              [+,4.0,5.0,t1] [*,3.0,t1,t2] [+,2.0,t2,t3] [+,t3,c,t4] [*,d,3.0,t5] [-,t4,t5,t6] [=,t6,_,a] 
@@ -53,7 +73,7 @@
       
              [+,29.0,c,t4] [*,d,3.0,t5] [-,t4,t5,a] 
              
- - object_code 输入算数表达式的优化后的四元式，输出算数表达式的汇编代码
+ - object_code 输入优化后的四元式，输出8086汇编代码
       - 输入：List<String[]> qt
       
              [+,29.0,c,t4] [*,d,3.0,t5] [-,t4,t5,a] 
@@ -70,7 +90,7 @@
              SUB R,t5
              ST R,a
  
- - Main 调用1,2,3,4，也就是输入算数表达式的c语言代码，输出算数表达式的汇编代码
+ - Main 调用1,2,3,4，也就是输入c语言代码，输出8086汇编代码
       - 输入：String path_in
       
              "./z.c语言代码输入.txt"（txt内容如：a=2+3*(4+5)+c-d*3;b=3;）暂时没支持if while
@@ -123,7 +143,7 @@
        
  - function(a,b,c)
  
-       未选定
+       [ fun, _, _, _] ———————————— for
 
 
 ### 目标代码说明：8086汇编语言
