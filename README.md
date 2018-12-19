@@ -211,38 +211,24 @@
 
 - 循环结构：
 
-       MOV AX,DATAS
-       MOV DS,AX
-    
        MOV AL,0H
        MOV BL,39H
-       MOV CX,6H
+       MOV CX,04H
     
-       WH: ———————————— while{}中的内容
-       CMP BL,37H
-       JE CT
-       CMP AL,4
-       JE BK
+       WH: ———————————— while开始
+       INC CX ———————————— 避免循环终结
+       CMP AL,08H ———————————— while终止的条件，等价于最开始的while(?)和break的功能
+       JE WE
+       INC AL
        DEC BL
+       CMP BL,37H
+       JE WH ———————————— 等价于continue
        INC AL
        LOOP WH
-       JMP ED ———————————— 为了避免执行CT和BK部分代码，要跳到他们后面去
-    
-       CT: ———————————— continue
-       DEC BL
-       DEC CX
-       JMP WH
-    
-       BK: ———————————— break
-       MOV CX,0H
-    
-       ED:
+       WE: ———————————— while终结
        MOV DL,AL
        ADD DL,30H
        MOV AH,02H
-       INT 21H
-
-       MOV AH,4CH
        INT 21H
       
 - 子程序：
