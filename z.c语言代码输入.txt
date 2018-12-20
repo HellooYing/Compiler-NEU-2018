@@ -15,3 +15,4 @@ int f1(int a,int b){
     c=a+b;
     return c;
 }
+int g;

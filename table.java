@@ -21,7 +21,7 @@ public class table {
     List<String> vall = new ArrayList<String>();// 活动记录，记录当前位置，是子函数还是主函数，来决定调用临时变量还是全局变量
 
     void print(table tb) {
-        String result = "总表：\n";
+        String result = "\n\n总表：\n";
         for (int j = 0; j < tb.synbl.size(); j++) {
             table.vari tv = tb.synbl.get(j);
             result = result.concat("变量名：").concat(tv.name).concat(" 类型：").concat(tv.tp).concat(" 偏移地址：")
@@ -33,7 +33,7 @@ public class table {
             List<String> xctp = tf.xctp;
             List<String> xcname = tf.xcname;
             List<vari> vt;
-            result = result.concat("函数名：").concat(tf.name).concat("\n").concat("形参：").concat("\n");
+            result = result.concat("\n函数名：").concat(tf.name).concat("\n").concat("形参：").concat("\n");
             for (int jj = 0; jj < xctp.size(); jj++) {
                 result = result.concat(xctp.get(jj)).concat(" ").concat(xcname.get(jj)).concat("\n");
             }
@@ -44,11 +44,12 @@ public class table {
                         .concat(" 偏移地址：").concat(String.valueOf(vt.get(jj).ofad)).concat(" 其他：")
                         .concat(String.valueOf(vt.get(jj).other)).concat("\n");
             }
-            result = result.concat("\n\n活动记录：");
-            for (int jj = 0; jj < vall.size(); jj++) {
-                result = result.concat(vall.get(jj)).concat(" ");
-            }
         }
+        result = result.concat("\n\n活动记录：");
+        for (int jj = 0; jj < vall.size(); jj++) {
+            result = result.concat(vall.get(jj)).concat(" ");
+        }
+        result = result.concat("\n");
         System.out.print(result);
     }
 }

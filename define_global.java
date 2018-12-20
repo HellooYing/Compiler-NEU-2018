@@ -75,7 +75,7 @@ public class define_global {
 			fuc.name = thisv.name;
 			List<String> xctp = new ArrayList<String>();
 			List<String> xcname = new ArrayList<String>();
-			for (; j < step.length; j++) {
+			for (j=j+1; j < step.length; j++) {
 				if (step[j].substring(1, 2).equals("i")) {
 					xcname.add(i[Integer.parseInt(step[j].substring(3, step[j].length() - 1))]);
 				} else if (step[j].substring(1, 2).equals("k")) {

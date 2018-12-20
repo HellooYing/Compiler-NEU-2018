@@ -51,7 +51,7 @@ public class block {
 					if (j + 2 < step.length && step[j + 2].substring(1, 2).equals("p")
 							&& p[Integer.parseInt(step[j + 2].substring(3, step[j + 2].length() - 1))].equals("(")) {
 						// 这就说明是函数声明而非变量声明
-						for (jj = j + 3; jj < step.length; jj++) {// 找到if{}的前大括号
+						for (jj = j + 3; jj < step.length; jj++) {// 找到int f(int a,int b){}的前大括号
 							if (step[jj].substring(1, 2).equals("p")) {
 								if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
 									break;
@@ -149,6 +149,9 @@ public class block {
 				} else if (t.equals("continue")) {
 					sentence.add(Arrays.copyOfRange(step, j, j + 2));
 					j = j + 1;
+				}else if (t.equals("return")) {
+					sentence.add(Arrays.copyOfRange(step, j, j + 3));
+					j = j + 2;
 				}
 			}
 			// else if(是i 在function列表里)
@@ -184,7 +187,32 @@ public class block {
 			if (sentence.get(j)[0].substring(1, 2).equals("k")) {
 				t = k[Integer.parseInt(sentence.get(j)[0].substring(3, sentence.get(j)[0].length() - 1))];
 				if (t.equals("int") || t.equals("char") || t.equals("int[]") || t.equals("String")) {
-					if (tb.vall.get(tb.vall.size() - 1).equals("main"))
+					if (2 < sentence.get(j).length && sentence.get(j)[2].substring(1, 2).equals("p")
+							&& p[Integer.parseInt(sentence.get(j)[2].substring(3, sentence.get(j)[2].length() - 1))].equals("(")) {
+						String[] sen1=new String[0];
+						int jj;
+						for(jj=2;jj<sentence.get(j).length;jj++){
+							if(sentence.get(j)[jj].substring(1, 2).equals("p")
+								&& p[Integer.parseInt(sentence.get(j)[jj].substring(3, sentence.get(j)[jj].length() - 1))].equals(")")){
+								sen1=Arrays.copyOfRange(sentence.get(j),0,jj+1);
+								break;
+							}
+						}
+						String fnm=i[Integer.parseInt(sen1[1].substring(3, sen1[1].length() - 1))];
+						String[] sen2=new String[0];
+						sen2=Arrays.copyOfRange(sentence.get(j),jj+2,sentence.get(j).length-1);
+						for(String s:sen2) System.out.print(s+" ");
+						new define_global().answer(sen1, i, C, S, c, k, p, tb);
+						qtt = new block().answer(sen2, i, C, S, c, k, p, tb);
+						String[] inqt = new String[4];
+						inqt[0] = "fun";
+						inqt[1] = fnm;
+						inqt[2] = "_";
+						inqt[3] = "_";
+						qt.add(inqt);
+						qt.addAll(qtt);
+					}
+					else if (tb.vall.get(tb.vall.size() - 1).equals("main"))
 						new define_global().answer(sentence.get(j), i, C, S, c, k, p, tb);
 					else
 						new define_local().answer(sentence.get(j), i, C, S, c, k, p, tb);
@@ -235,6 +263,13 @@ public class block {
 					String[] inqt = new String[4];
 					inqt[0] = "ct";
 					inqt[1] = "_";
+					inqt[2] = "_";
+					inqt[3] = "_";
+					qt.add(inqt);
+				} else if (t.equals("return")) {
+					String[] inqt = new String[4];
+					inqt[0] = "rt";
+					inqt[1] = i[Integer.parseInt(sentence.get(j)[1].substring(3, sentence.get(j)[1].length() - 1))];
 					inqt[2] = "_";
 					inqt[3] = "_";
 					qt.add(inqt);
