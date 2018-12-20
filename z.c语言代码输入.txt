@@ -2,7 +2,17 @@
 a=5;
 int a;
 int a,b,c;
-
+while(a<5){
+    a=a+1;
+    b=a*5-1;
+    if(b==14){break;}
+}
 */
 
-int a,b,c;
+int a;
+int b;
+a=0;
+a=a+1;
+if(a==1){
+    b=3;
+}

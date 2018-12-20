@@ -15,40 +15,29 @@ public class if_four {
 		String path_out = "./z.token序列.txt";
 
         //这一句执行了我写的分析器程序，它将根据你在"z.if代码.txt"中输入的代码更新"z.token序列.txt"
-		new analyzer().answer(path_in);
         
-        //这一段从"z.token序列.txt"文件读取了需要用到的输入，即token序列(我把它取名为step)和i, C, S, c, k, p表
-		try {
-			File filename = new File(path_out);
-			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-			BufferedReader br = new BufferedReader(reader);
-			String line = "";
-			line = br.readLine().substring(1);
-			step = line.split(" ");
-			line = br.readLine();
-			i = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			C = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			S = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			c = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			k = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			p = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			br.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+        //这一段从"z.token序列.txt"文件读取了需要用到的输入，即token序列(我把它取名为p)和i, C, S, c, k, p表
+		List<List<String>> anal=new analyzer().answer(path_in);
+		String[] step, i, C, S, c, k, p;
+		int n=0;
+		
+		i = (String[])anal.get(0).toArray(new String[anal.get(0).size()]);
+		C = (String[])anal.get(1).toArray(new String[anal.get(1).size()]);
+		S = (String[])anal.get(2).toArray(new String[anal.get(2).size()]);
+		c = (String[])anal.get(3).toArray(new String[anal.get(3).size()]);
+		k = (String[])anal.get(4).toArray(new String[anal.get(4).size()]);
+		p = (String[])anal.get(5).toArray(new String[anal.get(5).size()]);
+		step = (String[])anal.get(6).toArray(new String[anal.get(6).size()]);
         //读取完毕
 
         //下一句执行你写的if语法分析程序
-		List<String[]> r1=new if_four().answer(step, i, C, S, c, k, p);
+        table tb=new table();
+		init(tb);
+		List<String[]> r1=new if_four().answer(step, i, C, S, c, k, p, tb);
 	}
 
 	
-	public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1) {
+	public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,table tb) {
 		qt.clear();
 		step=step1;//token序列
         i=i1;//变量
@@ -80,7 +69,7 @@ public class if_four {
         switch (step[now].substring(1, 2))
         {
         case "k":
-            t = k[Integer.parseInt(step[now].substring(3, 4))];
+            t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             if(t.equals("if"))
             {
                 startn=now+2;//暂存左式step_on首Token串的序号
@@ -90,7 +79,7 @@ public class if_four {
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         break;
                     case "i":
                         break;
@@ -112,7 +101,7 @@ public class if_four {
                     }
                 }
                 step_son = Arrays.copyOfRange(step, startn, now);
-                qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
                 n=reset_t(qtt,n);           //获得当前临时变量tn的n值
                 T1=qtt.get(qtt.size()-1)[3];//暂存比较的左式的临时变量
                 for(int j=0; j<qtt.size(); j++)//将比较的左式四元式序列送入四元式区
@@ -128,7 +117,7 @@ public class if_four {
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         break;
                     case "i":
                         break;
@@ -147,7 +136,7 @@ public class if_four {
                         break;
                 }
                 step_son=Arrays.copyOfRange(step, startn, now-1);
-                qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
 				n=reset_t(qtt,n)+1;//获得当前临时变量tn的n值
                 T2=qtt.get(qtt.size()-1)[3];//暂存比较的右式的临时变量
                 for(int j=0; j<qtt.size(); j++)//将比较的右式四元式序列送入四元式区
@@ -168,7 +157,7 @@ public class if_four {
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         break;
                     case "i":
                         break;
@@ -195,7 +184,7 @@ public class if_four {
                     }
                 }
                 step_son=Arrays.copyOfRange(step, startn, now);
-                qtt=new block().answer(step_son,i,C,S,c,k,p);
+                qtt=new block().answer(step_son,i,C,S,c,k,p, tb);
                 reset_t(qtt,n);
                 for(int j=0; j<qtt.size(); j++)
                 {
@@ -204,7 +193,7 @@ public class if_four {
 
 
                 now=now+1;
-                t = k[Integer.parseInt(step[now].substring(3, 4))];
+                t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
 			if(t.equals("else"))
 			{
                 braceNum=0;
@@ -219,30 +208,30 @@ public class if_four {
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         //System.out.println(t);
                         //System.out.println(now);
                         break;
                     case "i":
-                    t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                     //System.out.println(t);
                    // System.out.println(now);
                         break;
                     case "c":
-                    t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                     //System.out.println(t);
                     //System.out.println(now);
                         break;
                     case "k":
-                    //t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    //t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                     //System.out.println(t);
                         break;
                     case "C":
-                    //t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    //t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                     //System.out.println(t);
                         break;
                     case "S":
-                    //t = p[Integer.parseInt(step[now].substring(3, 4))];
+                    //t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                     //System.out.println(t);
                         break;
                     default:
@@ -260,7 +249,7 @@ public class if_four {
                     }
                 }
                 step_son=Arrays.copyOfRange(step, startn, now);
-                qtt=new block().answer(step_son,i,C,S,c,k,p);
+                qtt=new block().answer(step_son,i,C,S,c,k,p, tb);
                 for(int j=0; j<qtt.size(); j++)
                 {
                     qt.add(qtt.get(j));
@@ -296,24 +285,24 @@ public class if_four {
         //步骤大概是，要求实现：if(>/>=/</<=/==/!=){……} else{……}
 		//对于大括号里的{……}部分，我写好了针对这种一块代码的类。
 
-		//List<String[]> qtt=new block().answer(step_son,i,C,S,c,k,p)将会返回{……}的四元式,因此你只需要关注分支语句就可以。
+		//List<String[]> qtt=new block().answer(step_son,i,C,S,c,k,p, tb)将会返回{……}的四元式,因此你只需要关注分支语句就可以。
 		//注意 这里的step_son是step的子数组，内容是{……}中不包括{}的……部分的{i,0},{p,1}等等。
 		//也就是你需要找到if和else的{和}的位置，然后通过step_son=Arrays.copyOfRange(step, start, end)方法获取中间的……，
 		//从而调用block获取{……}的四元式
 
 		//如果按照我的想法，都不需要用递归下降法，
 		//就上去先把if(a+b>c+d)直接变成+ a b t1，+ c d t2，> t1 t2 t3,if t3 _ _ ,加到qt里
-		//然后把到else之前的全交给List<String[]> qtt=new block().answer(step_son,i,C,S,c,k,p)得到它们的四元式,也加到qt里
+		//然后把到else之前的全交给List<String[]> qtt=new block().answer(step_son,i,C,S,c,k,p, tb)得到它们的四元式,也加到qt里
 		//判断有没有else，有就再else一句 (el _ _ _ ),再把剩下的交给new block()，齐活了
 		//以上是大的想法
 
 		//具体的操作大概是，先判断"("和">"(或</<=/…）之间的token数量是否超过一个，不超过则说明是if(a>?)这种，左边就不需要多管了
-		//如果超过一个，则需要把它变成t1=a+b的形式然后调用List<String[]> qtt=new exp_four().answer(step_son,i,C,S,c,k,p)方式获取t1=a+b的中间代码
+		//如果超过一个，则需要把它变成t1=a+b的形式然后调用List<String[]> qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb)方式获取t1=a+b的中间代码
 		//现在你要做的是获取step_son，这个step_son应该是a+b翻译成token,去step里找到它们然后切出来吧，上面有获取子数组的方法
 		//另一个问题是你将会用很多t1 t2这样的中间变量，为了让它们是t1 t2而不是t1 t1 t1重复，你需要定义一个变量n=1来作为t几的那个几
 		//得到t几的方法是String tn="t".concat(String.valueOf(n))
 		//但exp_four 以及block都只会为你提供t1-tn，因为它们不知道你是用到了t1还是t100
-		//为了避免这种冲突，请你在List<String[]> qtt=new block或exp_four().answer(step_son,i,C,S,c,k,p)之后执行reset_t(qtt,n)
+		//为了避免这种冲突，请你在List<String[]> qtt=new block或exp_four().answer(step_son,i,C,S,c,k,p, tb)之后执行reset_t(qtt,n)
 		//这是我为了避免这种情况而封装的函数，加入你这里以及把t用到了t10，执行这个函数会让qtt中的t1变成t11，依次类推，从而不会让临时变量重复
 		//到了这里，你应该已经得到了a+b部分的四元式，它们存在qtt里。
 		//而将在[> t1 t2 t3]这个四元式代表a+b的t1是qtt中最后一个四元式的第三位也就是qtt.get(qtt.size()-1)[3],你应该把它存一下，不然等会qtt被用了就找不到了
@@ -323,7 +312,7 @@ public class if_four {
 		//如果不是c+d而是c*(10+a)/b*d-100+f，会有很多四元式产生，所以记得下一步[>,t1,t2,t3]的t1 t2是t几很重要
 		//然后qt应该是[+,a,b,t1] [+,c,d,t2] [>,t1,t2,t3]。记得printqt();可以输出qt看
 		//然后再加上[if,t3,_,_],if就ok了，我觉得你应该也能想出来else怎么写了
-		//当然 [+,a,b,t1] [+,c,d,t2] [>,t1,t2,t3] [if,t3,_,_]后面要加上List<String[]> qtt=new block().answer(step_son,i,C,S,c,k,p)搞出来的{……}部分四元式，还要记得reset_t(qtt,n)
+		//当然 [+,a,b,t1] [+,c,d,t2] [>,t1,t2,t3] [if,t3,_,_]后面要加上List<String[]> qtt=new block().answer(step_son,i,C,S,c,k,p, tb)搞出来的{……}部分四元式，还要记得reset_t(qtt,n)
 
 
 
@@ -352,19 +341,19 @@ public class if_four {
         String t;
         switch (step[now].substring(1, 2)) {
         case "k":
-			t = k[Integer.parseInt(step[now].substring(3, 4))];//用t获取到了k[2]，"if"，现在t的内容就是"if"
+			t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];//用t获取到了k[2]，"if"，现在t的内容就是"if"
             ……当前字符是关键字如if……操作……
             break;
 		case "i":
-			t = i[Integer.parseInt(step[now].substring(3, 4))];
+			t = i[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             ……当前字符是变量名如c……操作……
             break;
 		case "c":
-			t = c[Integer.parseInt(step[now].substring(3, 4))];
+			t = c[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             ……当前字符是数字如3.0……操作……
             break;
 		case "p":
-            t = p[Integer.parseInt(step[now].substring(3, 4))];
+            t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             ……当前字符是符号如+->=或者==……操作……
             break;
         case "C":
@@ -451,5 +440,40 @@ public class if_four {
 			return false;
 		}
 		return true;
+	}
+    static void init(table tb){
+		table.func s=tb.new func();
+		s.name="test";
+		List<String> xctp=new ArrayList<String>();
+		xctp.add("int");xctp.add("int");
+		List<String> xcname=new ArrayList<String>();
+		xcname.add("d");xcname.add("f");
+		s.xctp=xctp;
+		s.xcname=xcname;
+		table.var v=tb.new var();
+		v.name="d";
+		v.tp="int";
+		v.ofad=0;
+		v.other=-1;
+		s.vt.add(v);
+		v=tb.new var();
+		v.name="f";
+		v.tp="int";
+		v.ofad=1;
+		v.other=-1;
+		s.vt.add(v);
+		tb.pfinfl.add(s);
+
+		v=tb.new var();
+		v.name="e";
+		v.tp="int";
+		v.ofad=0;
+		v.other=-1;
+		tb.synbl.add(v);
+
+		List<String> vall=new ArrayList<String>();
+		vall.add("main");
+		vall.add("test");
+		tb.vall=vall;
 	}
 }

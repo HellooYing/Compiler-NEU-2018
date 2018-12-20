@@ -14,42 +14,30 @@ public class for_four
 
     public static void main(String[] args) throws Exception
     {
+        String path_in = "./z.c语言代码输入.txt";
         String path_out = "./z.token序列.txt";
 
-        //这一段从"z.token序列.txt"文件读取了需要用到的输入，即token序列(我把它取名为step)和i, C, S, c, k, p表
-        try
-        {
-            File filename = new File(path_out);
-            InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-            BufferedReader br = new BufferedReader(reader);
-            String line = "";
-            line = br.readLine().substring(1);
-            step = line.split(" ");
-            line = br.readLine();
-            i = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            C = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            S = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            c = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            k = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-            line = br.readLine();
-            p = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-            br.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        //这一段从"z.token序列.txt"文件读取了需要用到的输入，即token序列(我把它取名为p)和i, C, S, c, k, p表
+        List<List<String>> anal=new analyzer().answer(path_in);
+		String[] step, i, C, S, c, k, p;
+		int n=0;
+		
+		i = (String[])anal.get(0).toArray(new String[anal.get(0).size()]);
+		C = (String[])anal.get(1).toArray(new String[anal.get(1).size()]);
+		S = (String[])anal.get(2).toArray(new String[anal.get(2).size()]);
+		c = (String[])anal.get(3).toArray(new String[anal.get(3).size()]);
+		k = (String[])anal.get(4).toArray(new String[anal.get(4).size()]);
+		p = (String[])anal.get(5).toArray(new String[anal.get(5).size()]);
+		step = (String[])anal.get(6).toArray(new String[anal.get(6).size()]);
         //读取完毕
 
         //执行for语法分析程序
-        List<String[]> r1=new for_four().answer(step, i, C, S, c, k, p);
+        table tb=new table();
+		init(tb);
+        List<String[]> r1=new for_four().answer(step, i, C, S, c, k, p, tb);
     }
 
-    public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1)
+    public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,table tb)
     {
         step=step1;//token序列
         i=i1;//变量
@@ -68,7 +56,7 @@ public class for_four
         switch (step[now].substring(1, 2))
         {
         case "k":
-            t = k[Integer.parseInt(step[now].substring(3, 4))];
+            t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             if(t.equals("for"))
             {
                 addqt("for","_","_","_");//生成for四元式
@@ -79,7 +67,7 @@ public class for_four
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         break;
                     default:
                         break;
@@ -92,7 +80,7 @@ public class for_four
                 {}
                 else//左式多于一个标示符
                 {
-                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
                     n=reset_t(qtt,n);           //获得当前临时变量tn的n值
                     for(int j=0; j<qtt.size(); j++)//将初始化区四元式序列送入四元式区
                     {
@@ -107,7 +95,7 @@ public class for_four
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         break;
                     default:
                         break;
@@ -124,10 +112,10 @@ public class for_four
                     switch (step[now-1].substring(1, 2))
                     {
                     case "i":
-                        LROT=i[Integer.parseInt(step[now-1].substring(3, 4))];
+                        LROT=i[Integer.parseInt(step[now-1].substring(3,step[now-1].length()-1))];
                         break;
                     case "c":
-                        LROT=c[Integer.parseInt(step[now-1].substring(3, 4))];
+                        LROT=c[Integer.parseInt(step[now-1].substring(3,step[now-1].length()-1))];
                         break;
                     default:
                         break;
@@ -135,7 +123,7 @@ public class for_four
                 }
                 else//左式多于一个标示符
                 {
-                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
                     n=reset_t(qtt,n);           //获得当前临时变量tn的n值
                     LROT=qtt.get(qtt.size()-1)[3];//暂存比较的左式的临时变量
                     for(int j=0; j<qtt.size(); j++)//将比较的左式四元式序列送入四元式区
@@ -151,7 +139,7 @@ public class for_four
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         break;
                     default:
                         break;
@@ -165,10 +153,10 @@ public class for_four
                     switch (step[now-1].substring(1, 2))
                     {
                     case "i":
-                        RROT=i[Integer.parseInt(step[now-1].substring(3, 4))];
+                        RROT=i[Integer.parseInt(step[now-1].substring(3,step[now-1].length()-1))];
                         break;
                     case "c":
-                        RROT=c[Integer.parseInt(step[now-1].substring(3, 4))];
+                        RROT=c[Integer.parseInt(step[now-1].substring(3,step[now-1].length()-1))];
                         break;
                     default:
                         break;
@@ -176,7 +164,7 @@ public class for_four
                 }
                 else//比较区右式多于一个标示符
                 {
-                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
                     n=reset_t(qtt,n)+1;//获得当前临时变量tn的n值
                     RROT=qtt.get(qtt.size()-1)[3];//暂存比较区的右式的临时变量
                     for(int j=0; j<qtt.size(); j++)//将比较区的右式四元式序列送入四元式区
@@ -196,7 +184,7 @@ public class for_four
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         break;
                     default:
                         break;
@@ -213,7 +201,7 @@ public class for_four
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3, 4))];
+                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         break;
                     default:
                         break;
@@ -230,7 +218,7 @@ public class for_four
                     }
                 }
                 step_son=Arrays.copyOfRange(step, startn, now);
-                qtt=new block().answer(step_son,i,C,S,c,k,p);
+                qtt=new block().answer(step_son,i,C,S,c,k,p, tb);
                 reset_t(qtt,n);
                 for(int j=0; j<qtt.size(); j++)
                 {
@@ -245,7 +233,7 @@ public class for_four
                     switch (step[startnt].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[startnt].substring(3, 4))];
+                        t = p[Integer.parseInt(step[startnt].substring(3, step[startnt].length()-1))];
                         break;
                     default:
                         break;
@@ -259,10 +247,10 @@ public class for_four
                     switch (step[startnt-4].substring(1, 2))//保存“i”
                     {
                     case "i":
-                        tTail=i[Integer.parseInt(step[startnt-4].substring(3, 4))];
+                        tTail=i[Integer.parseInt(step[startnt-4].substring(3, step[startnt-4].length()-1))];
                         break;
                     case "c":
-                        tTail=c[Integer.parseInt(step[startnt-4].substring(3, 4))];
+                        tTail=c[Integer.parseInt(step[startnt-4].substring(3, step[startnt-4].length()-1))];
                         break;
                     default:
                         break;
@@ -271,7 +259,7 @@ public class for_four
                     switch (step[startnt-2].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[startnt-2].substring(3, 4))];
+                        t = p[Integer.parseInt(step[startnt-2].substring(3, step[startnt-2].length()-1))];
                         if(t.equals("+"))           //i++情况
                         {
                             addqt("+",tTail,"1",tn);
@@ -284,7 +272,7 @@ public class for_four
                         }
                         else    //普通算术表达式
                         {
-                            qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                            qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
                             n=reset_t(qtt,n);           //获得当前临时变量tn的n值
                             for(int j=0; j<qtt.size(); j++)//将初始化区四元式序列送入四元式区
                             {
@@ -294,7 +282,7 @@ public class for_four
                         break;
 
                     default ://最后一个token不是“+”/“-”，不可能是i++/i--情况
-                        qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                        qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
                         n=reset_t(qtt,n);           //获得当前临时变量tn的n值
                         for(int j=0; j<qtt.size(); j++)//将初始化区四元式序列送入四元式区
                         {
@@ -305,7 +293,7 @@ public class for_four
                 }
                 else//不是三个token串，不可能是i++/i--情况
                 {
-                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p);
+                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
                     n=reset_t(qtt,n);           //获得当前临时变量tn的n值
                     for(int j=0; j<qtt.size(); j++)//将初始化区四元式序列送入四元式区
                     {
@@ -407,6 +395,41 @@ public class for_four
         }
         return true;
     }
+    static void init(table tb){
+		table.func s=tb.new func();
+		s.name="test";
+		List<String> xctp=new ArrayList<String>();
+		xctp.add("int");xctp.add("int");
+		List<String> xcname=new ArrayList<String>();
+		xcname.add("d");xcname.add("f");
+		s.xctp=xctp;
+		s.xcname=xcname;
+		table.var v=tb.new var();
+		v.name="d";
+		v.tp="int";
+		v.ofad=0;
+		v.other=-1;
+		s.vt.add(v);
+		v=tb.new var();
+		v.name="f";
+		v.tp="int";
+		v.ofad=1;
+		v.other=-1;
+		s.vt.add(v);
+		tb.pfinfl.add(s);
+
+		v=tb.new var();
+		v.name="e";
+		v.tp="int";
+		v.ofad=0;
+		v.other=-1;
+		tb.synbl.add(v);
+
+		List<String> vall=new ArrayList<String>();
+		vall.add("main");
+		vall.add("test");
+		tb.vall=vall;
+	}
 }
 
 

@@ -20,68 +20,18 @@ public class define_local{
 	//当前能接收的语句只有int a;/int a,b,c;
 	public static void main(String[] args) throws Exception{
 		String path_in = "./z.c语言代码输入.txt";
-		String anal=new analyzer().answer(path_in);
-		String[] t=anal.split("\n");
+		List<List<String>> anal=new analyzer().answer(path_in);
 		String[] step, i, C, S, c, k, p;
-		int n=0;
-		String line=t[n];
-		step = line.substring(1).split(" ");
-		n++;
-		line=t[n];
-		i = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-		n++;
-		line=t[n];
-		C = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-		n++;
-		line=t[n];
-		S = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-		n++;
-		line=t[n];
-		c = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-		n++;
-		line=t[n];
-		k = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-		n++;
-		line=t[n];
-		p = new String[2];
-		p[0]=",";
-		p[1]=";";
+		
+		i = (String[])anal.get(0).toArray(new String[anal.get(0).size()]);
+		C = (String[])anal.get(1).toArray(new String[anal.get(1).size()]);
+		S = (String[])anal.get(2).toArray(new String[anal.get(2).size()]);
+		c = (String[])anal.get(3).toArray(new String[anal.get(3).size()]);
+		k = (String[])anal.get(4).toArray(new String[anal.get(4).size()]);
+		p = (String[])anal.get(5).toArray(new String[anal.get(5).size()]);
+		step = (String[])anal.get(6).toArray(new String[anal.get(6).size()]);
 		table tb=new table();
-
-		table.func s=tb.new func();
-		s.name="test";
-		List<String> xctp=new ArrayList<String>();
-		xctp.add("int");xctp.add("int");
-		List<String> xcname=new ArrayList<String>();
-		xcname.add("d");xcname.add("f");
-		s.xctp=xctp;
-		s.xcname=xcname;
-		table.var v=tb.new var();
-		v.name="d";
-		v.tp="int";
-		v.ofad=0;
-		v.other=-1;
-		s.vt.add(v);
-		v=tb.new var();
-		v.name="f";
-		v.tp="int";
-		v.ofad=1;
-		v.other=-1;
-		s.vt.add(v);
-		tb.pfinfl.add(s);
-
-		v=tb.new var();
-		v.name="e";
-		v.tp="int";
-		v.ofad=0;
-		v.other=-1;
-		tb.synbl.add(v);
-
-		List<String> vall=new ArrayList<String>();
-		vall.add("main");
-		vall.add("test");
-		tb.vall=vall;
-
+		init(tb);
         new define_local().answer(step, i, C, S, c, k, p, tb);
 	}
 
@@ -108,15 +58,15 @@ public class define_local{
 		
 
 		//对于进来的句子，先判断是否有逗号，来判别是几个变量
-		String tp=k[Integer.parseInt(step[0].substring(3,4))];//进来的语句第一个都是类型如int
+		String tp=k[Integer.parseInt(step[0].substring(3,step[0].length()-1))];//进来的语句第一个都是类型如int
 		List<String> name=new ArrayList<String>();
 		List<Integer> other=new ArrayList<Integer>();
 		if(tp.equals("int")||tp.equals("char")){//对int或者char的定义，other是"_"
 			for(int j=1;j<step.length;j++){
 			//找逗号判断几个变量，如果遇到逗号或分号，则变量在逗号或分号前一个
 				if(step[j].substring(1,2).equals("p")){
-					if(p[Integer.parseInt(step[j].substring(3,4))].equals(",")||p[Integer.parseInt(step[j].substring(3,4))].equals(";")){
-						name.add(i[Integer.parseInt(step[j-1].substring(3,4))]);
+					if(p[Integer.parseInt(step[j].substring(3,step[j].length()-1))].equals(",")||p[Integer.parseInt(step[j].substring(3,step[j].length()-1))].equals(";")){
+						name.add(i[Integer.parseInt(step[j-1].substring(3,step[j-1].length()-1))]);
 						other.add(-1);
 					}
 				}
@@ -197,5 +147,41 @@ public class define_local{
 		if(vt.size()==0) return 0;
 		if(vt.get(vt.size()-1).tp.equals("int[]")) return vt.get(vt.size()-1).other+vt.get(vt.size()-1).ofad;
 		else return vt.get(vt.size()-1).ofad+1;
+	}
+	static void init(table tb){
+		
+		table.func s=tb.new func();
+		s.name="test";
+		List<String> xctp=new ArrayList<String>();
+		xctp.add("int");xctp.add("int");
+		List<String> xcname=new ArrayList<String>();
+		xcname.add("d");xcname.add("f");
+		s.xctp=xctp;
+		s.xcname=xcname;
+		table.var v=tb.new var();
+		v.name="d";
+		v.tp="int";
+		v.ofad=0;
+		v.other=-1;
+		s.vt.add(v);
+		v=tb.new var();
+		v.name="f";
+		v.tp="int";
+		v.ofad=1;
+		v.other=-1;
+		s.vt.add(v);
+		tb.pfinfl.add(s);
+
+		v=tb.new var();
+		v.name="e";
+		v.tp="int";
+		v.ofad=0;
+		v.other=-1;
+		tb.synbl.add(v);
+
+		List<String> vall=new ArrayList<String>();
+		vall.add("main");
+		vall.add("test");
+		tb.vall=vall;
 	}
 }

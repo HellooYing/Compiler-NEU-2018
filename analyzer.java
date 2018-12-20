@@ -31,7 +31,8 @@ public class analyzer {
 		new analyzer().answer(path_in);
 	}
 
-	public String answer(String path_in) {
+	public List<List<String>> answer(String path_in) {
+		List<List<String>> fr=new ArrayList<List<String>>();
 		String result="";
 		try{
 			File filename = new File(path_in);
@@ -241,6 +242,18 @@ public class analyzer {
 					break;
 				}
 			}
+			List<String> strc=new ArrayList<String>();
+			for(Double aa:c){
+				strc.add(aa.toString());
+			}
+			fr.add(i);
+			fr.add(C);
+			fr.add(S);
+			fr.add(strc);
+			fr.add(Arrays.asList(k));
+			fr.add(p);
+			String[] step=result.substring(1).split(" ");
+			fr.add(Arrays.asList(step));
 			String show_i,show_C,show_S,show_c,show_k,show_p;
 			show_i="i:".concat(i.toString());
 			show_C="C:".concat(C.toString());
@@ -258,6 +271,8 @@ public class analyzer {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}  
-		return result;    
+		
+		
+		return fr;    
 	}
 }

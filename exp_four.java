@@ -15,33 +15,21 @@ public class exp_four {
     public static void main(String[] args) throws Exception {
 		String path_in = "./z.c语言代码输入.txt";
 		String path_out = "./z.token序列.txt";
-		new analyzer().answer(path_in);
-		try {
-			File filename = new File(path_out);
-			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
-			BufferedReader br = new BufferedReader(reader);
-			String line = "";
-			line = br.readLine().substring(1);
-			step = line.split(" ");
-			line = br.readLine();
-			i = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			C = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			S = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			c = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			k = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			line = br.readLine();
-			p = line.substring(3, line.length() - 1).replace(" ", "").split(",");
-			br.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		List<String[]> r1=new exp_four().answer(step, i, C, S, c, k, p);
+		List<List<String>> anal=new analyzer().answer(path_in);
+		String[] step, i, C, S, c, k, p;
+		
+		i = (String[])anal.get(0).toArray(new String[anal.get(0).size()]);
+		C = (String[])anal.get(1).toArray(new String[anal.get(1).size()]);
+		S = (String[])anal.get(2).toArray(new String[anal.get(2).size()]);
+		c = (String[])anal.get(3).toArray(new String[anal.get(3).size()]);
+		k = (String[])anal.get(4).toArray(new String[anal.get(4).size()]);
+		p = (String[])anal.get(5).toArray(new String[anal.get(5).size()]);
+		step = (String[])anal.get(6).toArray(new String[anal.get(6).size()]);
+        table tb=new table();
+		init(tb);
+		List<String[]> r1=new exp_four().answer(step, i, C, S, c, k, p, tb);
 	}
-    public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1){
+    public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,table tb){
         i=i1;
 		C=C1;
 		S=S1;
@@ -56,25 +44,25 @@ public class exp_four {
 		num = 1;
 		brackets = 0;//清除上一次留下的值
         String finalout="";
-        if(step1.length>4&&step1[1].substring(1,2).equals("p")&&p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")){
-            finalout=i[Integer.parseInt(step1[0].substring(3, 4))];
+        if(step1.length>4&&step1[1].substring(1,2).equals("p")&&p[Integer.parseInt(step1[1].substring(3, step1[1].length()-1))].equals("=")){
+            finalout=i[Integer.parseInt(step1[0].substring(3, step1[0].length()-1))];
             step=Arrays.copyOfRange(step1,2,step1.length);
         }
-        else if(step1[1].substring(1,2).equals("p")&&p[Integer.parseInt(step1[1].substring(3, 4))].equals("=")&&step1.length<=4){//赋值语句
+        else if(step1[1].substring(1,2).equals("p")&&p[Integer.parseInt(step1[1].substring(3, step1[1].length()-1))].equals("=")&&step1.length<=4){//赋值语句
             inqt=new String[4];
 			inqt[0]="=";
             switch(step1[2].substring(1,2)){
                 case "i":
-                    inqt[1]=i[Integer.parseInt(step1[2].substring(3,4))];
+                    inqt[1]=i[Integer.parseInt(step1[2].substring(3,step1[2].length()-1))];
                     break;
                 case "c":
-                    inqt[1]=c[Integer.parseInt(step1[2].substring(3,4))];
+                    inqt[1]=c[Integer.parseInt(step1[2].substring(3,step1[2].length()-1))];
                     break;
                 default:
                     System.out.println("输入表达式无效");
             }
             inqt[2]="_";
-			inqt[3]=i[Integer.parseInt(step1[0].substring(3,4))];
+			inqt[3]=i[Integer.parseInt(step1[0].substring(3,step1[0].length()-1))];
 			qt.add(inqt);
             return qt;
         }
@@ -157,7 +145,7 @@ public class exp_four {
             case "c":
             return;
             case "p":
-            t=p[Integer.parseInt(step[now].substring(3,4))];
+            t=p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             if(t.equals("+")||t.equals("-")){
 				if(st2.empty()||st2.peek().equals("(")){
 					st2.add(t);
@@ -205,7 +193,7 @@ public class exp_four {
             case "c":
             return;
             case "p":
-            t=p[Integer.parseInt(step[now].substring(3,4))];
+            t=p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             if(t.equals("*")||t.equals("/")){
 				if(st2.empty()||st2.peek().equals("+")||st2.peek().equals("-")||st2.peek().equals("(")){
 					st2.add(t);
@@ -250,13 +238,13 @@ public class exp_four {
         String t;
         switch(step[now].substring(1,2)){
             case "i":
-            t=i[Integer.parseInt(step[now].substring(3,4))];
+            t=i[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             //System.out.println(t);     
             st1.add(t);
             if(now==step.length-1) return;
             now++;
             if(step[now].substring(1,2).equals("p")){
-                t=p[Integer.parseInt(step[now].substring(3,4))];
+                t=p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                 while(t.equals(")")){
                     brackets--;
                     //System.out.println(t);
@@ -278,12 +266,12 @@ public class exp_four {
 					st2.pop();
                     if(now==step.length-1) {return;}
                     now++;
-                    if(step[now].substring(1,2).equals("p")){t=p[Integer.parseInt(step[now].substring(3,4))];}
+                    if(step[now].substring(1,2).equals("p")){t=p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];}
                 }
             }
             break;
             case "c":
-            t=c[Integer.parseInt(step[now].substring(3,4))];
+            t=c[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             //System.out.println(t);
 			st1.add(t);
             if(now==step.length-1){
@@ -291,7 +279,7 @@ public class exp_four {
             }
             now++;
             if(step[now].substring(1,2).equals("p")){
-                t=p[Integer.parseInt(step[now].substring(3,4))];
+                t=p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                 while(t.equals(")")){
                     brackets--;
                     //System.out.println(t);
@@ -313,12 +301,12 @@ public class exp_four {
 					st2.pop();
                     if(now==step.length-1) {return;}
                     now++;
-                    if(step[now].substring(1,2).equals("p")){t=p[Integer.parseInt(step[now].substring(3,4))];}
+                    if(step[now].substring(1,2).equals("p")){t=p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];}
                 }
             }
             break;
             case "p":
-            t=p[Integer.parseInt(step[now].substring(3,4))];
+            t=p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             if(t.equals("(")){
                 //System.out.println(t);
                 if(now==step.length-1) {
@@ -326,7 +314,7 @@ public class exp_four {
                     System.out.println(getTraceInfo());
                     return;
                 }
-                else if(step[now+1].substring(1,2).equals("p")&&p[Integer.parseInt(step[now+1].substring(3,4))].equals(")")){
+                else if(step[now+1].substring(1,2).equals("p")&&p[Integer.parseInt(step[now+1].substring(3,step[now+1].length()-1))].equals(")")){
                     flag=0;
                     System.out.println(getTraceInfo());
                     return;
@@ -348,4 +336,39 @@ public class exp_four {
             return;
         }    
     }
+    static void init(table tb){
+		table.func s=tb.new func();
+		s.name="test";
+		List<String> xctp=new ArrayList<String>();
+		xctp.add("int");xctp.add("int");
+		List<String> xcname=new ArrayList<String>();
+		xcname.add("d");xcname.add("f");
+		s.xctp=xctp;
+		s.xcname=xcname;
+		table.var v=tb.new var();
+		v.name="d";
+		v.tp="int";
+		v.ofad=0;
+		v.other=-1;
+		s.vt.add(v);
+		v=tb.new var();
+		v.name="f";
+		v.tp="int";
+		v.ofad=1;
+		v.other=-1;
+		s.vt.add(v);
+		tb.pfinfl.add(s);
+
+		v=tb.new var();
+		v.name="e";
+		v.tp="int";
+		v.ofad=0;
+		v.other=-1;
+		tb.synbl.add(v);
+
+		List<String> vall=new ArrayList<String>();
+		vall.add("main");
+		vall.add("test");
+		tb.vall=vall;
+	}
 }
