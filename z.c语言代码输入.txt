@@ -13,6 +13,9 @@ int a;
 int b;
 a=0;
 a=a+1;
-if(a==1){
-    b=3;
+b=10;
+while(a<5){
+    a=a+1;
+    b=a*5-1;
+    if(b-1==14-1){break;}
 }

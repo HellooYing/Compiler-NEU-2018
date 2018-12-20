@@ -44,7 +44,7 @@ public class while_four
 
     public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,table tb)
     {
-        step=step1;//token序列
+       step=step1;//token序列
         i=i1;//变量
         C=C1;//字符
         S=S1;//字符串
@@ -61,9 +61,10 @@ public class while_four
         switch (step[now].substring(1, 2))
         {
         case "k":
-            t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
+            t = k[Integer.parseInt(step[now].substring(3, step[now].length()-1))];
             if(t.equals("while"))
             {
+                
                 startn=now+2;//暂存左式step_on首Token串的序号
                 while(true)
                 {
@@ -71,7 +72,7 @@ public class while_four
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
+                        t = p[Integer.parseInt(step[now].substring(3, step[now].length()-1))];
                         break;
                     default:
                         break;
@@ -88,10 +89,10 @@ public class while_four
                     switch (step[now-1].substring(1, 2))
                     {
                     case "i":
-                        LROT=i[Integer.parseInt(step[now-1].substring(3,step[now-1].length()-1))];
+                        LROT=i[Integer.parseInt(step[now-1].substring(3, step[now-1].length()-1))];
                         break;
                     case "c":
-                        LROT=c[Integer.parseInt(step[now-1].substring(3,step[now-1].length()-1))];
+                        LROT=c[Integer.parseInt(step[now-1].substring(3, step[now-1].length()-1))];
                         break;
                     default:
                         break;
@@ -99,7 +100,7 @@ public class while_four
                 }
                 else//左式多于一个标示符
                 {
-                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
+                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p,tb);
                     n=reset_t(qtt,n);           //获得当前临时变量tn的n值
                     LROT=qtt.get(qtt.size()-1)[3];//暂存比较的左式的临时变量
                     for(int j=0; j<qtt.size(); j++)//将比较的左式四元式序列送入四元式区
@@ -115,7 +116,7 @@ public class while_four
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
+                        t = p[Integer.parseInt(step[now].substring(3, step[now].length()-1))];
                         break;
                     default:
                         break;
@@ -129,10 +130,10 @@ public class while_four
                     switch (step[now-2].substring(1, 2))
                     {
                     case "i":
-                        RROT=i[Integer.parseInt(step[now-2].substring(3,step[now-2].length()-1))];
+                        RROT=i[Integer.parseInt(step[now-2].substring(3, step[now-2].length()-1))];
                         break;
                     case "c":
-                    RROT=c[Integer.parseInt(step[now-2].substring(3,step[now-2].length()-1))];
+                    RROT=c[Integer.parseInt(step[now-2].substring(3, step[now-2].length()-1))];
                     break;
                     default:
                         break;
@@ -140,7 +141,7 @@ public class while_four
                 }
                 else//右式多于一个标示符
                 {
-                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p, tb);
+                    qtt=new exp_four().answer(step_son,i,C,S,c,k,p,tb);
                     n=reset_t(qtt,n)+1;//获得当前临时变量tn的n值
                     RROT=qtt.get(qtt.size()-1)[3];//暂存比较的右式的临时变量
                     for(int j=0; j<qtt.size(); j++)//将比较的右式四元式序列送入四元式区
@@ -152,18 +153,16 @@ public class while_four
                 n=0;                   //进入下一个基本块，n置零
                 addqt(P,LROT,RROT,tn);     //生成比较四元式
                 addqt("wh",tn,"_","_");//生成while四元式
-                
 
                 startn=now+1;//暂存while{}内程序开始位置
                 t="zhaozhiyi";//强制给t赋予某个值，使其不为“{”，防止下面判断while{}内首个token发生错误
                 while(true)
                 {
                     now++;
-                    if(now==step.length) break;
                     switch (step[now].substring(1, 2))
                     {
                     case "p":
-                        t = p[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
+                        t = p[Integer.parseInt(step[now].substring(3, step[now].length()-1))];
                         break;
                     default:
                         break;
@@ -171,16 +170,18 @@ public class while_four
                     if(t.equals("{"))
                     {
                         braceNum++;
+                        t="zhaozhiyi";//强制给t赋予某个值，使其不为“{”，防止下面有连续的"{"时判断发生错误
                     }
                     if(t.equals("}"))
                     {
+                        t="zhaozhiyi";//强制给t赋予某个值，使其不为“}”，防止下面有连续的"}"时判断发生错误
                         braceNum--;
                         if(braceNum==0)
-                            break;
+                        {break;}                          
                     }
                 }
                 step_son=Arrays.copyOfRange(step, startn, now);
-                qtt=new block().answer(step_son,i,C,S,c,k,p, tb);
+                qtt=new block().answer(step_son,i,C,S,c,k,p,tb);
                 reset_t(qtt,n);
                 for(int j=0; j<qtt.size(); j++)
                 {
@@ -218,19 +219,6 @@ public class while_four
             e.printStackTrace();
         }
         //写入完毕
-
-
-        while(true)
-        {
-            qti++;
-            if(qt.get(qti)[0].equals("wh"))
-            {
-                code.add("WH:");
-                break;
-            }
-        }
-       
-
 
         return qt;
     }
@@ -301,13 +289,13 @@ public class while_four
 		xcname.add("d");xcname.add("f");
 		s.xctp=xctp;
 		s.xcname=xcname;
-		table.var v=tb.new var();
+		table.vari v=tb.new vari();
 		v.name="d";
 		v.tp="int";
 		v.ofad=0;
 		v.other=-1;
 		s.vt.add(v);
-		v=tb.new var();
+		v=tb.new vari();
 		v.name="f";
 		v.tp="int";
 		v.ofad=1;
@@ -315,7 +303,7 @@ public class while_four
 		s.vt.add(v);
 		tb.pfinfl.add(s);
 
-		v=tb.new var();
+		v=tb.new vari();
 		v.name="e";
 		v.tp="int";
 		v.ofad=0;

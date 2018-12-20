@@ -298,13 +298,13 @@ public class block{
 		xcname.add("d");xcname.add("f");
 		s.xctp=xctp;
 		s.xcname=xcname;
-		table.var v=tb.new var();
+		table.vari v=tb.new vari();
 		v.name="d";
 		v.tp="int";
 		v.ofad=0;
 		v.other=-1;
 		s.vt.add(v);
-		v=tb.new var();
+		v=tb.new vari();
 		v.name="f";
 		v.tp="int";
 		v.ofad=1;
@@ -312,7 +312,7 @@ public class block{
 		s.vt.add(v);
 		tb.pfinfl.add(s);
 
-		v=tb.new var();
+		v=tb.new vari();
 		v.name="e";
 		v.tp="int";
 		v.ofad=0;

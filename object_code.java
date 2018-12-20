@@ -36,7 +36,7 @@ public class object_code{
 		String[] inqt;
 		boolean[][] active=new boolean[qt.size()][4];//存qt的活跃信息
 		HashSet<String> t = new HashSet<String>();//一个集合，为了把每个非数字的变量名加入set去重，获取变量表
-		List<String> variable;//set转化为list的变量表
+		List<String> variiable;//set转化为list的变量表
 		boolean[] symbl;//存放变量对应的活跃信息
 		String RDL;//表示寄存器此时存的是哪个变量。我是写的单寄存器。
 
@@ -49,11 +49,11 @@ public class object_code{
 			}
 		}
 
-		variable = new ArrayList<String>(t);
-		symbl = new boolean[variable.size()];
-		for(int i=0;i<variable.size();i++){//给变量的活跃信息赋初值
-			if(variable.get(i).length()>1&&variable.get(i).substring(0,1).equals("t")&&is_c(variable.get(i).substring(1))){
-				//如果variable是t+数字的组合，就是临时变量
+		variiable = new ArrayList<String>(t);
+		symbl = new boolean[variiable.size()];
+		for(int i=0;i<variiable.size();i++){//给变量的活跃信息赋初值
+			if(variiable.get(i).length()>1&&variiable.get(i).substring(0,1).equals("t")&&is_c(variiable.get(i).substring(1))){
+				//如果variiable是t+数字的组合，就是临时变量
 				symbl[i]=false;//临时变量初值false
 			}
 			else symbl[i]=true;//非临时变量初值true
@@ -62,16 +62,16 @@ public class object_code{
 		for(int i=qt.size()-1;i>=0;i--){//逆序扫描四元式组，添加变量在每个四元式的时候的活跃信息
 			inqt=qt.get(i);
 			if(t.contains(inqt[1])){//如果inqt[1]是变量而不是数字，也就是它在t那个集合里
-				active[i][1]=symbl[index(variable,inqt[1])];//给它添加活跃信息
-				symbl[index(variable,inqt[1])]=true;
+				active[i][1]=symbl[index(variiable,inqt[1])];//给它添加活跃信息
+				symbl[index(variiable,inqt[1])]=true;
 			}
 			if(t.contains(inqt[2])){
-				active[i][2]=symbl[index(variable,inqt[2])];
-				symbl[index(variable,inqt[2])]=true;
+				active[i][2]=symbl[index(variiable,inqt[2])];
+				symbl[index(variiable,inqt[2])]=true;
 			}
 			if(t.contains(inqt[3])){
-				active[i][3]=symbl[index(variable,inqt[3])];
-				symbl[index(variable,inqt[3])]=false;
+				active[i][3]=symbl[index(variiable,inqt[3])];
+				symbl[index(variiable,inqt[3])]=false;
 			}
 		}//到这为止，active存放着变量的活跃信息，位置与qt一一对应。而没有活跃信息的数字和符号默认为false，后面应用时应避免查询。
 
@@ -177,11 +177,11 @@ public class object_code{
 		return code;
 	}
 
-	int index(List<String> variable,String str){
+	int index(List<String> variiable,String str){
 		int i;
-		for(i=0;i<variable.size();i++){
-			if(variable.get(i).equals(str)) break;
-			else if(i==variable.size()-1){
+		for(i=0;i<variiable.size();i++){
+			if(variiable.get(i).equals(str)) break;
+			else if(i==variiable.size()-1){
 				i=-1;
 				break;
 			}

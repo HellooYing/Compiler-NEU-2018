@@ -46,7 +46,7 @@ public class define_local{
 		p=p1;//符号
 		table.func func=tb.new func();
 		String fnm=tb.vall.get(tb.vall.size()-1);
-		List<table.var> vt=new ArrayList<table.var>();//这个函数的临时变量表
+		List<table.vari> vt=new ArrayList<table.vari>();//这个函数的临时变量表
 		
         for(int j=0;j<tb.pfinfl.size();j++){
 			if(tb.pfinfl.get(j).name.equals(fnm)){//符号表的函数表的函数名与fnm相同的那个func
@@ -75,11 +75,11 @@ public class define_local{
 		//增添对数组的支持时写这里
 
 
-		//现在拿到了这次变量名，现在要新建一个var类型，用来存本变量的信息。本变量的信息中有一条偏移地址，
+		//现在拿到了这次变量名，现在要新建一个vari类型，用来存本变量的信息。本变量的信息中有一条偏移地址，
 		
 
 		for(int j=0;j<name.size();j++){//对于这次定义的每个变量
-        	table.var thisv=tb.new var();//新建一个var
+        	table.vari thisv=tb.new vari();//新建一个vari
 			thisv.name=name.get(j);
 			thisv.tp=tp;
 			thisv.other=other.get(j);
@@ -96,7 +96,7 @@ public class define_local{
 			}
 		}
 
-		//result在txt中存放方式，先打印总表，总表中的每个var一行
+		//result在txt中存放方式，先打印总表，总表中的每个vari一行
 		//再打印函数表，函数表中前三个元素一行，vt：n行
         tb.print(tb);
 		wt(tb);
@@ -104,7 +104,7 @@ public class define_local{
 	static void  wt(table tb){
 		String result = "";
 		for(int j=0;j<tb.synbl.size();j++){
-			table.var tv=tb.synbl.get(j);
+			table.vari tv=tb.synbl.get(j);
 			result=result.concat(tv.name).concat(" ").concat(tv.tp).concat(" ").concat(String.valueOf(tv.ofad)).concat(" ").concat(String.valueOf(tv.other)).concat("\n");
 		}
 		result=result.concat("\n");
@@ -112,7 +112,7 @@ public class define_local{
 			table.func tf=tb.pfinfl.get(j);
 			List<String> xctp=tf.xctp;
 			List<String> xcname=tf.xcname;
-			List<table.var> vt;
+			List<table.vari> vt;
 			result=result.concat(tf.name).concat("\n");
 			for(int jj=0;jj<xctp.size();jj++){
 				result=result.concat(xctp.get(jj)).concat(" ").concat(xcname.get(jj)).concat("\n");
@@ -139,10 +139,10 @@ public class define_local{
 		} 
 	}
 	
-	static int getofad(List<table.var> vt){
+	static int getofad(List<table.vari> vt){
 		//求偏移地址：如果vt.size()为0，则偏移地址为0，
-		//如果vt.size()不为0，就去看看上一条var的类型是否是int[]，
-		//如果是int[]，那么偏移地址为上一条var的other+ofad
+		//如果vt.size()不为0，就去看看上一条vari的类型是否是int[]，
+		//如果是int[]，那么偏移地址为上一条vari的other+ofad
 		//如果不是数组而是int或者char，那么偏移地址为ofad+1
 		if(vt.size()==0) return 0;
 		if(vt.get(vt.size()-1).tp.equals("int[]")) return vt.get(vt.size()-1).other+vt.get(vt.size()-1).ofad;
@@ -158,13 +158,13 @@ public class define_local{
 		xcname.add("d");xcname.add("f");
 		s.xctp=xctp;
 		s.xcname=xcname;
-		table.var v=tb.new var();
+		table.vari v=tb.new vari();
 		v.name="d";
 		v.tp="int";
 		v.ofad=0;
 		v.other=-1;
 		s.vt.add(v);
-		v=tb.new var();
+		v=tb.new vari();
 		v.name="f";
 		v.tp="int";
 		v.ofad=1;
@@ -172,7 +172,7 @@ public class define_local{
 		s.vt.add(v);
 		tb.pfinfl.add(s);
 
-		v=tb.new var();
+		v=tb.new vari();
 		v.name="e";
 		v.tp="int";
 		v.ofad=0;

@@ -46,7 +46,7 @@ public class define_global{
 		//增添对数组的支持时写这里		
 
 		for(int j=0;j<name.size();j++){//对于这次定义的每个变量
-        	table.var thisv=tb.new var();//新建一个var
+        	table.vari thisv=tb.new vari();//新建一个vari
 			thisv.name=name.get(j);
 			thisv.tp=tp;
 			thisv.other=other.get(j);
@@ -59,7 +59,7 @@ public class define_global{
     static void  wt(table tb){
 		String result = "";
 		for(int j=0;j<tb.synbl.size();j++){
-			table.var tv=tb.synbl.get(j);
+			table.vari tv=tb.synbl.get(j);
 			result=result.concat(tv.name).concat(" ").concat(tv.tp).concat(" ").concat(String.valueOf(tv.ofad)).concat(" ").concat(String.valueOf(tv.other)).concat("\n");
 		}
 		result=result.concat("\n");
@@ -67,7 +67,7 @@ public class define_global{
 			table.func tf=tb.pfinfl.get(j);
 			List<String> xctp=tf.xctp;
 			List<String> xcname=tf.xcname;
-			List<table.var> vt;
+			List<table.vari> vt;
 			result=result.concat(tf.name).concat("\n");
 			for(int jj=0;jj<xctp.size();jj++){
 				result=result.concat(xctp.get(jj)).concat(" ").concat(xcname.get(jj)).concat("\n");
@@ -94,10 +94,10 @@ public class define_global{
 		} 
 	}
 	
-	static int getofad(List<table.var> vt){
+	static int getofad(List<table.vari> vt){
 		//求偏移地址：如果vt.size()为0，则偏移地址为0，
-		//如果vt.size()不为0，就去看看上一条var的类型是否是int[]，
-		//如果是int[]，那么偏移地址为上一条var的other+ofad
+		//如果vt.size()不为0，就去看看上一条vari的类型是否是int[]，
+		//如果是int[]，那么偏移地址为上一条vari的other+ofad
 		//如果不是数组而是int或者char，那么偏移地址为ofad+1
 		if(vt.size()==0) return 0;
 		if(vt.get(vt.size()-1).tp.equals("int[]")) return vt.get(vt.size()-1).other+vt.get(vt.size()-1).ofad;
@@ -112,13 +112,13 @@ public class define_global{
 		xcname.add("d");xcname.add("f");
 		s.xctp=xctp;
 		s.xcname=xcname;
-		table.var v=tb.new var();
+		table.vari v=tb.new vari();
 		v.name="d";
 		v.tp="int";
 		v.ofad=0;
 		v.other=-1;
 		s.vt.add(v);
-		v=tb.new var();
+		v=tb.new vari();
 		v.name="f";
 		v.tp="int";
 		v.ofad=1;
@@ -126,7 +126,7 @@ public class define_global{
 		s.vt.add(v);
 		tb.pfinfl.add(s);
 
-		v=tb.new var();
+		v=tb.new vari();
 		v.name="e";
 		v.tp="int";
 		v.ofad=0;

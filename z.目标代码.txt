@@ -1,6 +1,7 @@
-LD R,b
-SUB R,1.0
+LD R,0.0
+ADD R,1.0
 ST R,_
 LD R,a
+MUL R,5.0
 SUB R,1.0
 ST R,_
