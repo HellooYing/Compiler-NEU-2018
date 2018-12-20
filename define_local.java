@@ -1,9 +1,4 @@
-import java.io.File;
-import java.io.InputStreamReader;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.*;
 public class define_local{
 	//本函数的作用，在全局变量的情况下，输入int a这种定义性语句的token序列和当前符号总表，
@@ -52,15 +47,30 @@ public class define_local{
 		p[0]=",";
 		p[1]=";";
 		table tb=new table();
+
 		table.func s=tb.new func();
 		s.name="test";
+		List<String> xctp=new ArrayList<String>();
+		xctp.add("int");xctp.add("int");
+		List<String> xcname=new ArrayList<String>();
+		xcname.add("d");xcname.add("e");
+		s.xctp=xctp;
+		s.xcname=xcname;
 		tb.pfinfl.add(s);
+
+		table.var v=tb.new var();
+		v.name="e";
+		v.tp="int";
+		v.ofad=0;
+		v.other=-1;
+		tb.synbl.add(v);
+
 		String fnm="test";
         new define_local().answer(step, i, C, S, c, k, p, tb, fnm);
 		System.out.println(tb.pfinfl.get(0).vt.get(0).name);
 	}
 
-	void answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1, table table, String fnm){
+	void answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1, table tb, String fnm){
 		String[] step, i, C, S, c, k, p;
 		step=step1;//token序列
         i=i1;//变量
@@ -69,14 +79,14 @@ public class define_local{
 		c=c1;//数字常量
 		k=k1;//关键字
 		p=p1;//符号
-		table.func func=table.new func();
+		table.func func=tb.new func();
 		List<table.var> vt=new ArrayList<table.var>();//这个函数的临时变量表
 		
-        for(int j=0;j<table.pfinfl.size();j++){
-			if(table.pfinfl.get(j).name.equals(fnm)){//符号表的函数表的函数名与fnm相同的那个func
+        for(int j=0;j<tb.pfinfl.size();j++){
+			if(tb.pfinfl.get(j).name.equals(fnm)){//符号表的函数表的函数名与fnm相同的那个func
 				//找到了本次定义所在的子函数
-				func=table.pfinfl.get(j);
-				vt=table.pfinfl.get(j).vt;
+				func=tb.pfinfl.get(j);
+				vt=tb.pfinfl.get(j).vt;
 			}
 		}
 		
@@ -86,21 +96,24 @@ public class define_local{
 		List<String> name=new ArrayList<String>();
 		List<Integer> other=new ArrayList<Integer>();
 		if(tp.equals("int")||tp.equals("char")){//对int或者char的定义，other是"_"
-		for(int j=1;j<step.length;j++){
+			for(int j=1;j<step.length;j++){
 			//找逗号判断几个变量，如果遇到逗号或分号，则变量在逗号或分号前一个
-			if(step[j].substring(1,2).equals("p")){
-				if(p[Integer.parseInt(step[j].substring(3,4))].equals(",")||p[Integer.parseInt(step[j].substring(3,4))].equals(";")){
-					name.add(i[Integer.parseInt(step[j-1].substring(3,4))]);
-					other.add(-1);
+				if(step[j].substring(1,2).equals("p")){
+					if(p[Integer.parseInt(step[j].substring(3,4))].equals(",")||p[Integer.parseInt(step[j].substring(3,4))].equals(";")){
+						name.add(i[Integer.parseInt(step[j-1].substring(3,4))]);
+						other.add(-1);
+					}
 				}
 			}
 		}
-		}
+		//增添对数组的支持时写这里
+
+
 		//现在拿到了这次变量名，现在要新建一个var类型，用来存本变量的信息。本变量的信息中有一条偏移地址，
 		
 
 		for(int j=0;j<name.size();j++){//对于这次定义的每个变量
-        	table.var thisv=table.new var();//新建一个var
+        	table.var thisv=tb.new var();//新建一个var
 			thisv.name=name.get(j);
 			thisv.tp=tp;
 			thisv.other=other.get(j);
@@ -110,35 +123,51 @@ public class define_local{
 
 		func.vt=vt;
 		
-		for(int j=0;j<table.pfinfl.size();j++){
-			if(table.pfinfl.get(j).name.equals(fnm)){//符号表的函数表的函数名与fnm相同的那个func
+		for(int j=0;j<tb.pfinfl.size();j++){
+			if(tb.pfinfl.get(j).name.equals(fnm)){//符号表的函数表的函数名与fnm相同的那个func
 				//找到了本次定义所在的子函数
-				table.pfinfl.set(j,func);
+				tb.pfinfl.set(j,func);
 			}
 		}
-        // String result = "";
-		// for (int aa = 0; aa < r.size(); aa++) {
-		// 	result = result.concat("[");
-		// 	for (int aaa = 0; aaa < 4; aaa++) {
-		// 		result = result.concat(r.get(aa)[aaa]);
-		// 		if (aaa != 3)
-		// 			result = result.concat(",");
-		// 	}
-		// 	result = result.concat("] ");
-		// }
-		// try {
-		// 	File writename = new File("./z.符号表.txt");
-		// 	writename.createNewFile();
-		// 	BufferedWriter out = new BufferedWriter(new FileWriter(writename));
-		// 	out.write(result);
-		// 	out.flush();
-		// 	out.close(); 
-		// } catch (Exception e) {
-		// 	e.printStackTrace();
-		// }
-		// return r;        
-	}
 
+		//result在txt中存放方式，先打印总表，总表中的每个var一行
+		//再打印函数表，函数表中前三个元素一行，vt：n行
+        tb.print(tb);
+		wt(tb);
+	}
+	static void  wt(table tb){
+		String result = "";
+		for(int j=0;j<tb.synbl.size();j++){
+			table.var tv=tb.synbl.get(j);
+			result=result.concat(tv.name).concat(" ").concat(tv.tp).concat(" ").concat(String.valueOf(tv.ofad)).concat(" ").concat(String.valueOf(tv.other)).concat("\n");
+		}
+		result=result.concat("\n");
+		for(int j=0;j<tb.pfinfl.size();j++){
+			table.func tf=tb.pfinfl.get(j);
+			List<String> xctp=tf.xctp;
+			List<String> xcname=tf.xcname;
+			List<table.var> vt;
+			result=result.concat(tf.name).concat("\n");
+			for(int jj=0;jj<xctp.size();jj++){
+				result=result.concat(xctp.get(jj)).concat(" ").concat(xcname.get(jj)).concat("\n");
+			}
+			vt=tf.vt;
+			for(int jj=0;jj<vt.size();jj++){
+				result=result.concat(vt.get(jj).name).concat(" ").concat(vt.get(jj).tp).concat(" ").concat(String.valueOf(vt.get(jj).ofad)).concat(" ").concat(String.valueOf(vt.get(jj).other)).concat("\n");
+			}
+		}
+		try {
+			File writename = new File("./z.符号表.txt");
+			writename.createNewFile();
+			OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(writename),"UTF-8");
+			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+			out.write(result);
+			out.flush();
+			out.close(); 
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+	}
 	static void printLS(List<String[]> r){
 		for(String[] a:r){
 			for(String aa:a){

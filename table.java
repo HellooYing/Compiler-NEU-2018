@@ -16,4 +16,29 @@ public class table{
 
     List<var> synbl=new ArrayList<var>();;//全局变量总表
     List<func> pfinfl=new ArrayList<func>();;//函数表
+    void print(table tb){
+        String result = "总表：\n";
+		for(int j=0;j<tb.synbl.size();j++){
+			table.var tv=tb.synbl.get(j);
+			result=result.concat("变量名：").concat(tv.name).concat(" 类型：").concat(tv.tp).concat(" 偏移地址：").concat(String.valueOf(tv.ofad)).concat(" 其他：").concat(String.valueOf(tv.other)).concat("\n");
+		}
+		result=result.concat("\n\n函数表：\n");
+		for(int j=0;j<tb.pfinfl.size();j++){
+			table.func tf=tb.pfinfl.get(j);
+			List<String> xctp=tf.xctp;
+			List<String> xcname=tf.xcname;
+            List<var> vt;
+			result=result.concat("函数名：").concat(tf.name).concat("\n").concat("形参：").concat("\n");
+			for(int jj=0;jj<xctp.size();jj++){
+				result=result.concat(xctp.get(jj)).concat(" ").concat(xcname.get(jj)).concat("\n");
+			}
+			result=result.concat("函数的局部变量：\n");
+			vt=tf.vt;
+			for(int jj=0;jj<vt.size();jj++){
+				result=result.concat("变量名：").concat(vt.get(jj).name).concat(" 类型：").concat(vt.get(jj).tp).concat(" 偏移地址：").concat(String.valueOf(vt.get(jj).ofad)).concat(" 其他：").concat(String.valueOf(vt.get(jj).other)).concat("\n");
+			}
+			result=result.concat("\n");
+		}
+        System.out.print(result);
+    }
 }

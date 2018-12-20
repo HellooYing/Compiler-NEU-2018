@@ -1,0 +1,8 @@
+e int 0 -1
+
+test
+int d
+int e
+a int 0 -1
+b int 1 -1
+c int 2 -1
