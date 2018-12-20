@@ -2,7 +2,11 @@ e int 0 -1
 
 test
 int d
-int e
-a int 0 -1
-b int 1 -1
-c int 2 -1
+int f
+d int 0 -1
+f int 1 -1
+a int 2 -1
+b int 3 -1
+c int 4 -1
+
+main test 

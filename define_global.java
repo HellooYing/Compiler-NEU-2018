@@ -1,24 +1,7 @@
 import java.io.*;
 import java.util.*;
-public class define_local{
-	//本函数的作用，在全局变量的情况下，输入int a这种定义性语句的token序列和当前符号总表，
-	//输出修改后的符号表。
-	//然后在生成目标代码的时候，先查询一个变量在不在总表里，在就用全局变量的操作（直接在数据段读写），
-	//不在就用临时变量的操作（放到堆栈段，用活动记录跟堆栈段一一对应，每次应该读堆栈段的哪里是临时变量的值）
-	//因此，在define_local输入int a,就只进行查看a是否在总表里出现过（重定义检测），然后在对应函数表的
-
-	//List<String[]> synbl;总表：变量名、类型（int int[] function char)、在数据段中的偏移地址、其他信息
-	//（如类型为函数，则指向函数表中的某一个。如类型为数组，则存放数组长度）
-	//所以总表中的String[]的length=4，synbl.size()=定义语句出现次数
-
-	//List<List<String>> pfinfl;
-	//函数表：函数名0、形参类型1、形参名（与形参类型一一对应）2、返回类型(如["int"])3、临时变量（[a,b,c]）4、临时变量在堆栈段的偏移地址5
-	//如果临时变量是一个数组，它的下一个临时变量的偏移地址就要加上那个数组的长度
-
-	//List<String> vall;
-
-	//当前能接收的语句只有int a;/int a,b,c;
-	public static void main(String[] args) throws Exception{
+public class define_global{
+    public static void main(String[] args) throws Exception{
 		String path_in = "./z.c语言代码输入.txt";
 		String anal=new analyzer().answer(path_in);
 		String[] t=anal.split("\n");
@@ -82,10 +65,9 @@ public class define_local{
 		vall.add("test");
 		tb.vall=vall;
 
-        new define_local().answer(step, i, C, S, c, k, p, tb);
+        new define_global().answer(step, i, C, S, c, k, p, tb);
 	}
-
-	void answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1, table tb){
+    void answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1, table tb){
 		String[] step, i, C, S, c, k, p;
 		step=step1;//token序列
         i=i1;//变量
@@ -94,20 +76,9 @@ public class define_local{
 		c=c1;//数字常量
 		k=k1;//关键字
 		p=p1;//符号
-		table.func func=tb.new func();
-		String fnm=tb.vall.get(tb.vall.size()-1);
-		List<table.var> vt=new ArrayList<table.var>();//这个函数的临时变量表
-		
-        for(int j=0;j<tb.pfinfl.size();j++){
-			if(tb.pfinfl.get(j).name.equals(fnm)){//符号表的函数表的函数名与fnm相同的那个func
-				//找到了本次定义所在的子函数
-				func=tb.pfinfl.get(j);
-				vt=tb.pfinfl.get(j).vt;
-			}
-		}
-		
 
-		//对于进来的句子，先判断是否有逗号，来判别是几个变量
+        //新建的临时变量，就直接加进总表就好了
+        //对于进来的句子，先判断是否有逗号，来判别是几个变量
 		String tp=k[Integer.parseInt(step[0].substring(3,4))];//进来的语句第一个都是类型如int
 		List<String> name=new ArrayList<String>();
 		List<Integer> other=new ArrayList<Integer>();
@@ -122,36 +93,20 @@ public class define_local{
 				}
 			}
 		}
-		//增添对数组的支持时写这里
-
-
-		//现在拿到了这次变量名，现在要新建一个var类型，用来存本变量的信息。本变量的信息中有一条偏移地址，
-		
+		//增添对数组的支持时写这里		
 
 		for(int j=0;j<name.size();j++){//对于这次定义的每个变量
         	table.var thisv=tb.new var();//新建一个var
 			thisv.name=name.get(j);
 			thisv.tp=tp;
 			thisv.other=other.get(j);
-			thisv.ofad=getofad(vt);
-			vt.add(thisv);
+			thisv.ofad=getofad(tb.synbl);
+			tb.synbl.add(thisv);
 		}
-
-		func.vt=vt;
-		
-		for(int j=0;j<tb.pfinfl.size();j++){
-			if(tb.pfinfl.get(j).name.equals(fnm)){//符号表的函数表的函数名与fnm相同的那个func
-				//找到了本次定义所在的子函数
-				tb.pfinfl.set(j,func);
-			}
-		}
-
-		//result在txt中存放方式，先打印总表，总表中的每个var一行
-		//再打印函数表，函数表中前三个元素一行，vt：n行
         tb.print(tb);
 		wt(tb);
-	}
-	static void  wt(table tb){
+    }
+    static void  wt(table tb){
 		String result = "";
 		for(int j=0;j<tb.synbl.size();j++){
 			table.var tv=tb.synbl.get(j);

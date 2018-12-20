@@ -11,11 +11,13 @@ public class table{
         String name;//函数名
         List<String> xctp=new ArrayList<String>();//形参类型
         List<String> xcname=new ArrayList<String>();//形参名
+        //在函数初始化的时候，要注意把形参加入临时变量，否则没地方放- -
         List<var> vt=new ArrayList<var>();//函数中的临时变量
     }
 
-    List<var> synbl=new ArrayList<var>();;//全局变量总表
-    List<func> pfinfl=new ArrayList<func>();;//函数表
+    List<var> synbl=new ArrayList<var>();//全局变量总表
+    List<func> pfinfl=new ArrayList<func>();//函数表
+    List<String> vall=new ArrayList<String>();//活动记录，记录当前位置，是子函数还是主函数，来决定调用临时变量还是全局变量
     void print(table tb){
         String result = "总表：\n";
 		for(int j=0;j<tb.synbl.size();j++){
@@ -37,7 +39,10 @@ public class table{
 			for(int jj=0;jj<vt.size();jj++){
 				result=result.concat("变量名：").concat(vt.get(jj).name).concat(" 类型：").concat(vt.get(jj).tp).concat(" 偏移地址：").concat(String.valueOf(vt.get(jj).ofad)).concat(" 其他：").concat(String.valueOf(vt.get(jj).other)).concat("\n");
 			}
-			result=result.concat("\n");
+			result=result.concat("\n\n活动记录：");
+            for(int jj=0;jj<vall.size();jj++){
+				result=result.concat(vall.get(jj)).concat(" ");
+			}
 		}
         System.out.print(result);
     }
