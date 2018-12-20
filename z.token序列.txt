@@ -1,7 +1,7 @@
- {k,6} {i,0} {p,0} {k,6} {i,1} {p,0} {i,0} {p,1} {c,0} {p,0} {i,0} {p,1} {i,0} {p,2} {c,1} {p,0} {i,1} {p,1} {c,2} {p,0} {k,4} {p,3} {i,0} {p,4} {c,3} {p,5} {p,6} {i,0} {p,1} {i,0} {p,2} {c,1} {p,0} {i,1} {p,1} {i,0} {p,7} {c,3} {p,8} {c,1} {p,0} {k,2} {p,3} {i,1} {p,8} {c,1} {p,9} {c,4} {p,8} {c,1} {p,5} {p,6} {k,9} {p,0} {p,10} {p,10}
-i:[a, b]
+ {k,6} {i,0} {p,0} {k,6} {i,1} {p,1} {k,6} {i,2} {p,2} {p,3} {k,6} {i,3} {p,4} {i,3} {p,5} {i,1} {p,6} {i,2} {p,4} {k,11} {i,3} {p,4} {p,7}
+i:[f1, a, b, c]
 C:[]
 S:[]
-c:[0.0, 1.0, 10.0, 5.0, 14.0]
-k:[main, void, if, else, while, for, int, char, string, break, continue]
-p:[;, =, +, (, <, ), {, *, -, ==, }]
+c:[]
+k:[main, void, if, else, while, for, int, char, string, break, continue, return]
+p:[(, ,, ), {, ;, =, +, }]
