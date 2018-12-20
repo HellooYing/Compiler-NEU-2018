@@ -30,8 +30,8 @@
       
              [+,4.0,5.0,t1] [*,3.0,t1,t2] [+,2.0,t2,t3] [+,t3,c,t4] [*,d,3.0,t5] [-,t4,t5,t6] [=,t6,_,a] 
              
- - define_local、define_global 输入类似于"int a;"的代码对应的token序列、iCSckp表、符号表-总表、符号表-函数表、符号表-活动记录，输出修改后的符号表。
-      - 输入：String[] step, i, C, S, c, k, p; List<List<String[]>> table(内容为List<String[]> synbl, pfinfl, vall);
+ - define_local、define_global 输入类似于"int a;"的代码对应的token序列、iCSckp表、符号表，无输出但修改符号表。
+      - 输入：String[] step, i, C, S, c, k, p; table table;
       
              step: {k,6} {i,0} {p,0} {i,1} {p,1} {k,6} {i,0} {p,2} {i,1} {p,2} {i,2} {p,1}
              i:[a, b, c]
@@ -40,14 +40,25 @@
              c:[]
              k:[main, void, if, else, while, for, int, char, string, break, continue]
              p:[=, ;, ,]
-             synbl:[]
-             pfinfl:[]
-             vall:[]
+             table：
+             总表：
+             变量名：e 类型：int 偏移地址：0 其他：-1
+
+             函数表：
+             函数名：test
+             形参：
+             int d
+             int f
+             函数的局部变量：
+             变量名：d 类型：int 偏移地址：0 其他：-1
+             变量名：f 类型：int 偏移地址：1 其他：-1
+             变量名：a 类型：int 偏移地址：2 其他：-1
+             变量名：b 类型：int 偏移地址：3 其他：-1
+             变量名：c 类型：int 偏移地址：4 其他：-1
+
+             活动记录：main test
       
-      - 输出：List<List<String[]>> table
-      
-             [synbl, pfinfl, vall] 
-             
+      - 输出：无输出，但更新了table             
              
  - block 输入基本块token序列和iCSckp表，输出四元式中间代码。在此方法中，if、while、算数表达式等求中间代码都是通过引用其他_four.java实现的。
       - 输入：String[] step, i, C, S, c, k, p;
@@ -111,26 +122,43 @@
  
       - 符号表结构：
        
-             public class table{
-                 class synbl{//全局变量表
-                     String name;//变量名
-                     String tp;//类型
-                     String ofad;//偏移地址
-                     String other;//（如类型为函数，则指向函数表中的某一个。如类型为数组，则存放数组长度）
-                 }
-
-                 class pfinfl{//函数表
-                     String name;//函数名
-                     List<String> xctp;//形参类型
-                     List<String> xcname;//形参名
-                     List<synbl> vt;//函数中的临时变量
-                 }
-
-                 synbl synbl;
-                 pfinfl pfinfl;
+             class var{//全局变量信息
+                 String name;//变量名
+                 String tp;//类型：int int[] function char string
+                 int ofad;//偏移地址
+                 int other;//（如类型为函数，则指向函数表中的某一个。如类型为数组，则存放数组长度）
              }
 
+             class func{//函数信息
+                 String name;//函数名
+                 List<String> xctp=new ArrayList<String>();//形参类型
+                 List<String> xcname=new ArrayList<String>();//形参名
+                 List<var> vt=new ArrayList<var>();//函数中的临时变量
+             }
 
+             List<var> synbl=new ArrayList<var>();//全局变量总表
+             List<func> pfinfl=new ArrayList<func>();//函数表
+             List<String> vall=new ArrayList<String>();//活动记录，记录当前位置，是子函数还是主函数，来决定调用临时变量还是全局变量
+
+      - 符号表实例：
+             总表：
+             变量名：e 类型：int 偏移地址：0 其他：-1
+ 
+             函数表：
+             函数名：test
+             形参：
+             int d
+             int f
+             函数的局部变量：
+             变量名：d 类型：int 偏移地址：0 其他：-1
+             变量名：f 类型：int 偏移地址：1 其他：-1
+             变量名：a 类型：int 偏移地址：2 其他：-1
+             变量名：b 类型：int 偏移地址：3 其他：-1
+             变量名：c 类型：int 偏移地址：4 其他：-1
+
+             活动记录：main test
+            
+            
 ### 中间代码设计：
 
  - 算数表达式
