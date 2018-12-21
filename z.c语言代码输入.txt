@@ -16,3 +16,4 @@ int f1(int a,int b){
     return c;
 }
 int g;
+g=f1(10,3);

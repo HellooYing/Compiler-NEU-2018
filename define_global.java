@@ -96,7 +96,7 @@ public class define_global {
 			fuc.vt = vt;
 			tb.pfinfl.add(fuc);
 		}
-		tb.print(tb);
+		//tb.print(tb);
 		wt(tb);
 	}
 

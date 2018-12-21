@@ -98,7 +98,7 @@ public class define_local {
 
 		// result在txt中存放方式，先打印总表，总表中的每个vari一行
 		// 再打印函数表，函数表中前三个元素一行，vt：n行
-		tb.print(tb);
+		//tb.print(tb);
 		wt(tb);
 	}
 

@@ -28,8 +28,10 @@ public class Main {
 		tb.vall.add("main");
 		List<String[]> qt = new block().answer(step, i, C, S, c, k, p, tb);
 		qt = new optimization().answer(qt);
-		List<String> code = new object_code().answer(qt);
-		for (String s : code)
-			System.out.println(s);
+		printLS(qt);
+		tb.print(tb);
+		//List<String> code = new object_code().answer(qt);
+		//for (String s : code)
+		//	System.out.println(s);
 	}
 }

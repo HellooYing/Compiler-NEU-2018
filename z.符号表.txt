@@ -1,18 +1,11 @@
-e int 0 -1
-f1 function 0 1
+f1 function 0 0
+c int 1 -1
+g int 2 -1
 
-test
-int d
-int f
-d int 0 -1
-f int 1 -1
-c int 2 -1
-g int 3 -1
-
-main test f1
+f1
 int a
 int b
 a int 0 0
 b int 1 0
 
-main test 
+main 
