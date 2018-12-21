@@ -27,7 +27,10 @@ public class Main {
 		table tb = new table();
 		tb.vall.add("main");
 		List<String[]> qt = new block().answer(step, i, C, S, c, k, p, tb);
+		System.out.println("\n原始四元式：");
+		printLS(qt);
 		qt = new optimization().answer(qt);
+		System.out.println("\n优化后的四元式：");
 		printLS(qt);
 		tb.print(tb);
 		//List<String> code = new object_code().answer(qt);

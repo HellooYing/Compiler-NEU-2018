@@ -84,7 +84,7 @@ public class exp_four {
         if (flag == 0)
             System.out.println("输入表达式无效");
         else {
-            while (!st2.empty()) {
+            while (!st2.empty()&&st1.size()!=1) {
                 inqt = new String[4];
                 inqt[0] = st2.pop();
                 inqt[2] = st1.pop();
@@ -166,16 +166,18 @@ public class exp_four {
             if (t.equals("+") || t.equals("-")) {
                 if (st2.empty() || st2.peek().equals("(")) {
                     st2.add(t);
-                } else if (st2.peek().equals("+") || st2.peek().equals("-") || st2.peek().equals("*")
-                        || st2.peek().equals("/")) {
-                    inqt = new String[4];
-                    inqt[0] = st2.pop();
-                    inqt[2] = st1.pop();
-                    inqt[1] = st1.pop();
-                    inqt[3] = "t".concat(String.valueOf(num));
-                    num++;
-                    st1.add(inqt[3]);
-                    qt.add(inqt);
+                } else{
+                    while(!st2.empty()&&st1.size()!=1&&(st2.peek().equals("+") || st2.peek().equals("-") || st2.peek().equals("*")
+                        || st2.peek().equals("/"))) {
+                        inqt = new String[4];
+                        inqt[0] = st2.pop();
+                        inqt[2] = st1.pop();
+                        inqt[1] = st1.pop();
+                        inqt[3] = "t".concat(String.valueOf(num));
+                        num++;
+                        st1.add(inqt[3]);
+                        qt.add(inqt);
+                    }
                     st2.add(t);
                 }
                 // System.out.println(t);
@@ -219,15 +221,17 @@ public class exp_four {
             if (t.equals("*") || t.equals("/")) {
                 if (st2.empty() || st2.peek().equals("+") || st2.peek().equals("-") || st2.peek().equals("(")) {
                     st2.add(t);
-                } else if (st2.peek().equals("*") || st2.peek().equals("/")) {
-                    inqt = new String[4];
-                    inqt[0] = st2.pop();
-                    inqt[2] = st1.pop();
-                    inqt[1] = st1.pop();
-                    inqt[3] = "t".concat(String.valueOf(num));
-                    num++;
-                    st1.add(inqt[3]);
-                    qt.add(inqt);
+                } else {
+                    while(!st2.empty()&&st1.size()!=1&&(st2.peek().equals("*") || st2.peek().equals("/"))) {
+                        inqt = new String[4];
+                        inqt[0] = st2.pop();
+                        inqt[2] = st1.pop();
+                        inqt[1] = st1.pop();
+                        inqt[3] = "t".concat(String.valueOf(num));
+                        num++;
+                        st1.add(inqt[3]);
+                        qt.add(inqt);
+                    }
                     st2.add(t);
                 }
                 // System.out.println(t);
@@ -407,4 +411,13 @@ public class exp_four {
         vall.add("test");
         tb.vall = vall;
     }
+    void printLS(List<String[]> r) {
+		for (String[] a : r) {
+			for (String aa : a) {
+				System.out.print(aa);
+				System.out.print(" ");
+			}
+			System.out.println();
+		}
+	}
 }

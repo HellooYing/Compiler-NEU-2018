@@ -10,11 +10,12 @@ while(a<5){
 */
 
 
-
-int f1(int a,int b){
-    int c;
-    c=a+b;
-    return c;
+int a;
+int b;
+a=0;
+b=3*a+b+3*a+1;
+while(a<b){
+    a=a+1;
+    b=5;
+    if(a==3) {break;}
 }
-int g;
-g=f1(10,3);
