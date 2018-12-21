@@ -139,6 +139,7 @@ public class for_four {
                 step_son = Arrays.copyOfRange(step, startn, now);
                 if (step_son.length == 1)// 判断比较区右式有一个标识符
                 {
+                    n=n+1;
                     switch (step[now - 1].substring(1, 2)) {
                     case "i":
                         RROT = i[Integer.parseInt(step[now - 1].substring(3, step[now - 1].length() - 1))];
@@ -160,7 +161,6 @@ public class for_four {
                     }
                 }
                 tn = "t".concat(String.valueOf(n));
-                n = 0; // 进入下一个基本块，n置零
                 addqt(P, LROT, RROT, tn); // 生成比较四元式
                 addqt("do", tn, "_", "_");// 生成判断四元式
 
@@ -192,8 +192,10 @@ public class for_four {
                     }
                     if (t.equals("{")) {
                         braceNum++;
+                        t = "zhaozhiyi";// 强制给t赋予某个值，使其不为“{”，防止下面有连续的"{"时判断发生错误
                     }
                     if (t.equals("}")) {
+                        t = "zhaozhiyi";// 强制给t赋予某个值，使其不为“}”，防止下面有连续的"}"时判断发生错误
                         braceNum--;
                         if (braceNum == 0)
                             break;
@@ -275,7 +277,6 @@ public class for_four {
                     }
                 }
 
-                n = 0;// 进入新基本块，n=0
                 addqt("fe", "_", "_", "_");// 跳转四元式
             }
         default:

@@ -144,6 +144,27 @@ public class block {
 					}
 					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence把整个while的一大句话加进去
 					j = jj;// 开始找下面的
+				} else if (t.equals("for")) {
+
+					int jj;
+					for (jj = j + 1; jj < step.length; jj++) {// 找到while{}的前大括号
+						if (step[jj].substring(1, 2).equals("p")) {
+							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
+								break;
+						}
+					}
+					bracket = 1;
+					while (bracket > 0) {// 找到跟之前找到的那个前大括号匹配的后大括号
+						jj++;
+						if (step[jj].substring(1, 2).equals("p")) {
+							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
+								bracket++;
+							else if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("}"))
+								bracket--;
+						}
+					}
+					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence把整个while的一大句话加进去
+					j = jj;// 开始找下面的
 				} else if (t.equals("break")) {
 					sentence.add(Arrays.copyOfRange(step, j, j + 2));
 					j = j + 1;
@@ -183,7 +204,7 @@ public class block {
 			}
 		} // 检查是否所有单词都有句子可加，没有就说明有问题
 
-		n = 0;
+		int nn = 0;
 		for (int j = 0; j < sentence.size(); j++) {
 			if (sentence.get(j)[0].substring(1, 2).equals("k")) {
 				t = k[Integer.parseInt(sentence.get(j)[0].substring(3, sentence.get(j)[0].length() - 1))];
@@ -206,6 +227,7 @@ public class block {
 						if(zd==false) return new ArrayList<String[]>();
 						tb.vall.add(fnm);
 						qtt = new block().answer(sen2, i, C, S, c, k, p, tb);
+						nn=reset_t(qtt,nn);
 						tb.vall.remove(tb.vall.size()-1);
 						String[] inqt = new String[4];
 						inqt[0] = "fun";
@@ -225,40 +247,16 @@ public class block {
 					}
 				} else if (t.equals("if")) {
 					qtt = new if_four().answer(sentence.get(j), i, C, S, c, k, p, tb);
-					n=reset_t(qtt, n);
+					nn=reset_t(qtt,nn);
 					qt.addAll(qtt);
-					String[] inqt = new String[4];
-					inqt[0] = "ie";
-					inqt[1] = "_";
-					inqt[2] = "_";
-					inqt[3] = "_";
-					qt.add(inqt);
-					// int m = 0;
-					// for (int jj = 1; jj < 4; jj++) {
-					// 	if (qtt.get(qtt.size() - 1)[jj].length() >= 2) {
-					// 		if (qtt.get(qtt.size() - 1)[jj].substring(0, 1).equals("t")
-					// 				&& is_c(qtt.get(qtt.size() - 1)[jj].substring(1))) {
-					// 			if (Double.valueOf(qtt.get(qtt.size() - 1)[jj].substring(1)) > m)
-					// 				m = Double.valueOf(qtt.get(qtt.size() - 1)[jj].substring(1)).intValue();
-					// 		}
-					// 	}
-					// }
-					// n = n + m;
 				} else if (t.equals("while")) {
 					qtt = new while_four().answer(sentence.get(j), i, C, S, c, k, p, tb);
-					n=reset_t(qtt, n);
+					nn=reset_t(qtt,nn);
 					qt.addAll(qtt);
-					// int m = 0;
-					// for (int jj = 1; jj < 4; jj++) {
-					// 	if (qtt.get(qtt.size() - 1)[jj].length() >= 2) {
-					// 		if (qtt.get(qtt.size() - 1)[jj].substring(0, 1).equals("t")
-					// 				&& is_c(qtt.get(qtt.size() - 1)[jj].substring(1))) {
-					// 			if (Double.valueOf(qtt.get(qtt.size() - 1)[jj].substring(1)) > m)
-					// 				m = Double.valueOf(qtt.get(qtt.size() - 1)[jj].substring(1)).intValue();
-					// 		}
-					// 	}
-					// }
-					// n = n + m;
+				}else if (t.equals("for")) {
+					qtt = new for_four().answer(sentence.get(j), i, C, S, c, k, p, tb);
+					nn=reset_t(qtt,nn);
+					qt.addAll(qtt);
 				} else if (t.equals("break")) {
 					String[] inqt = new String[4];
 					inqt[0] = "bk";
@@ -295,28 +293,17 @@ public class block {
 					}
 					if(isf==1){
 						qtt = new function_four().answer(sentence.get(j), i, C, S, c, k, p, tb);
-						n=reset_t(qtt, n);
+						nn=reset_t(qtt,nn);
 						for (String[] s : qtt) {
 							qt.add(s);
 						}
 					}
 					else{
 						qtt = new exp_four().answer(sentence.get(j), i, C, S, c, k, p, tb);
-						n=reset_t(qtt, n);
+						nn=reset_t(qtt,nn);
 						for (String[] s : qtt) {
 							qt.add(s);
 						}
-						// int m = 0;
-						// for (int jj = 1; jj < 4; jj++) {
-						// 	if (qtt.get(qtt.size() - 1)[jj].length() >= 2) {
-						// 		if (qtt.get(qtt.size() - 1)[jj].substring(0, 1).equals("t")
-						// 				&& is_c(qtt.get(qtt.size() - 1)[jj].substring(1))) {
-						// 			if (Double.valueOf(qtt.get(qtt.size() - 1)[jj].substring(1)) > m)
-						// 				m = Double.valueOf(qtt.get(qtt.size() - 1)[jj].substring(1)).intValue();
-						// 		}
-						// 	}
-						// }
-						// n = n + m;// 这里我觉得应该是n+m+1，但是实验是n+m比较好看
 					}
 				}
 			}
@@ -343,7 +330,6 @@ public class block {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return qt;
 		// List<String[]> qt = new exp_four().answer(step, i, C, S, c, k, p, tb);
 		// qt = new optimization().answer(qt);

@@ -94,7 +94,7 @@ public class while_four {
                 } else// 左式多于一个标示符
                 {
                     qtt = new exp_four().answer(step_son, i, C, S, c, k, p, tb);
-                    n = reset_t(qtt, n); // 获得当前临时变量tn的n值
+                    n = reset_t(qtt, n);// 获得当前临时变量tn的n值
                     LROT = qtt.get(qtt.size() - 1)[3];// 暂存比较的左式的临时变量
                     for (int j = 0; j < qtt.size(); j++)// 将比较的左式四元式序列送入四元式区
                     {
@@ -118,6 +118,7 @@ public class while_four {
                 step_son = Arrays.copyOfRange(step, startn, now - 1);
                 if (step_son.length == 1)// 判断右式有一个标识符
                 {
+                    n=n+1;
                     switch (step[now - 2].substring(1, 2)) {
                     case "i":
                         RROT = i[Integer.parseInt(step[now - 2].substring(3, step[now - 2].length() - 1))];
@@ -131,7 +132,7 @@ public class while_four {
                 } else// 右式多于一个标示符
                 {
                     qtt = new exp_four().answer(step_son, i, C, S, c, k, p, tb);
-                    n = reset_t(qtt, n) + 1;// 获得当前临时变量tn的n值
+                    n = reset_t(qtt, n)+1;// 获得当前临时变量tn的n值
                     RROT = qtt.get(qtt.size() - 1)[3];// 暂存比较的右式的临时变量
                     for (int j = 0; j < qtt.size(); j++)// 将比较的右式四元式序列送入四元式区
                     {
@@ -139,7 +140,6 @@ public class while_four {
                     }
                 }
                 tn = "t".concat(String.valueOf(n));
-                n = 0; // 进入下一个基本块，n置零
                 addqt(P, LROT, RROT, tn); // 生成比较四元式
                 addqt("wh", tn, "_", "_");// 生成while四元式
 

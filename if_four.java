@@ -237,8 +237,7 @@ public class if_four {
 			   {
                 braceNum=0;
                 n=n+1;//获得当前临时变量tn的n值
-                tn="t".concat(String.valueOf(n));
-                addqt("es",tn,"_","_");
+                addqt("es","_","_","_");
                 startn=now+2;//暂存else{}内程序开始位置
                 t="hh";//强制给t赋予某个值，使其不为“{”，防止下面判断else{}内首个token发生错误
                 while(true)

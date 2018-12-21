@@ -39,12 +39,33 @@ public class optimization {
 		int flag = 1;// 如果整体循环都没有新的需要优化的地方，才代表真正优化完毕。
 		while (flag == 1) {
 			flag = 0;
+			int flag_appear12;// 代表t1这样的结果，是否在下面的第一位和第二位出现过。出现过就代表被使用过，不是无效赋值。
+			int flag_appear3;// 代表t1这样的结果，在下面的第三位出现过，代表被重新赋值过。
+			for (int i = 0; i < r.size(); i++) {// 第三遍循环，如果某个四元式的结果在后续被重新赋值过并且没被引用过，那么它是无效赋值可以删掉
+				inqt = r.get(i);
+				flag_appear12 = 0;
+				flag_appear3 = 0;
+				for (int j = i + 1; j < r.size(); j++) {
+					t = r.get(j);
+					if (t[1].equals(inqt[3]) || t[2].equals(inqt[3])) {
+						flag_appear12 = 1;
+					}
+					if (t[3].equals(inqt[3])) {
+						flag_appear3 = 1;
+						break;
+					}
+				}
+				if (flag_appear12 == 0 && flag_appear3 == 1) {
+					r.remove(i);
+					i--;
+				}
+			}
 			replace.add(" ");// 为了下面的循环可以进入
-			while (replace.size() > 0) {// 第二遍循环，如果t2和t4的符号、操作数、目标操作数都一样，那么t4=t2，t4那条四元式删除
+			while (replace.size() > 0) {
 				replace.clear();
-				for (int i = 0; i < r.size(); i++) {// 第一遍循环，检查常数
+				for (int i = 0; i < r.size(); i++) {// 第一遍循环，检查常数。在这个变量出现在四元式最后一位时，就不可替换了
 					inqt = r.get(i);
-					if ((is_c(inqt[1]) && (is_c(inqt[2]))) && (inqt[0].equals("*") || inqt[0].equals("+")
+					if ((is_c(inqt[1]) && is_c(inqt[2])&&is_t(r.get(i)[3])) && (inqt[0].equals("*") || inqt[0].equals("+")
 							|| inqt[0].equals("-") || inqt[0].equals("/"))) {
 						// 如果第二位第三位都是数字且第一位是加减乘除
 						replace.add(inqt[3]);// 在替换列表加入类似于t1 6.28，代表等会把所有t1换成6.28
@@ -68,15 +89,15 @@ public class optimization {
 					}
 					if (replace.size() > 0) {// 如果replace不是空，就检查当前四元式是否要把t1替换成6.28之类的
 						flag = 1;
-						for (int j = 0; j < replace.size() / 2; j = j + 2) {// 因为replace是成对加的
+						for (int j = 0; j <= replace.size() / 2; j = j + 2) {// 因为replace是成对加的
 							if (inqt[1].equals(replace.get(j)))
-								inqt[1] = replace.get(j + 1);
+								{inqt[1] = replace.get(j + 1);}
 							if (inqt[2].equals(replace.get(j)))
-								inqt[2] = replace.get(j + 1);
+								{inqt[2] = replace.get(j + 1);}
 						}
 					}
 					if (r.size() > 1 && r.get(r.size() - 1)[0].equals("=")
-							&& r.get(r.size() - 1)[1].equals(r.get(r.size() - 2)[3])) {
+							&& r.get(r.size() - 1)[1].equals(r.get(r.size() - 2)[3])&&is_t(r.get(r.size() - 2)[3])) {
 						r.get(r.size() - 2)[3] = r.get(r.size() - 1)[3];
 						r.remove(r.size() - 1);
 					}
@@ -111,44 +132,23 @@ public class optimization {
 					flag = 1;
 			}
 
-			int flag_appear12;// 代表t1这样的结果，是否在下面的第一位和第二位出现过。出现过就代表被使用过，不是无效赋值。
-			int flag_appear3;// 代表t1这样的结果，在下面的第三位出现过，代表被重新赋值过。
-			for (int i = 0; i < r.size(); i++) {// 第三遍循环，如果某个四元式的结果在后续被重新赋值过并且没被引用过，那么它是无效赋值可以删掉
-				inqt = r.get(i);
-				flag_appear12 = 0;
-				flag_appear3 = 0;
-				for (int j = i + 1; j < r.size(); j++) {
-					t = r.get(j);
-					if (t[1].equals(inqt[3]) || t[2].equals(inqt[3])) {
-						flag_appear12 = 1;
-					}
-					if (t[3].equals(inqt[3])) {
-						flag_appear3 = 1;
-						break;
-					}
-				}
-				if (flag_appear12 == 0 && flag_appear3 == 1) {
-					r.remove(i);
-					i--;
-				}
-			}
-			// 第四遍循环，删去无引用的临时变量：逆序，从第一个非最终返回的临时变量找起，找这后面有没有它的引用，没有就删去它
-			for (int i = r.size() - 2; i >= 0; i--) {
-				inqt = r.get(i);
-				if (!is_t(inqt[3]))
-					continue;
-				flag_appear12 = 0;
-				for (int j = i + 1; j < r.size(); j++) {
-					t = r.get(j);
-					if (t[1].equals(inqt[3]) || t[2].equals(inqt[3])) {
-						flag_appear12 = 1;
-					}
-				}
-				if (flag_appear12 == 0) {
-					r.remove(i);
-					i++;
-				}
-			}
+			// // 第四遍循环，删去无引用的临时变量：逆序，从第一个非最终返回的临时变量找起，找这后面有没有它的引用，没有就删去它
+			// for (int i = r.size() - 2; i >= 0; i--) {
+			// 	inqt = r.get(i);
+			// 	if (!is_t(inqt[3]))
+			// 		continue;
+			// 	flag_appear12 = 0;
+			// 	for (int j = i + 1; j < r.size(); j++) {
+			// 		t = r.get(j);
+			// 		if (t[1].equals(inqt[3]) || t[2].equals(inqt[3])) {
+			// 			flag_appear12 = 1;
+			// 		}
+			// 	}
+			// 	if (flag_appear12 == 0) {
+			// 		r.remove(i);
+			// 		i++;
+			// 	}
+			// }
 
 		}
 		String result = "";

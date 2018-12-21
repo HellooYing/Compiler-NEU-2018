@@ -1,21 +1,15 @@
-/*
-a=5;
-int a;
-int a,b,c;
-while(a<5){
-    a=a+1;
-    b=a*5-1;
-    if(b==14){break;}
-}
-*/
-
-
 int a;
 int b;
 a=0;
-b=3*a+b+3*a+1;
-while(a<b){
-    a=a+1;
-    b=5;
-    if(a==3) {break;}
+b=6;
+while(a<b+1){
+    a=6+1+2*3;
+    b=8+9+10;
+}
+if(a<b){
+    a=8;
+    b=a;
+}
+else{
+    b=a;
 }
