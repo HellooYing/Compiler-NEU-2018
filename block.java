@@ -35,6 +35,7 @@ public class block {
 		k = k1;
 		p = p1;
 		int bracket, n;
+		boolean zd=true;//错误中断
 		List<String[]> qt = new ArrayList<String[]>();
 		List<String[]> qtt = new ArrayList<String[]>();// 加入qt之前要检查临时变量t几是否有重复，所以要临时放一下改完再加进去
 		List<String> code = new ArrayList<String>();
@@ -201,8 +202,11 @@ public class block {
 						String fnm=i[Integer.parseInt(sen1[1].substring(3, sen1[1].length() - 1))];
 						String[] sen2=new String[0];
 						sen2=Arrays.copyOfRange(sentence.get(j),jj+2,sentence.get(j).length-1);
-						new define_global().answer(sen1, i, C, S, c, k, p, tb);
+						zd=new define_global().answer(sen1, i, C, S, c, k, p, tb);
+						if(zd==false) return new ArrayList<String[]>();
+						tb.vall.add(fnm);
 						qtt = new block().answer(sen2, i, C, S, c, k, p, tb);
+						tb.vall.remove(tb.vall.size()-1);
 						String[] inqt = new String[4];
 						inqt[0] = "fun";
 						inqt[1] = fnm;
@@ -211,10 +215,14 @@ public class block {
 						qt.add(inqt);
 						qt.addAll(qtt);
 					}
-					else if (tb.vall.get(tb.vall.size() - 1).equals("main"))
-						new define_global().answer(sentence.get(j), i, C, S, c, k, p, tb);
-					else
-						new define_local().answer(sentence.get(j), i, C, S, c, k, p, tb);
+					else if (tb.vall.get(tb.vall.size() - 1).equals("main")){
+						zd=new define_global().answer(sentence.get(j), i, C, S, c, k, p, tb);
+						if(zd==false) return new ArrayList<String[]>();
+					}
+					else{
+						zd=new define_local().answer(sentence.get(j), i, C, S, c, k, p, tb);
+						if(zd==false) return new ArrayList<String[]>();
+					}
 				} else if (t.equals("if")) {
 					qtt = new if_four().answer(sentence.get(j), i, C, S, c, k, p, tb);
 					n=reset_t(qtt, n);

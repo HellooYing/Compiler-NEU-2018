@@ -19,7 +19,7 @@ public class define_global {
 		new define_global().answer(step, i, C, S, c, k, p, tb);
 	}
 
-	void answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,
+	boolean answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,
 			table tb) {
 		String[] step, i, C, S, c, k, p;
 		step = step1;// token序列
@@ -52,6 +52,12 @@ public class define_global {
 			for (int j = 0; j < name.size(); j++) {// 对于这次定义的每个变量
 				table.vari thisv = tb.new vari();// 新建一个vari
 				thisv.name = name.get(j);
+				for(int jj=0;jj<tb.synbl.size();jj++){
+					if(tb.synbl.get(jj).name.equals(thisv.name)){
+						System.out.println("全局变量重定义！该变量为："+thisv.name);
+						return false;
+					}
+				}
 				thisv.tp = tp;
 				thisv.other = other.get(j);
 				thisv.ofad = getofad(tb.synbl);
@@ -59,11 +65,18 @@ public class define_global {
 			}
 		} else if (tp.equals("function")) {
 			table.vari thisv = tb.new vari();// 新建一个vari
+			thisv.name="";
 			int j;
 			for (j = 1; j < step.length; j++) {
 				if (step[j].substring(1, 2).equals("i")) {
 					thisv.name = i[Integer.parseInt(step[j].substring(3, step[j].length() - 1))];
 					break;
+				}
+			}
+			for(int jj=0;jj<tb.synbl.size();jj++){
+				if(tb.synbl.get(jj).name.equals(thisv.name)){
+					System.out.println("函数重定义！该函数为："+thisv.name);
+					return false;
 				}
 			}
 			thisv.tp = tp;
@@ -98,6 +111,7 @@ public class define_global {
 		}
 		//tb.print(tb);
 		wt(tb);
+		return true;
 	}
 
 	static void wt(table tb) {

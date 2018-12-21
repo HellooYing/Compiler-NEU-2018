@@ -36,7 +36,7 @@ public class define_local {
 		new define_local().answer(step, i, C, S, c, k, p, tb);
 	}
 
-	void answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,
+	boolean answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,
 			table tb) {
 		String[] step, i, C, S, c, k, p;
 		step = step1;// token序列
@@ -49,7 +49,7 @@ public class define_local {
 		table.func func = tb.new func();
 		String fnm = tb.vall.get(tb.vall.size() - 1);
 		List<table.vari> vt = new ArrayList<table.vari>();// 这个函数的临时变量表
-
+		
 		for (int j = 0; j < tb.pfinfl.size(); j++) {
 			if (tb.pfinfl.get(j).name.equals(fnm)) {// 符号表的函数表的函数名与fnm相同的那个func
 				// 找到了本次定义所在的子函数
@@ -81,6 +81,12 @@ public class define_local {
 		for (int j = 0; j < name.size(); j++) {// 对于这次定义的每个变量
 			table.vari thisv = tb.new vari();// 新建一个vari
 			thisv.name = name.get(j);
+			for(int jj=0;jj<vt.size();jj++){
+				if(vt.get(jj).name.equals(thisv.name)){
+					System.out.println("局部变量重定义！该变量为："+thisv.name+". 函数名为："+fnm);
+					return false;
+				}
+			}
 			thisv.tp = tp;
 			thisv.other = other.get(j);
 			thisv.ofad = getofad(vt);
@@ -88,18 +94,17 @@ public class define_local {
 		}
 
 		func.vt = vt;
-
 		for (int j = 0; j < tb.pfinfl.size(); j++) {
 			if (tb.pfinfl.get(j).name.equals(fnm)) {// 符号表的函数表的函数名与fnm相同的那个func
 				// 找到了本次定义所在的子函数
 				tb.pfinfl.set(j, func);
 			}
 		}
-
 		// result在txt中存放方式，先打印总表，总表中的每个vari一行
 		// 再打印函数表，函数表中前三个元素一行，vt：n行
 		//tb.print(tb);
 		wt(tb);
+		return true;
 	}
 
 	static void wt(table tb) {
