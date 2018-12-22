@@ -375,7 +375,8 @@
        
 - 比较语句：
 
-       > < == >= <= != ——> MOV AL,t1    MOV AH,t2    CMP AL,AH    如果下一句是dw，则根据上一句的比较符号取反 J? WEN(新建)
+       > < == >= <= != ——> MOV AL,t1    MOV AH,t2    CMP AL,AH    
+       如果下一句是dw或df，则根据上一句的比较符号取反 J? WEN(新建)或FEN(新建)
        
 - 分支结构：
 
@@ -387,8 +388,12 @@
 
        wh ——> MOV CX,02H    WHN(新建):    INC CX    
        we ——> LOOP WHN    WEN:
-       bk ——> JMP WEN
-       ct ——> 根据上一句的比较符号 J? WHN
+
+       for ——> MOV CX,02H    FORN:(新建)    INC CX
+       fe ——> LOOP FORN   FEN:
+
+       bk ——> JMP WEN或FEN
+       ct ——> 根据上一句的比较符号 J? WHN或FEN
        
 - 子程序：
 
