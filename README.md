@@ -198,10 +198,9 @@
  
        [ fun, f, _, _] ———————————— 函数名为f的函数定义开始
        [ rt , c, _, _] ———————————— 返回c作为函数的定义终结
-       
-       [ sf , f, _, a] ———————————— 函数f开始调用，返回值存为a
-       [ xc, 10, _, _] ———————————— 传递一个值为10的形参
-       [ esf, f, _, a] ———————————— 函数f结束调用，返回值存为a
+       [ sf, f , _, _] ———————————— f开始
+       [ xc, a, 10, _] ———————————— 传递10给形参a
+       [ esf, f, a, _] ———————————— 函数f结束调用，返回值存为a
 
 
 ### 目标代码说明：8086汇编语言
@@ -376,11 +375,11 @@
 - 比较语句：
 
        > < == >= <= != ——> MOV AL,t1    MOV AH,t2    CMP AL,AH    
-       如果下一句是dw或df，则根据上一句的比较符号取反 J? WEN(新建)或FEN(新建)
+       如果下一句是dw或df，则根据比较符号取反 J? WEN(新建)或FEN(新建)
        
 - 分支结构：
 
-       if ——> 根据上一句的比较符号取反 J? ESN(新建)
+       if ——> 如果这个if有else 则根据上一句的比较符号取反 J? ESN(新建)    没有else则根据上一句的比较符号取反 J? IEN(新建)
        es ——> JMP IEN(新建)    ESN:
        ie ——> IEN:
        
@@ -393,12 +392,12 @@
        fe ——> LOOP FORN   FEN:
 
        bk ——> JMP WEN或FEN
-       ct ——> 根据上一句的比较符号 J? WHN或FEN
+       ct ——> 根据上一句的比较符号 J? WHN或FORN
        
 - 子程序：
 
-       fun ——> fname PROC NEAR
-       rt ——> MOV 结果,AL    RET    fname ENDP
-       sf 无操作
+       fun ——> fname PROC NEAR    在活动记录中加入函数
+       rt ——> MOV AL,结果    RET    fname ENDP    在活动记录中把该函数及其临时变量全pop掉
+       sf ——> 向活动记录加入f以供传参寻找偏移地址
        xc ——> MOV 形参的位置,想传的参数
-       esf ——> CALL fname
+       esf ——> CALL fname    活动记录pop f
