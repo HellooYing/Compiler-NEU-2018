@@ -43,6 +43,7 @@ public class optimization {
 			int flag_appear3;// 代表t1这样的结果，在下面的第三位出现过，代表被重新赋值过。
 			for (int i = 0; i < r.size(); i++) {// 第三遍循环，如果某个四元式的结果在后续被重新赋值过并且没被引用过，那么它是无效赋值可以删掉
 				inqt = r.get(i);
+				if(!(inqt[0].equals("+")||inqt[0].equals("-")||inqt[0].equals("*")||inqt[0].equals("/")||inqt[0].equals("="))) continue;
 				flag_appear12 = 0;
 				flag_appear3 = 0;
 				for (int j = i + 1; j < r.size(); j++) {
@@ -65,6 +66,7 @@ public class optimization {
 				replace.clear();
 				for (int i = 0; i < r.size(); i++) {// 第一遍循环，检查常数。在这个变量出现在四元式最后一位时，就不可替换了
 					inqt = r.get(i);
+					if(!(inqt[0].equals("+")||inqt[0].equals("-")||inqt[0].equals("*")||inqt[0].equals("/")||inqt[0].equals("="))) continue;
 					if ((is_c(inqt[1]) && is_c(inqt[2])&&is_t(r.get(i)[3])) && (inqt[0].equals("*") || inqt[0].equals("+")
 							|| inqt[0].equals("-") || inqt[0].equals("/"))) {
 						// 如果第二位第三位都是数字且第一位是加减乘除
@@ -108,6 +110,7 @@ public class optimization {
 				replace.clear();
 				for (int i = 0; i < r.size(); i++) {
 					inqt = r.get(i);
+					if(!(inqt[0].equals("+")||inqt[0].equals("-")||inqt[0].equals("*")||inqt[0].equals("/")||inqt[0].equals("="))) continue;
 					for (int j = i + 1; j < r.size(); j++) {
 						t = r.get(j);
 						if (inqt[0].equals(t[0]) && inqt[1].equals(t[1]) && inqt[2].equals(t[2])) {

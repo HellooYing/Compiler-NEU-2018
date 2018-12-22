@@ -235,16 +235,18 @@ public class for_four {
                     default:
                         break;
                     }
-                    tn = "t".concat(String.valueOf(n));// 生成临时变量
+                    
                     switch (step[startnt - 2].substring(1, 2)) {
                     case "p":
                         t = p[Integer.parseInt(step[startnt - 2].substring(3, step[startnt - 2].length() - 1))];
                         if (t.equals("+")) // i++情况
                         {
+                            tn = "t".concat(String.valueOf(n+1));// 生成临时变量
                             addqt("+", tTail, "1", tn);
                             addqt("=", tn, "_", tTail);
                         } else if (t.equals("-")) // i--情况
                         {
+                            tn = "t".concat(String.valueOf(n+1));// 生成临时变量
                             addqt("-", tTail, "1", tn);
                             addqt("=", tn, "_", tTail);
                         } else // 普通算术表达式

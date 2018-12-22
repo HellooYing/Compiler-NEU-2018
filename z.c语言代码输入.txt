@@ -2,10 +2,10 @@ int a;
 int b;
 b=10;
 a=1+2+3*4*5+b;
-while(a>b){
-    b=b+1;
-    a=a-1;
+int f(int c,int d){
+    int e;
+    e=c+d;
+    return e;
 }
-switch(a){
-    case 1: break;
-}
+
+a=f(10,15);

@@ -38,6 +38,7 @@ public class function_four {
         c = c1;// 数字常量
         k = k1;// 关键字
         p = p1;// 符号
+		String re=i[Integer.parseInt(step[0].substring(3, step[0].length() - 1))];
 		List<String[]> r = new ArrayList<String[]>();
 		int j,jj;
 		String fnm=i[Integer.parseInt(step[2].substring(3, step[2].length() - 1))];
@@ -49,6 +50,14 @@ public class function_four {
 		inqt[3] = result;
 		r.add(inqt);
 		j=0;
+		int n1;
+		List<String> xcname = new ArrayList<String>();
+		for(n1=0;n1<tb.pfinfl.size();n1++){
+            if(fnm.equals(tb.pfinfl.get(n1).name)){
+                xcname=tb.pfinfl.get(n1).xcname;
+            }
+        }
+		n1=0;
 		while(!(step[j].substring(1, 2).equals("p")&&p[Integer.parseInt(step[j].substring(3, step[j].length() - 1))].equals("("))){
 			j++;
 		}
@@ -60,10 +69,11 @@ public class function_four {
 			if(step[j].substring(1, 2).equals("c")||step[j].substring(1, 2).equals("i")){
 				inqt = new String[4];
 				inqt[0] = "xc";
+				inqt[1] = xcname.get(n1);
+				n1++;
 				if(step[j].substring(1, 2).equals("c"))
-					inqt[1] = c[Integer.parseInt(step[j].substring(3, step[j].length() - 1))];
-				else inqt[1] = i[Integer.parseInt(step[j].substring(3, step[j].length() - 1))];
-				inqt[2] = "_";
+					inqt[2] = c[Integer.parseInt(step[j].substring(3, step[j].length() - 1))];
+				else inqt[2] = i[Integer.parseInt(step[j].substring(3, step[j].length() - 1))];
 				inqt[3] = "_";
 				r.add(inqt);
 			}
@@ -71,9 +81,10 @@ public class function_four {
 		inqt = new String[4];
 		inqt[0] = "esf";
 		inqt[1] = fnm;
-		inqt[2] = "_";
+		inqt[2] = re;
 		inqt[3] = "_";
 		r.add(inqt);
+		printLS(r);
 		return r;
 	}
 

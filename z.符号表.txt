@@ -1,3 +1,12 @@
 a int 0 -1
 b int 1 -1
+f function 0 0
 
+f
+int c
+int d
+c int 0 0
+d int 1 0
+e int 2 -1
+
+main f 
