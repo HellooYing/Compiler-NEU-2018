@@ -9,7 +9,7 @@ import java.util.*;
 
 public class analyzer {
 	String[] k = { "main", "void", "if", "else", "while", "for", "int", "char", "string", "break", "continue",
-			"return" };// 关键字放到数组里
+			"return","switch","case","default" };// 关键字放到数组里
 	List<String> i = new ArrayList<String>();// 变量名
 	List<String> C = new ArrayList<String>();// 字符
 	List<String> S = new ArrayList<String>();// 字符串
@@ -271,7 +271,7 @@ public class analyzer {
 			show_C = "C:".concat(C.toString());
 			show_S = "S:".concat(S.toString());
 			show_c = "c:".concat(c.toString());
-			show_k = "k:[main, void, if, else, while, for, int, char, string, break, continue, return]";
+			show_k = "k:[main, void, if, else, while, for, int, char, string, break, continue, return, switch, case, default]";
 			show_p = "p:".concat(p.toString());
 			File writename = new File("./z.token序列.txt"); // 如果没有则新建一个新的path_out的txt文件
 			writename.createNewFile(); // 创建新文件

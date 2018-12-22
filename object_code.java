@@ -15,7 +15,7 @@ public class object_code {
 		List<String> variiable;// set转化为list的变量表
 		boolean[] symbl;// 存放变量对应的活跃信息
 		String RDL;// 表示寄存器此时存的是哪个变量。我是写的单寄存器。
-        String[] kt = { "if","es","ie","wh","dw","bk","ct","we","for","df","do","fe","fun","rt","sf","xc","esf"};
+        String[] kt = { "if","es","ie","wh","dw","bk","ct","we","for","df","do","fe","fun","rt","sf","xc","esf","sw","dft","cs"};
         List<String> k=Arrays.asList(kt);
         for (int i = 0; i < qt.size(); i++) {// 加set去重获取变量表
 			inqt = qt.get(i);
@@ -180,18 +180,24 @@ public class object_code {
                 code.add("JMP ".concat(whn.peek()));
                 RDL = "";
             }else if(inqt[0].equals("if")){
-                esn.push("ES".concat(String.valueOf(n)));
-                n++;
-                code.add(cmpn(qt.get(i-1)[0]).concat(" ").concat(esn.peek()));
+                if(hves(qt,i)){
+                    esn.push("ES".concat(String.valueOf(n)));
+                    n++;
+                    code.add(cmpn(qt.get(i-1)[0]).concat(" ").concat(esn.peek()));
+                }
+                else{
+                    ien.push("IE".concat(String.valueOf(n)));
+                    n++;
+                    code.add(cmpn(qt.get(i-1)[0]).concat(" ").concat(ien.peek()));
+                }
                 RDL = "";
             }else if(inqt[0].equals("es")){
                 ien.push("IE".concat(String.valueOf(n)));
                 n++;
                 code.add("JMP ".concat(ien.peek()));
-                code.add(esn.peek().concat(":"));
+                code.add(esn.pop().concat(":"));
                 RDL = "";
             }else if(inqt[0].equals("ie")){
-                esn.pop();
                 code.add(ien.pop().concat(":"));
                 RDL = "";
             }
@@ -369,6 +375,15 @@ public class object_code {
             if(fnml.contains(tb.vall.get(i))) return i;
         }
         return 0;
+    }
+
+    static boolean hves(List<String[]> qt,int i){//从qt的第i个开始，查到ie前，有没有es
+        for(;i<qt.size();i++){
+            String[] ii=qt.get(i);
+            if(ii[0].equals("ie")) break;
+            if(ii[0].equals("es")) return true;
+        }
+        return false;
     }
 
     static boolean is_t(String t) {

@@ -121,6 +121,26 @@ public class block {
 					}
 					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence把整个if的一大句话加进去
 					j = jj;// 开始找下面的
+				}else if (t.equals("switch")) {// 是switch
+					int jj;
+					for (jj = j + 1; jj < step.length; jj++) {// 找到switch{}的前大括号
+						if (step[jj].substring(1, 2).equals("p")) {
+							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
+								break;
+						}
+					}
+					bracket = 1;
+					while (bracket > 0) {// 找到跟之前找到的那个前大括号匹配的后大括号
+						jj++;
+						if (step[jj].substring(1, 2).equals("p")) {
+							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
+								bracket++;
+							else if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("}"))
+								bracket--;
+						}
+					}
+					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence把整个if的一大句话加进去
+					j = jj;// 开始找下面的
 				}
 				// 再找while
 				else if (t.equals("while")) {
@@ -249,7 +269,11 @@ public class block {
 					qtt = new if_four().answer(sentence.get(j), i, C, S, c, k, p, tb);
 					nn=reset_t(qtt,nn);
 					qt.addAll(qtt);
-				} else if (t.equals("while")) {
+				}else if (t.equals("switch")) {
+					qtt = new switch_four().answer(sentence.get(j), i, C, S, c, k, p, tb);
+					nn=reset_t(qtt,nn);
+					qt.addAll(qtt);
+				}else if (t.equals("while")) {
 					qtt = new while_four().answer(sentence.get(j), i, C, S, c, k, p, tb);
 					nn=reset_t(qtt,nn);
 					qt.addAll(qtt);
