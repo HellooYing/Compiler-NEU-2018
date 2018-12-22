@@ -179,7 +179,8 @@
              
  - while
  
-       [ wh, t1, _, _] ———————————— while(t1)
+       [ wh , _, _, _] ———————————— 开始循环
+       [ dw, t1, _, _] ———————————— 是否执行本次while
        [ bk, _, _, _ ] ———————————— break
        [ ct, _, _, _ ] ———————————— continue
        [ we, _, _, _ ] ———————————— while结束
@@ -201,6 +202,7 @@
        [ sf , f, _, a] ———————————— 函数f开始调用，返回值存为a
        [ xc, 10, _, _] ———————————— 传递一个值为10的形参
        [ esf, f, _, a] ———————————— 函数f结束调用，返回值存为a
+
 
 ### 目标代码说明：8086汇编语言
 
@@ -364,4 +366,34 @@
        CODES ENDS
            END START
     
+    
+### 语义动作：
 
+- 算数表达式：
+
+       + - * / ——> MOV AL,t1    ADD AL,t2
+       
+- 比较语句：
+
+       > < == >= <= != ——> MOV AL,t1    MOV AH,t2    CMP AL,AH    如果下一句是dw，则根据上一句的比较符号取反 J? WEN(新建)
+       
+- 分支结构：
+
+       if ——> 根据上一句的比较符号取反 J? ESN(新建)
+       es ——> JMP IEN(新建)    ESN:
+       ie ——> IEN:
+       
+- 循环结构：
+
+       wh ——> MOV CX,02H    WHN(新建):    INC CX    
+       we ——> LOOP WHN    WEN:
+       bk ——> JMP WEN
+       ct ——> 根据上一句的比较符号 J? WHN
+       
+- 子程序：
+
+       fun ——> fname PROC NEAR
+       rt ——> MOV 结果,AL    RET    fname ENDP
+       sf 无操作
+       xc ——> MOV 形参的位置,想传的参数
+       esf ——> CALL fname
