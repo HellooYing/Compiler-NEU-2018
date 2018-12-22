@@ -162,10 +162,18 @@ public class define_global {
 		// 如果不是数组而是int或者char，那么偏移地址为ofad+1
 		if (vt.size() == 0)
 			return 0;
+		int other=0,ofad=0;
+		for(int j=vt.size()-1;j>=0;j--){
+			if(!vt.get(j).tp.equals("function")){
+				other=vt.get(j).other;
+				ofad=vt.get(j).ofad;
+				break;
+			}
+		}
 		if (vt.get(vt.size() - 1).tp.equals("int[]"))
-			return vt.get(vt.size() - 1).other + vt.get(vt.size() - 1).ofad;
+			return other + ofad;
 		else
-			return vt.get(vt.size() - 1).ofad + 1;
+			return ofad + 1;
 	}
 
 	static void init(table tb) {

@@ -1,10 +1,10 @@
 a int 0 -1
 b int 1 -1
 f function 0 0
-x1 int 1 -1
-x2 int 2 -1
-x3 int 3 -1
-i int 4 -1
+x1 int 2 -1
+x2 int 3 -1
+x3 int 4 -1
+i int 5 -1
 
 f
 int c

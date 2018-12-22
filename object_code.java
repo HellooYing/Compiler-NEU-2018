@@ -119,18 +119,22 @@ public class object_code {
 			} else if (inqt[0].equals("*")) {
 				if (RDL == "") {
 					code.add("  MOV AL,".concat(getv(inqt[1],tb)));
-					code.add("  MUL AL,".concat(getv(inqt[2],tb)));
+					code.add("  MOV AH,".concat(getv(inqt[2],tb)));
+                    code.add("  MUL AH");
 				}
 
 				else if (RDL.equals(getv(inqt[2],tb))) {
-					code.add("  MUL AL,".concat(getv(inqt[1],tb)));
+                    code.add("  MOV AH,".concat(getv(inqt[1],tb)));
+                    code.add("  MUL AH");
 				} else if (RDL.equals(getv(inqt[1],tb))) {
-					code.add("  MUL AL,".concat(getv(inqt[2],tb)));
+					code.add("  MOV AH,".concat(getv(inqt[2],tb)));
+                    code.add("  MUL AH");
 				} else {
 					if (active[i - 1][3])
 					code.add("  MOV ".concat(getv1(RDL,tb)).concat(",AL"));
 					code.add("  MOV AL,".concat(getv(inqt[1],tb)));
-					code.add("  MUL AL,".concat(getv(inqt[2],tb)));
+					code.add("  MOV AH,".concat(getv(inqt[2],tb)));
+                    code.add("  MUL AH");
 				}
                 RDL = inqt[3];
                 if(i+1<qt.size()&&!(qt.get(i+1)[0].equals("+")||qt.get(i+1)[0].equals("-")||qt.get(i+1)[0].equals("*")||qt.get(i+1)[0].equals("/")||qt.get(i+1)[0].equals("="))){
@@ -138,15 +142,19 @@ public class object_code {
                 }
 			} else if (inqt[0].equals("/")) {
 				if (RDL == "") {
-					code.add("  MOV AL,".concat(getv(inqt[1],tb)));
-					code.add("  DIV AL,".concat(getv(inqt[2],tb)));
+					code.add("  MOV AX,".concat(getv(inqt[1],tb)));
+                    code.add("  MOV BL,".concat(getv(inqt[2],tb)));
+					code.add("  DIV BL");
 				} else if (RDL.equals(getv(inqt[1],tb))) {
-					code.add("  DIV AL,".concat(getv(inqt[2],tb)));
+                    code.add("  MOV AX,".concat(getv(inqt[1],tb)));
+					code.add("  MOV BL,".concat(getv(inqt[2],tb)));
+					code.add("  DIV BL");
 				} else {
 					if (active[i - 1][3])
 					code.add("  MOV ".concat(getv1(RDL,tb)).concat(",AL"));
-					code.add("  MOV AL,".concat(getv(inqt[1],tb)));
-					code.add("  DIV AL,".concat(getv(inqt[2],tb)));
+					code.add("  MOV AX,".concat(getv(inqt[1],tb)));
+					code.add("  MOV BL,".concat(getv(inqt[2],tb)));
+					code.add("  DIV BL");
 				}
                 RDL = inqt[3];
                 if(i+1<qt.size()&&!(qt.get(i+1)[0].equals("+")||qt.get(i+1)[0].equals("-")||qt.get(i+1)[0].equals("*")||qt.get(i+1)[0].equals("/")||qt.get(i+1)[0].equals("="))){
