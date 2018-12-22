@@ -34,7 +34,7 @@ public class switch_four {
         //下一句执行你写的if语法分析程序
         table tb=new table();
 		init(tb);
-		List<String[]> r1=new switch_four().answer(step, i, C, S, c, k, p, tb);
+		List<String[]> r1=new if_four().answer(step, i, C, S, c, k, p, tb);
 	}
 
 	
@@ -51,21 +51,23 @@ public class switch_four {
 
 
 
-        String t,l;           //Token的值，case后的值
+        String t,ll;           //Token的值，case后的值
         String[] step_son;  //各阶段的子token序列
         List<String[]> qtt; //各阶段生成的四元式
         String tn;          //临时变量
-        int braceNum=1;     //"{"个数，用来统计while{}的结束
-
+        
+        
+        
         switch (step[now].substring(1, 2))
         {
             case "k":
             t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             if(t.equals("switch"))
             {
-                startn=now+2;//保存switch里的变量
-                t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
+                now=now+2;//保存switch里的变量
+                t = i[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                 addqt("sw",t,"_","_");//生成switch四元式
+                now=now+2;
                 while(true)
                 {
                     now++;
@@ -73,17 +75,18 @@ public class switch_four {
                     if(t.equals("case"))
                     {
                         now=now+1;
-                        l = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
-                        addqt("cs",l,"_","_");//生成case四元式
+                        t = c[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
+                        addqt("cs",t,"_","_");//生成case四元式
                         now=now+2;
                         startl=now;//存case后起始位置
                         t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         switch(t)
                         {
                             case "break":
-                            addqt("bk","_","_","_");//生成break四元式
+                            addqt("sbk","_","_","_");//生成break四元式
+                            now=now+1;
                             break;
-                            case "defult":
+                            case "default":
                             now=now-1;
                             break;
                             case "case":
@@ -91,9 +94,10 @@ public class switch_four {
                             break;
                             default:
                             {
-                                if(!t.equals("break"))
+                                while(!t.equals("break"))
                                 {
                                     now++;
+                                    t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                                 }
                                 step_son=Arrays.copyOfRange(step, startl, now);
                                 qtt=new block().answer(step_son,i,C,S,c,k,p, tb);
@@ -101,15 +105,15 @@ public class switch_four {
                                 {
                                     qt.add(qtt.get(j));
                                 }
-                                addqt("bk","_","_","_");//生成break四元式
+                                addqt("sbk","_","_","_");//生成break四元式
                             }
-
+                            break;
                         }
-
-
-
                     }
-                    if(t.equals("defult"))
+                    
+
+                    t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
+                    if(t.equals("default"))
                     {
                         addqt("dft","_","_","_");//生成defult四元式
                         now=now+2;
@@ -118,31 +122,37 @@ public class switch_four {
                         switch(t)
                         {
                             case "break":
-                            addqt("bk","_","_","_");//生成break四元式
+                            addqt("sbk","_","_","_");//生成break四元式
                             break;
                             case "case":
                             now=now-1;
                             break;
                             default:
                             {
-                                if(!t.equals("break"))
+                                while(!t.equals("break"))
                                 {
                                     now++;
+                                    t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                                 }
+                                //now=now-1;
+                                //System.out.println(now);
                                 step_son=Arrays.copyOfRange(step, startl, now);
                                 qtt=new block().answer(step_son,i,C,S,c,k,p, tb);
                                 for(int j=0; j<qtt.size(); j++)
                                 {
                                     qt.add(qtt.get(j));
                                 }
-                                addqt("bk","_","_","_");//生成break四元式
+                                //now=now+1;
+                                addqt("sbk","_","_","_");//生成break四元式
                             }
-
+                            break;
                         }
                     }
+                    if(now==step.length-1)
+                    {
+                        break;
+                    }
                 }
-
-
             }
         }
 

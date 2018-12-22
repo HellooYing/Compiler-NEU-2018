@@ -16,6 +16,10 @@ public class Main {
 		k = (String[]) anal.get(4).toArray(new String[anal.get(4).size()]);
 		p = (String[]) anal.get(5).toArray(new String[anal.get(5).size()]);
 		step = (String[]) anal.get(6).toArray(new String[anal.get(6).size()]);
+		
+		if(step[0].substring(1, 2).equals("k")&&k[Integer.parseInt(step[0].substring(3, step[0].length() - 1))].equals("int")&&step[1].substring(1, 2).equals("k")&&k[Integer.parseInt(step[1].substring(3, step[1].length() - 1))].equals("main")){
+			step=Arrays.copyOfRange(step,5,step.length-1);
+		}
 		table tb = new table();
 		tb.vall.add("main");
 		List<String[]> qt = new block().answer(step, i, C, S, c, k, p, tb);

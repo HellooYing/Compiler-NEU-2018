@@ -220,8 +220,9 @@ public class block {
 			System.out.println("出现了未知的语句，请检查输入代码是否正确");
 			System.out.print(l + " " + step.length);
 			for (String s : step) {
-				System.out.print(s);
+				System.out.print(s+" ");
 			}
+			System.out.println();
 		} // 检查是否所有单词都有句子可加，没有就说明有问题
 
 		int nn = 0;

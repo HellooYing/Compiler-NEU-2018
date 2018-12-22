@@ -242,12 +242,12 @@ public class for_four {
                         if (t.equals("+")) // i++情况
                         {
                             tn = "t".concat(String.valueOf(n+1));// 生成临时变量
-                            addqt("+", tTail, "1", tn);
+                            addqt("+", tTail, "1.0", tn);
                             addqt("=", tn, "_", tTail);
                         } else if (t.equals("-")) // i--情况
                         {
                             tn = "t".concat(String.valueOf(n+1));// 生成临时变量
-                            addqt("-", tTail, "1", tn);
+                            addqt("-", tTail, "1.0", tn);
                             addqt("=", tn, "_", tTail);
                         } else // 普通算术表达式
                         {
