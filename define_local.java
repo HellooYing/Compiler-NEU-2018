@@ -47,7 +47,7 @@ public class define_local {
 		k = k1;// 关键字
 		p = p1;// 符号
 		table.func func = tb.new func();
-		String fnm = tb.vall.get(tb.vall.size() - 1);
+		String fnm = getf(tb);
 		List<table.vari> vt = new ArrayList<table.vari>();// 这个函数的临时变量表
 		
 		for (int j = 0; j < tb.pfinfl.size(); j++) {
@@ -199,4 +199,14 @@ public class define_local {
 		vall.add("test");
 		tb.vall = vall;
 	}
+	static String getf(table tb){
+        List<String> fnml=new ArrayList<String>();
+        for(int i=0;i<tb.pfinfl.size();i++){
+            fnml.add(tb.pfinfl.get(i).name);
+        }
+        for(int i=tb.vall.size()-1;i>=0;i--){
+            if(fnml.contains(tb.vall.get(i))) return tb.vall.get(i);
+        }
+        return "main";
+    }
 }

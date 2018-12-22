@@ -61,7 +61,7 @@ public class while_four {
         case "k":
             t = k[Integer.parseInt(step[now].substring(3, step[now].length() - 1))];
             if (t.equals("while")) {
-
+                addqt("wh", "_", "_", "_");// 生成while四元式    
                 startn = now + 2;// 暂存左式step_on首Token串的序号
                 while (true) {
                     now++;
@@ -141,7 +141,8 @@ public class while_four {
                 }
                 tn = "t".concat(String.valueOf(n));
                 addqt(P, LROT, RROT, tn); // 生成比较四元式
-                addqt("wh", tn, "_", "_");// 生成while四元式
+                addqt("dw",tn,"_","_");
+                
 
                 startn = now + 1;// 暂存while{}内程序开始位置
                 t = "zhaozhiyi";// 强制给t赋予某个值，使其不为“{”，防止下面判断while{}内首个token发生错误

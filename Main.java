@@ -1,16 +1,6 @@
 import java.util.*;
-
+import java.io.*;
 public class Main {
-	static void printLS(List<String[]> r) {
-		for (String[] a : r) {
-			for (String aa : a) {
-				System.out.print(aa);
-				System.out.print(" ");
-			}
-			System.out.println();
-		}
-	}
-
 	public static void main(String[] args) throws Exception {
 		String path_in = "./z.c语言代码输入.txt";
 		List<List<String>> anal = new analyzer().answer(path_in);
@@ -52,10 +42,44 @@ public class Main {
 		}
 		System.out.println("\n优化后的四元式：");
 		printLS(opqt);
+		writeopqt(opqt);
 		tb.print(tb);
-		//List<String> code = new object_code().answer(qt);
-		//for (String s : code)
-		//	System.out.println(s);
+		List<String> code = new object_code().answer(opqt,tb);
+		for (String s : code)
+			System.out.println(s);
+	}
+
+	static void printLS(List<String[]> r) {
+		for (String[] a : r) {
+			for (String aa : a) {
+				System.out.print(aa);
+				System.out.print(" ");
+			}
+			System.out.println();
+		}
+	}
+
+	static void writeopqt(List<String[]> r){
+		String result = "";
+		for (int aa = 0; aa < r.size(); aa++) {
+			result = result.concat("[");
+			for (int aaa = 0; aaa < 4; aaa++) {
+				result = result.concat(r.get(aa)[aaa]);
+				if (aaa != 3)
+					result = result.concat(",");
+			}
+			result = result.concat("] ");
+		}
+		try {
+			File writename = new File("./z.优化后的四元式.txt");
+			writename.createNewFile();
+			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+			out.write(result);
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

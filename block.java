@@ -237,7 +237,7 @@ public class block {
 						qt.add(inqt);
 						qt.addAll(qtt);
 					}
-					else if (tb.vall.get(tb.vall.size() - 1).equals("main")){
+					else if (getf(tb).equals("main")){
 						zd=new define_global().answer(sentence.get(j), i, C, S, c, k, p, tb);
 						if(zd==false) return new ArrayList<String[]>();
 					}
@@ -412,4 +412,15 @@ public class block {
 		vall.add("test");
 		tb.vall = vall;
 	}
+
+	static String getf(table tb){
+        List<String> fnml=new ArrayList<String>();
+        for(int i=0;i<tb.pfinfl.size();i++){
+            fnml.add(tb.pfinfl.get(i).name);
+        }
+        for(int i=tb.vall.size()-1;i>=0;i--){
+            if(fnml.contains(tb.vall.get(i))) return tb.vall.get(i);
+        }
+        return "main";
+    }
 }

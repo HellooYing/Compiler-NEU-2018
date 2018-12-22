@@ -162,7 +162,7 @@ public class for_four {
                 }
                 tn = "t".concat(String.valueOf(n));
                 addqt(P, LROT, RROT, tn); // 生成比较四元式
-                addqt("do", tn, "_", "_");// 生成判断四元式
+                addqt("df", tn, "_", "_");// 生成判断四元式
 
                 startnt = now + 1;// 暂存尾处理区开始token串位置
                 while (true)// 跳过尾处理区，在for主程序之后生成四元式
@@ -203,7 +203,7 @@ public class for_four {
                 }
                 step_son = Arrays.copyOfRange(step, startn, now);
                 qtt = new block().answer(step_son, i, C, S, c, k, p, tb);
-                reset_t(qtt, n);
+                n=reset_t(qtt, n);
                 for (int j = 0; j < qtt.size(); j++) {
                     qt.add(qtt.get(j));
                 }

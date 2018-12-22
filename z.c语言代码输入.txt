@@ -1,15 +1,9 @@
 int a;
 int b;
-a=0;
-b=6;
-while(a<b+1){
-    a=6+1+2*3;
-    b=8+9+10;
-}
-if(a<b){
-    a=8;
-    b=a;
-}
-else{
-    b=a;
+b=10;
+a=1+2+3*4*5+b;
+while(a>b){
+    b=b+1;
+    a=a-1;
+    if(a==b){break;}
 }

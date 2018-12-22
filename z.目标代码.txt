@@ -1,4 +1,3 @@
-ST R,_
-LD R,a
-ADD R,b
-ST R,g
+LD R,10.0
+ADD R,63.0
+ST R,a

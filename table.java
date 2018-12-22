@@ -12,7 +12,6 @@ public class table {
         String name;// 函数名
         List<String> xctp = new ArrayList<String>();// 形参类型
         List<String> xcname = new ArrayList<String>();// 形参名
-        // 在函数初始化的时候，要注意把形参加入临时变量，否则没地方放- -
         List<vari> vt = new ArrayList<vari>();// 函数中的临时变量
     }
 
