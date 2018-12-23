@@ -61,6 +61,16 @@ public class define_local {
 
 		// 对于进来的句子，先判断是否有逗号，来判别是几个变量
 		String tp = k[Integer.parseInt(step[0].substring(3, step[0].length() - 1))];// 进来的语句第一个都是类型如int
+		String isarrt=i[Integer.parseInt(step[1].substring(3, step[1].length() - 1))];
+		int arrl=0;
+		int isarrn=isarrt.length();
+		if (isarrt.substring(isarrt.length()-1,isarrt.length()).equals("]")) {
+			tp = "int[]";
+			for(isarrn=0;isarrn<isarrt.length();isarrn++){
+				if(isarrt.charAt(isarrn)=='[') break;
+			}
+			arrl=Integer.parseInt(isarrt.substring(isarrn+1,isarrt.length()-1));
+		}
 		List<String> name = new ArrayList<String>();
 		List<Integer> other = new ArrayList<Integer>();
 		if (tp.equals("int") || tp.equals("char")) {// 对int或者char的定义，other是"_"
@@ -74,7 +84,32 @@ public class define_local {
 					}
 				}
 			}
-		}
+		}else if (tp.equals("int[]")) {// 对int或者char的定义，other是"_"
+			for (int j = 1; j < step.length; j++) {
+				// 找逗号判断几个变量，如果遇到逗号或分号，则变量在逗号或分号前一个
+				if (step[j].substring(1, 2).equals("p")) {
+					if (p[Integer.parseInt(step[j].substring(3, step[j].length() - 1))].equals(",")
+							|| p[Integer.parseInt(step[j].substring(3, step[j].length() - 1))].equals(";")) {
+						name.add(i[Integer.parseInt(step[j - 1].substring(3, step[j - 1].length() - 1))]);
+						other.add(arrl);
+					}
+				}
+			}
+			for (int j = 0; j < name.size(); j++) {// 对于这次定义的每个变量
+				table.vari thisv = tb.new vari();// 新建一个vari
+				thisv.name = name.get(j).substring(0,isarrn);
+				for(int jj=0;jj<tb.synbl.size();jj++){
+					if(tb.synbl.get(jj).name.equals(thisv.name)){
+						System.out.println("全局变量重定义！该变量为："+thisv.name);
+						return false;
+					}
+				}
+				thisv.tp = tp;
+				thisv.other = other.get(j);
+				thisv.ofad = getofad(tb.synbl);
+				tb.synbl.add(thisv);
+			}
+		} 
 		// 增添对数组的支持时写这里
 
 		// 现在拿到了这次变量名，现在要新建一个vari类型，用来存本变量的信息。本变量的信息中有一条偏移地址，

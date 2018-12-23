@@ -97,12 +97,12 @@ public class analyzer {
 					jj = j;
 					if (j != r.length()) {
 						t = (int) r.charAt(j);
-						while (((t >= 65 && t <= 90) || (t >= 97 && t <= 122) || (t >= 48 && t <= 57))
+						while (((t >= 65 && t <= 90) || (t >= 97 && t <= 122) || (t >= 48 && t <= 57)||t==91||t==93)
 								&& j < r.length() - 1) {
 							j++;
 							t = (int) r.charAt(j);
 							if (j == r.length() - 1) {
-								if ((t >= 65 && t <= 90) || (t >= 97 && t <= 122) || (t >= 48 && t <= 57)) {
+								if ((t >= 65 && t <= 90) || (t >= 97 && t <= 122) || (t >= 48 && t <= 57)||t==91||t==93) {
 									j = j + 1;
 								}
 							}

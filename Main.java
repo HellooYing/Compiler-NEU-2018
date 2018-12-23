@@ -2,8 +2,8 @@ import java.util.*;
 import java.io.*;
 public class Main {
 	public static void main(String[] args) throws Exception {
-		String path_in = "../z.c语言代码输入.txt";
-		String path_out = "../z.token序列.txt";
+		String path_in = "./z.c语言代码输入.txt";
+		String path_out = "./z.token序列.txt";
 		List<List<String>> anal = new analyzer().answer(path_in,path_out);
 		String[] step, i, C, S, c, k, p;
 		int n = 0;

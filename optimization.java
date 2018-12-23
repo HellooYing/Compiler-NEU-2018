@@ -110,7 +110,7 @@ public class optimization {
 				replace.clear();
 				for (int i = 0; i < r.size(); i++) {
 					inqt = r.get(i);
-					if(!(inqt[0].equals("+")||inqt[0].equals("-")||inqt[0].equals("*")||inqt[0].equals("/")||inqt[0].equals("="))) continue;
+					if(!(inqt[0].equals("+")||inqt[0].equals("-")||inqt[0].equals("*")||inqt[0].equals("/"))) continue;
 					for (int j = i + 1; j < r.size(); j++) {
 						t = r.get(j);
 						if (inqt[0].equals(t[0]) && inqt[1].equals(t[1]) && inqt[2].equals(t[2])) {

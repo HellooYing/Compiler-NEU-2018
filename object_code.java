@@ -283,6 +283,7 @@ public class object_code {
         code.add("  INT 21H");
         code.add("CODES ENDS");
         code.add("  END START");
+        System.out.println(getv("a[2]",tb));
         return code;
     }
 
@@ -323,29 +324,42 @@ public class object_code {
         int ofad=0;
         int flag=0;
         String r="";
+        int ar=0;
+        boolean isa=is_arr(v);
+        if(isa){
+            int isarrn;
+            for(isarrn=0;isarrn<v.length();isarrn++){
+				if(v.charAt(isarrn)=='['){
+                    ar=Integer.parseInt(v.substring(isarrn+1,v.length()-1));
+                    break;
+                }
+			}
+            v=v.substring(0,isarrn);
+        }
         if(getf(tb).equals("main")){
             for(int i=0;i<tb.synbl.size();i++){
                 if(tb.synbl.get(i).name.equals(v)){
                     ofad=tb.synbl.get(i).ofad;
                     flag=1;
                     r="DS:[".concat(String.valueOf(ofad)).concat("]");
+                    if(isa&&ar!=0) r="DS:[".concat(String.valueOf(ofad+ar)).concat("]");
                 }
             }
             if(flag==0&&is_t(v)){//如果是临时变量t几的话
-                            for(int jj=0;jj<tb.vall.size();jj++){
-                                if(tb.vall.get(jj).equals(v)){//在活动记录找到了它
-                                    ofad=jj;
-                                    flag=1;
-                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//偏移地址为临时变量在活动记录中的位置-所属函数在活动记录中的位置
-                                }
-                            }
-                            if(flag==0){
-                                tb.vall.add(v);
-                                ofad=tb.vall.size()-1;
-                                flag=1;
-                                r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");
-                            }
-                        }
+                for(int jj=0;jj<tb.vall.size();jj++){
+                    if(tb.vall.get(jj).equals(v)){//在活动记录找到了它
+                        ofad=jj;
+                        flag=1;
+                        r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//偏移地址为临时变量在活动记录中的位置-所属函数在活动记录中的位置
+                    }
+                }
+                if(flag==0){
+                    tb.vall.add(v);
+                    ofad=tb.vall.size()-1;
+                    flag=1;
+                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");
+                }
+            }
         }
         else{
             for(int i=0;i<tb.synbl.size();i++){
@@ -353,6 +367,7 @@ public class object_code {
                     ofad=tb.synbl.get(i).ofad;
                     flag=1;
                     r="DS:[".concat(String.valueOf(ofad)).concat("]");
+                    if(isa&&ar!=0) r="DS:[".concat(String.valueOf(ofad+ar)).concat("]");
                 }
             }
             if(flag==0){
@@ -365,6 +380,7 @@ public class object_code {
                                 flag=1;
                                 if(ofad==0) r="SS:[BP]";
                                 else r="SS:[BP+".concat(String.valueOf(ofad)).concat("]");
+                                if(isa&&ar!=0) r="SS:[BP+".concat(String.valueOf(ofad+ar)).concat("]");
                             }
                         }
                         if(flag==0&&is_t(v)){//如果是临时变量t几的话
@@ -398,6 +414,11 @@ public class object_code {
         return r;
     }
 
+    static boolean is_arr(String s){
+        if(s.charAt(s.length()-1)==']') return true;
+        else return false;
+    }
+
     static String cmpp(String cmp){
         if(cmp.equals(">")) return "  JA";
         if(cmp.equals(">=")) return "  JAE";
@@ -422,29 +443,42 @@ public class object_code {
         int ofad=0;
         int flag=0;
         String r="";
+        int ar=0;
+        boolean isa=is_arr(v);
+        if(isa){
+            int isarrn;
+            for(isarrn=0;isarrn<v.length();isarrn++){
+				if(v.charAt(isarrn)=='['){
+                    ar=Integer.parseInt(v.substring(isarrn+1,v.length()-1));
+                    break;
+                }
+			}
+            v=v.substring(0,isarrn);
+        }
         if(getf(tb).equals("main")){
             for(int i=0;i<tb.synbl.size();i++){
                 if(tb.synbl.get(i).name.equals(v)){
                     ofad=tb.synbl.get(i).ofad;
                     flag=1;
                     r="[".concat(v).concat("]");
+                    if(isa&&ar!=0) r="[".concat(v).concat("+").concat(String.valueOf(ar)).concat("]");
                 }
             }
             if(flag==0&&is_t(v)){//如果是临时变量t几的话
-                            for(int jj=0;jj<tb.vall.size();jj++){
-                                if(tb.vall.get(jj).equals(v)){//在活动记录找到了它
-                                    ofad=jj;
-                                    flag=1;
-                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//偏移地址为临时变量在活动记录中的位置-所属函数在活动记录中的位置
-                                }
-                            }
-                            if(flag==0){
-                                tb.vall.add(v);
-                                ofad=tb.vall.size()-1;
-                                flag=1;
-                                r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");
-                            }
-                        }
+                for(int jj=0;jj<tb.vall.size();jj++){
+                    if(tb.vall.get(jj).equals(v)){//在活动记录找到了它
+                        ofad=jj;
+                        flag=1;
+                        r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//偏移地址为临时变量在活动记录中的位置-所属函数在活动记录中的位置
+                    }
+                }
+                if(flag==0){
+                    tb.vall.add(v);
+                    ofad=tb.vall.size()-1;
+                    flag=1;
+                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");
+                }
+            }
         }
         else{
             for(int i=0;i<tb.synbl.size();i++){
@@ -452,6 +486,7 @@ public class object_code {
                     ofad=tb.synbl.get(i).ofad;
                     flag=1;
                     r="[".concat(v).concat("]");
+                    if(isa&&ar!=0) r="[".concat(v).concat("+").concat(String.valueOf(ar)).concat("]");
                 }
             }
             if(flag==0){
@@ -464,6 +499,7 @@ public class object_code {
                                 flag=1;
                                 if(ofad==0) r="SS:[BP]";
                                 else r="SS:[BP+".concat(String.valueOf(ofad)).concat("]");
+                                if(isa&&ar!=0) r="SS:[BP+".concat(String.valueOf(ofad+ar)).concat("]");
                             }
                         }
                         if(flag==0&&is_t(v)){//如果是临时变量t几的话
