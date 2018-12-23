@@ -1,3 +1,4 @@
+package cp;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,18 +7,18 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.*;
 public class switch_four {
-	public static String[] step, i, C, S, c, k, p;//è¾“å…¥
-    public static List<String[]> qt = new ArrayList<String[]>();//å­˜å››å…ƒå¼
-    String T1,T2,P;     //ä¿å­˜ä»£è¡¨å·¦å¼çš„ä¸´æ—¶å˜é‡ï¼Œä¿å­˜ä»£è¡¨å³å¼çš„ä¸´æ—¶å˜é‡ï¼Œä¿å­˜æ¯”è¾ƒçš„ç¬¦å·
-	public static int n=0, now=0, startn, startl, noww;                 //n:ä¸´æ—¶å˜é‡tnåºå·ï¼Œnowï¼štokenä¸²åºå·ï¼Œstartnï¼šswitchå˜é‡ä½ç½®ï¼Œ starlï¼šcaseåå¼å­å·¦å¼€å§‹ä½ç½®
+	public static String[] step, i, C, S, c, k, p;//ÊäÈë
+    public static List<String[]> qt = new ArrayList<String[]>();//´æËÄÔªÊ½
+    String T1,T2,P;     //±£´æ´ú±í×óÊ½µÄÁÙÊ±±äÁ¿£¬±£´æ´ú±íÓÒÊ½µÄÁÙÊ±±äÁ¿£¬±£´æ±È½ÏµÄ·ûºÅ
+	public static int n=0, now=0, startn, startl, noww;                 //n:ÁÙÊ±±äÁ¿tnĞòºÅ£¬now£ºtoken´®ĞòºÅ£¬startn£ºswitch±äÁ¿Î»ÖÃ£¬ starl£ºcaseºóÊ½×Ó×ó¿ªÊ¼Î»ÖÃ
 
 	public static void main(String[] args) throws Exception {
-		String path_in = "./z.cè¯­è¨€ä»£ç è¾“å…¥.txt";
-		String path_out = "./z.tokenåºåˆ—.txt";
+		String path_in = "./z.cÓïÑÔ´úÂëÊäÈë.txt";
+		String path_out = "./z.tokenĞòÁĞ.txt";
 
-        //è¿™ä¸€å¥æ‰§è¡Œäº†æˆ‘å†™çš„åˆ†æå™¨ç¨‹åºï¼Œå®ƒå°†æ ¹æ®ä½ åœ¨"z.ifä»£ç .txt"ä¸­è¾“å…¥çš„ä»£ç æ›´æ–°"z.tokenåºåˆ—.txt"
+        //ÕâÒ»¾äÖ´ĞĞÁËÎÒĞ´µÄ·ÖÎöÆ÷³ÌĞò£¬Ëü½«¸ù¾İÄãÔÚ"z.if´úÂë.txt"ÖĞÊäÈëµÄ´úÂë¸üĞÂ"z.tokenĞòÁĞ.txt"
         
-        //è¿™ä¸€æ®µä»"z.tokenåºåˆ—.txt"æ–‡ä»¶è¯»å–äº†éœ€è¦ç”¨åˆ°çš„è¾“å…¥ï¼Œå³tokenåºåˆ—(æˆ‘æŠŠå®ƒå–åä¸ºp)å’Œi, C, S, c, k, pè¡¨
+        //ÕâÒ»¶Î´Ó"z.tokenĞòÁĞ.txt"ÎÄ¼ş¶ÁÈ¡ÁËĞèÒªÓÃµ½µÄÊäÈë£¬¼´tokenĞòÁĞ(ÎÒ°ÑËüÈ¡ÃûÎªp)ºÍi, C, S, c, k, p±í
 		List<List<String>> anal=new analyzer().answer(path_in,path_out);
 		String[] step, i, C, S, c, k, p;
 		int n=0;
@@ -29,9 +30,9 @@ public class switch_four {
 		k = (String[])anal.get(4).toArray(new String[anal.get(4).size()]);
 		p = (String[])anal.get(5).toArray(new String[anal.get(5).size()]);
 		step = (String[])anal.get(6).toArray(new String[anal.get(6).size()]);
-        //è¯»å–å®Œæ¯•
+        //¶ÁÈ¡Íê±Ï
 
-        //ä¸‹ä¸€å¥æ‰§è¡Œä½ å†™çš„ifè¯­æ³•åˆ†æç¨‹åº
+        //ÏÂÒ»¾äÖ´ĞĞÄãĞ´µÄifÓï·¨·ÖÎö³ÌĞò
         table tb=new table();
 		init(tb);
 		List<String[]> r1=new if_four().answer(step, i, C, S, c, k, p, tb);
@@ -40,21 +41,21 @@ public class switch_four {
 	
 	public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,table tb) {
 		qt.clear();
-		step=step1;//tokenåºåˆ—
-        i=i1;//å˜é‡
-		C=C1;//å­—ç¬¦
-		S=S1;//å­—ç¬¦ä¸²
-		c=c1;//æ•°å­—å¸¸é‡
-		k=k1;//å…³é”®å­—
-        p=p1;//ç¬¦å·
+		step=step1;//tokenĞòÁĞ
+        i=i1;//±äÁ¿
+		C=C1;//×Ö·û
+		S=S1;//×Ö·û´®
+		c=c1;//Êı×Ö³£Á¿
+		k=k1;//¹Ø¼ü×Ö
+        p=p1;//·ûºÅ
         
 
 
 
-        String t,ll;           //Tokençš„å€¼ï¼Œcaseåçš„å€¼
-        String[] step_son;  //å„é˜¶æ®µçš„å­tokenåºåˆ—
-        List<String[]> qtt; //å„é˜¶æ®µç”Ÿæˆçš„å››å…ƒå¼
-        String tn;          //ä¸´æ—¶å˜é‡
+        String t,ll;           //TokenµÄÖµ£¬caseºóµÄÖµ
+        String[] step_son;  //¸÷½×¶ÎµÄ×ÓtokenĞòÁĞ
+        List<String[]> qtt; //¸÷½×¶ÎÉú³ÉµÄËÄÔªÊ½
+        String tn;          //ÁÙÊ±±äÁ¿
         
         
         
@@ -64,9 +65,9 @@ public class switch_four {
             t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
             if(t.equals("switch"))
             {
-                now=now+2;//ä¿å­˜switché‡Œçš„å˜é‡
+                now=now+2;//±£´æswitchÀïµÄ±äÁ¿
                 t = i[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
-                addqt("sw",t,"_","_");//ç”Ÿæˆswitchå››å…ƒå¼
+                addqt("sw",t,"_","_");//Éú³ÉswitchËÄÔªÊ½
                 now=now+2;
                 while(true)
                 {
@@ -76,14 +77,14 @@ public class switch_four {
                     {
                         now=now+1;
                         t = c[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
-                        addqt("cs",t,"_","_");//ç”Ÿæˆcaseå››å…ƒå¼
+                        addqt("cs",t,"_","_");//Éú³ÉcaseËÄÔªÊ½
                         now=now+2;
-                        startl=now;//å­˜caseåèµ·å§‹ä½ç½®
+                        startl=now;//´æcaseºóÆğÊ¼Î»ÖÃ
                         t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         switch(t)
                         {
                             case "break":
-                            addqt("sbk","_","_","_");//ç”Ÿæˆbreakå››å…ƒå¼
+                            addqt("sbk","_","_","_");//Éú³ÉbreakËÄÔªÊ½
                             now=now+1;
                             break;
                             case "default":
@@ -105,7 +106,7 @@ public class switch_four {
                                 {
                                     qt.add(qtt.get(j));
                                 }
-                                addqt("sbk","_","_","_");//ç”Ÿæˆbreakå››å…ƒå¼
+                                addqt("sbk","_","_","_");//Éú³ÉbreakËÄÔªÊ½
                             }
                             break;
                         }
@@ -115,14 +116,14 @@ public class switch_four {
                     t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                     if(t.equals("default"))
                     {
-                        addqt("dft","_","_","_");//ç”Ÿæˆdefultå››å…ƒå¼
+                        addqt("dft","_","_","_");//Éú³ÉdefultËÄÔªÊ½
                         now=now+2;
-                        startl=now;//å­˜defultåèµ·å§‹ä½ç½®
+                        startl=now;//´ædefultºóÆğÊ¼Î»ÖÃ
                         t = k[Integer.parseInt(step[now].substring(3,step[now].length()-1))];
                         switch(t)
                         {
                             case "break":
-                            addqt("sbk","_","_","_");//ç”Ÿæˆbreakå››å…ƒå¼
+                            addqt("sbk","_","_","_");//Éú³ÉbreakËÄÔªÊ½
                             break;
                             case "case":
                             now=now-1;
@@ -143,7 +144,7 @@ public class switch_four {
                                     qt.add(qtt.get(j));
                                 }
                                 //now=now+1;
-                                addqt("sbk","_","_","_");//ç”Ÿæˆbreakå››å…ƒå¼
+                                addqt("sbk","_","_","_");//Éú³ÉbreakËÄÔªÊ½
                             }
                             break;
                         }
@@ -172,7 +173,7 @@ public class switch_four {
 				result = result.concat("] ");
 			}
         try {
-			File writename = new File("./z.å››å…ƒå¼.txt");
+			File writename = new File("./z.ËÄÔªÊ½.txt");
 			writename.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			out.write(result);
@@ -181,7 +182,7 @@ public class switch_four {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-        //å†™å…¥å®Œæ¯•
+        //Ğ´ÈëÍê±Ï
 
 		return qt;
 	}
@@ -205,7 +206,7 @@ public class switch_four {
 		}
     }
 	static int reset_t(List<String[]> qtt,int n)
-	{//é¿å…ä¸´æ—¶å˜é‡çš„å†²çªï¼Œåœ¨æ¯æ¬¡å¾€qtåŠ qttçš„æ—¶å€™éƒ½è¦é‡ç½®æ‰€æœ‰tåé¢çš„å€¼
+	{//±ÜÃâÁÙÊ±±äÁ¿µÄ³åÍ»£¬ÔÚÃ¿´ÎÍùqt¼ÓqttµÄÊ±ºò¶¼ÒªÖØÖÃËùÓĞtºóÃæµÄÖµ
 		String[] inqtt;
         int num,max=0;
         for(int j=0; j<qtt.size(); j++)

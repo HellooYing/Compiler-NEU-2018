@@ -1,15 +1,16 @@
+package cp;
 import java.io.*;
 import java.util.*;
 
 public class function_four {
-	public static String[] step, i, C, S, c, k, p;// è¾“å…¥
-	public static List<String[]> qt = new ArrayList<String[]>();// å­˜å››å…ƒå¼
+	public static String[] step, i, C, S, c, k, p;// ÊäÈë
+	public static List<String[]> qt = new ArrayList<String[]>();// ´æËÄÔªÊ½
 
 	public static void main(String[] args) throws Exception {
-		String path_in = "./z.cè¯­è¨€ä»£ç è¾“å…¥.txt";
-		String path_out = "./z.tokenåºåˆ—.txt";
+		String path_in = "./z.cÓïÑÔ´úÂëÊäÈë.txt";
+		String path_out = "./z.tokenĞòÁĞ.txt";
 
-		// è¿™ä¸€æ®µä»"z.tokenåºåˆ—.txt"æ–‡ä»¶è¯»å–äº†éœ€è¦ç”¨åˆ°çš„è¾“å…¥ï¼Œå³tokenåºåˆ—(æˆ‘æŠŠå®ƒå–åä¸ºp)å’Œi, C, S, c, k, pè¡¨
+		// ÕâÒ»¶Î´Ó"z.tokenĞòÁĞ.txt"ÎÄ¼ş¶ÁÈ¡ÁËĞèÒªÓÃµ½µÄÊäÈë£¬¼´tokenĞòÁĞ(ÎÒ°ÑËüÈ¡ÃûÎªp)ºÍi, C, S, c, k, p±í
 		List<List<String>> anal = new analyzer().answer(path_in,path_out);
 		String[] step, i, C, S, c, k, p;
 		int n = 0;
@@ -21,9 +22,9 @@ public class function_four {
 		k = (String[]) anal.get(4).toArray(new String[anal.get(4).size()]);
 		p = (String[]) anal.get(5).toArray(new String[anal.get(5).size()]);
 		step = (String[]) anal.get(6).toArray(new String[anal.get(6).size()]);
-		// è¯»å–å®Œæ¯•
+		// ¶ÁÈ¡Íê±Ï
 
-		// æ‰§è¡Œforè¯­æ³•åˆ†æç¨‹åº
+		// Ö´ĞĞforÓï·¨·ÖÎö³ÌĞò
 		table tb = new table();
 		init(tb);
 		List<String[]> r1 = new function_four().answer(step, i, C, S, c, k, p, tb);
@@ -31,13 +32,13 @@ public class function_four {
 
 	static List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1,
 			String[] p1, table tb) {
-		step = step1;// tokenåºåˆ—
-        i = i1;// å˜é‡
-        C = C1;// å­—ç¬¦
-        S = S1;// å­—ç¬¦ä¸²
-        c = c1;// æ•°å­—å¸¸é‡
-        k = k1;// å…³é”®å­—
-        p = p1;// ç¬¦å·
+		step = step1;// tokenĞòÁĞ
+        i = i1;// ±äÁ¿
+        C = C1;// ×Ö·û
+        S = S1;// ×Ö·û´®
+        c = c1;// Êı×Ö³£Á¿
+        k = k1;// ¹Ø¼ü×Ö
+        p = p1;// ·ûºÅ
 		String re=i[Integer.parseInt(step[0].substring(3, step[0].length() - 1))];
 		List<String[]> r = new ArrayList<String[]>();
 		int j,jj;

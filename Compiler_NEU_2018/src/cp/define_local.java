@@ -1,27 +1,28 @@
+package cp;
 import java.io.*;
 import java.util.*;
 
 public class define_local {
-	// æœ¬å‡½æ•°çš„ä½œç”¨ï¼Œåœ¨å…¨å±€å˜é‡çš„æƒ…å†µä¸‹ï¼Œè¾“å…¥int aè¿™ç§å®šä¹‰æ€§è¯­å¥çš„tokenåºåˆ—å’Œå½“å‰ç¬¦å·æ€»è¡¨ï¼Œ
-	// è¾“å‡ºä¿®æ”¹åçš„ç¬¦å·è¡¨ã€‚
-	// ç„¶ååœ¨ç”Ÿæˆç›®æ ‡ä»£ç çš„æ—¶å€™ï¼Œå…ˆæŸ¥è¯¢ä¸€ä¸ªå˜é‡åœ¨ä¸åœ¨æ€»è¡¨é‡Œï¼Œåœ¨å°±ç”¨å…¨å±€å˜é‡çš„æ“ä½œï¼ˆç›´æ¥åœ¨æ•°æ®æ®µè¯»å†™ï¼‰ï¼Œ
-	// ä¸åœ¨å°±ç”¨ä¸´æ—¶å˜é‡çš„æ“ä½œï¼ˆæ”¾åˆ°å †æ ˆæ®µï¼Œç”¨æ´»åŠ¨è®°å½•è·Ÿå †æ ˆæ®µä¸€ä¸€å¯¹åº”ï¼Œæ¯æ¬¡åº”è¯¥è¯»å †æ ˆæ®µçš„å“ªé‡Œæ˜¯ä¸´æ—¶å˜é‡çš„å€¼ï¼‰
-	// å› æ­¤ï¼Œåœ¨define_localè¾“å…¥int a,å°±åªè¿›è¡ŒæŸ¥çœ‹aæ˜¯å¦åœ¨æ€»è¡¨é‡Œå‡ºç°è¿‡ï¼ˆé‡å®šä¹‰æ£€æµ‹ï¼‰ï¼Œç„¶ååœ¨å¯¹åº”å‡½æ•°è¡¨çš„
+	// ±¾º¯ÊıµÄ×÷ÓÃ£¬ÔÚÈ«¾Ö±äÁ¿µÄÇé¿öÏÂ£¬ÊäÈëint aÕâÖÖ¶¨ÒåĞÔÓï¾äµÄtokenĞòÁĞºÍµ±Ç°·ûºÅ×Ü±í£¬
+	// Êä³öĞŞ¸ÄºóµÄ·ûºÅ±í¡£
+	// È»ºóÔÚÉú³ÉÄ¿±ê´úÂëµÄÊ±ºò£¬ÏÈ²éÑ¯Ò»¸ö±äÁ¿ÔÚ²»ÔÚ×Ü±íÀï£¬ÔÚ¾ÍÓÃÈ«¾Ö±äÁ¿µÄ²Ù×÷£¨Ö±½ÓÔÚÊı¾İ¶Î¶ÁĞ´£©£¬
+	// ²»ÔÚ¾ÍÓÃÁÙÊ±±äÁ¿µÄ²Ù×÷£¨·Åµ½¶ÑÕ»¶Î£¬ÓÃ»î¶¯¼ÇÂ¼¸ú¶ÑÕ»¶ÎÒ»Ò»¶ÔÓ¦£¬Ã¿´ÎÓ¦¸Ã¶Á¶ÑÕ»¶ÎµÄÄÄÀïÊÇÁÙÊ±±äÁ¿µÄÖµ£©
+	// Òò´Ë£¬ÔÚdefine_localÊäÈëint a,¾ÍÖ»½øĞĞ²é¿´aÊÇ·ñÔÚ×Ü±íÀï³öÏÖ¹ı£¨ÖØ¶¨Òå¼ì²â£©£¬È»ºóÔÚ¶ÔÓ¦º¯Êı±íµÄ
 
-	// List<String[]> synbl;æ€»è¡¨ï¼šå˜é‡åã€ç±»å‹ï¼ˆint int[] function char)ã€åœ¨æ•°æ®æ®µä¸­çš„åç§»åœ°å€ã€å…¶ä»–ä¿¡æ¯
-	// ï¼ˆå¦‚ç±»å‹ä¸ºå‡½æ•°ï¼Œåˆ™æŒ‡å‘å‡½æ•°è¡¨ä¸­çš„æŸä¸€ä¸ªã€‚å¦‚ç±»å‹ä¸ºæ•°ç»„ï¼Œåˆ™å­˜æ”¾æ•°ç»„é•¿åº¦ï¼‰
-	// æ‰€ä»¥æ€»è¡¨ä¸­çš„String[]çš„length=4ï¼Œsynbl.size()=å®šä¹‰è¯­å¥å‡ºç°æ¬¡æ•°
+	// List<String[]> synbl;×Ü±í£º±äÁ¿Ãû¡¢ÀàĞÍ£¨int int[] function char)¡¢ÔÚÊı¾İ¶ÎÖĞµÄÆ«ÒÆµØÖ·¡¢ÆäËûĞÅÏ¢
+	// £¨ÈçÀàĞÍÎªº¯Êı£¬ÔòÖ¸Ïòº¯Êı±íÖĞµÄÄ³Ò»¸ö¡£ÈçÀàĞÍÎªÊı×é£¬Ôò´æ·ÅÊı×é³¤¶È£©
+	// ËùÒÔ×Ü±íÖĞµÄString[]µÄlength=4£¬synbl.size()=¶¨ÒåÓï¾ä³öÏÖ´ÎÊı
 
 	// List<List<String>> pfinfl;
-	// å‡½æ•°è¡¨ï¼šå‡½æ•°å0ã€å½¢å‚ç±»å‹1ã€å½¢å‚åï¼ˆä¸å½¢å‚ç±»å‹ä¸€ä¸€å¯¹åº”ï¼‰2ã€è¿”å›ç±»å‹(å¦‚["int"])3ã€ä¸´æ—¶å˜é‡ï¼ˆ[a,b,c]ï¼‰4ã€ä¸´æ—¶å˜é‡åœ¨å †æ ˆæ®µçš„åç§»åœ°å€5
-	// å¦‚æœä¸´æ—¶å˜é‡æ˜¯ä¸€ä¸ªæ•°ç»„ï¼Œå®ƒçš„ä¸‹ä¸€ä¸ªä¸´æ—¶å˜é‡çš„åç§»åœ°å€å°±è¦åŠ ä¸Šé‚£ä¸ªæ•°ç»„çš„é•¿åº¦
+	// º¯Êı±í£ºº¯ÊıÃû0¡¢ĞÎ²ÎÀàĞÍ1¡¢ĞÎ²ÎÃû£¨ÓëĞÎ²ÎÀàĞÍÒ»Ò»¶ÔÓ¦£©2¡¢·µ»ØÀàĞÍ(Èç["int"])3¡¢ÁÙÊ±±äÁ¿£¨[a,b,c]£©4¡¢ÁÙÊ±±äÁ¿ÔÚ¶ÑÕ»¶ÎµÄÆ«ÒÆµØÖ·5
+	// Èç¹ûÁÙÊ±±äÁ¿ÊÇÒ»¸öÊı×é£¬ËüµÄÏÂÒ»¸öÁÙÊ±±äÁ¿µÄÆ«ÒÆµØÖ·¾ÍÒª¼ÓÉÏÄÇ¸öÊı×éµÄ³¤¶È
 
 	// List<String> vall;
 
-	// å½“å‰èƒ½æ¥æ”¶çš„è¯­å¥åªæœ‰int a;/int a,b,c;
+	// µ±Ç°ÄÜ½ÓÊÕµÄÓï¾äÖ»ÓĞint a;/int a,b,c;
 	public static void main(String[] args) throws Exception {
-		String path_in = "./z.cè¯­è¨€ä»£ç è¾“å…¥.txt";
-		String path_out = "./z.tokenåºåˆ—.txt";
+		String path_in = "./z.cÓïÑÔ´úÂëÊäÈë.txt";
+		String path_out = "./z.tokenĞòÁĞ.txt";
 		List<List<String>> anal = new analyzer().answer(path_in,path_out);
 		String[] step, i, C, S, c, k, p;
 
@@ -40,32 +41,32 @@ public class define_local {
 	boolean answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,
 			table tb) {
 		String[] step, i, C, S, c, k, p;
-		step = step1;// tokenåºåˆ—
-		i = i1;// å˜é‡
-		C = C1;// å­—ç¬¦
-		S = S1;// å­—ç¬¦ä¸²
-		c = c1;// æ•°å­—å¸¸é‡
-		k = k1;// å…³é”®å­—
-		p = p1;// ç¬¦å·
+		step = step1;// tokenĞòÁĞ
+		i = i1;// ±äÁ¿
+		C = C1;// ×Ö·û
+		S = S1;// ×Ö·û´®
+		c = c1;// Êı×Ö³£Á¿
+		k = k1;// ¹Ø¼ü×Ö
+		p = p1;// ·ûºÅ
 		table.func func = tb.new func();
 		String fnm = getf(tb);
-		List<table.vari> vt = new ArrayList<table.vari>();// è¿™ä¸ªå‡½æ•°çš„ä¸´æ—¶å˜é‡è¡¨
+		List<table.vari> vt = new ArrayList<table.vari>();// Õâ¸öº¯ÊıµÄÁÙÊ±±äÁ¿±í
 		
 		for (int j = 0; j < tb.pfinfl.size(); j++) {
-			if (tb.pfinfl.get(j).name.equals(fnm)) {// ç¬¦å·è¡¨çš„å‡½æ•°è¡¨çš„å‡½æ•°åä¸fnmç›¸åŒçš„é‚£ä¸ªfunc
-				// æ‰¾åˆ°äº†æœ¬æ¬¡å®šä¹‰æ‰€åœ¨çš„å­å‡½æ•°
+			if (tb.pfinfl.get(j).name.equals(fnm)) {// ·ûºÅ±íµÄº¯Êı±íµÄº¯ÊıÃûÓëfnmÏàÍ¬µÄÄÇ¸öfunc
+				// ÕÒµ½ÁË±¾´Î¶¨ÒåËùÔÚµÄ×Óº¯Êı
 				func = tb.pfinfl.get(j);
 				vt = tb.pfinfl.get(j).vt;
 			}
 		}
 
-		// å¯¹äºè¿›æ¥çš„å¥å­ï¼Œå…ˆåˆ¤æ–­æ˜¯å¦æœ‰é€—å·ï¼Œæ¥åˆ¤åˆ«æ˜¯å‡ ä¸ªå˜é‡
-		String tp = k[Integer.parseInt(step[0].substring(3, step[0].length() - 1))];// è¿›æ¥çš„è¯­å¥ç¬¬ä¸€ä¸ªéƒ½æ˜¯ç±»å‹å¦‚int
+		// ¶ÔÓÚ½øÀ´µÄ¾ä×Ó£¬ÏÈÅĞ¶ÏÊÇ·ñÓĞ¶ººÅ£¬À´ÅĞ±ğÊÇ¼¸¸ö±äÁ¿
+		String tp = k[Integer.parseInt(step[0].substring(3, step[0].length() - 1))];// ½øÀ´µÄÓï¾äµÚÒ»¸ö¶¼ÊÇÀàĞÍÈçint
 		List<String> name = new ArrayList<String>();
 		List<Integer> other = new ArrayList<Integer>();
-		if (tp.equals("int") || tp.equals("char")) {// å¯¹intæˆ–è€…charçš„å®šä¹‰ï¼Œotheræ˜¯"_"
+		if (tp.equals("int") || tp.equals("char")) {// ¶Ôint»òÕßcharµÄ¶¨Òå£¬otherÊÇ"_"
 			for (int j = 1; j < step.length; j++) {
-				// æ‰¾é€—å·åˆ¤æ–­å‡ ä¸ªå˜é‡ï¼Œå¦‚æœé‡åˆ°é€—å·æˆ–åˆ†å·ï¼Œåˆ™å˜é‡åœ¨é€—å·æˆ–åˆ†å·å‰ä¸€ä¸ª
+				// ÕÒ¶ººÅÅĞ¶Ï¼¸¸ö±äÁ¿£¬Èç¹ûÓöµ½¶ººÅ»ò·ÖºÅ£¬Ôò±äÁ¿ÔÚ¶ººÅ»ò·ÖºÅÇ°Ò»¸ö
 				if (step[j].substring(1, 2).equals("p")) {
 					if (p[Integer.parseInt(step[j].substring(3, step[j].length() - 1))].equals(",")
 							|| p[Integer.parseInt(step[j].substring(3, step[j].length() - 1))].equals(";")) {
@@ -75,16 +76,16 @@ public class define_local {
 				}
 			}
 		}
-		// å¢æ·»å¯¹æ•°ç»„çš„æ”¯æŒæ—¶å†™è¿™é‡Œ
+		// ÔöÌí¶ÔÊı×éµÄÖ§³ÖÊ±Ğ´ÕâÀï
 
-		// ç°åœ¨æ‹¿åˆ°äº†è¿™æ¬¡å˜é‡åï¼Œç°åœ¨è¦æ–°å»ºä¸€ä¸ªvariç±»å‹ï¼Œç”¨æ¥å­˜æœ¬å˜é‡çš„ä¿¡æ¯ã€‚æœ¬å˜é‡çš„ä¿¡æ¯ä¸­æœ‰ä¸€æ¡åç§»åœ°å€ï¼Œ
+		// ÏÖÔÚÄÃµ½ÁËÕâ´Î±äÁ¿Ãû£¬ÏÖÔÚÒªĞÂ½¨Ò»¸övariÀàĞÍ£¬ÓÃÀ´´æ±¾±äÁ¿µÄĞÅÏ¢¡£±¾±äÁ¿µÄĞÅÏ¢ÖĞÓĞÒ»ÌõÆ«ÒÆµØÖ·£¬
 
-		for (int j = 0; j < name.size(); j++) {// å¯¹äºè¿™æ¬¡å®šä¹‰çš„æ¯ä¸ªå˜é‡
-			table.vari thisv = tb.new vari();// æ–°å»ºä¸€ä¸ªvari
+		for (int j = 0; j < name.size(); j++) {// ¶ÔÓÚÕâ´Î¶¨ÒåµÄÃ¿¸ö±äÁ¿
+			table.vari thisv = tb.new vari();// ĞÂ½¨Ò»¸övari
 			thisv.name = name.get(j);
 			for(int jj=0;jj<vt.size();jj++){
 				if(vt.get(jj).name.equals(thisv.name)){
-					System.out.println("å±€éƒ¨å˜é‡é‡å®šä¹‰ï¼è¯¥å˜é‡ä¸ºï¼š"+thisv.name+". å‡½æ•°åä¸ºï¼š"+fnm);
+					System.out.println("¾Ö²¿±äÁ¿ÖØ¶¨Òå£¡¸Ã±äÁ¿Îª£º"+thisv.name+". º¯ÊıÃûÎª£º"+fnm);
 					return false;
 				}
 			}
@@ -96,13 +97,13 @@ public class define_local {
 
 		func.vt = vt;
 		for (int j = 0; j < tb.pfinfl.size(); j++) {
-			if (tb.pfinfl.get(j).name.equals(fnm)) {// ç¬¦å·è¡¨çš„å‡½æ•°è¡¨çš„å‡½æ•°åä¸fnmç›¸åŒçš„é‚£ä¸ªfunc
-				// æ‰¾åˆ°äº†æœ¬æ¬¡å®šä¹‰æ‰€åœ¨çš„å­å‡½æ•°
+			if (tb.pfinfl.get(j).name.equals(fnm)) {// ·ûºÅ±íµÄº¯Êı±íµÄº¯ÊıÃûÓëfnmÏàÍ¬µÄÄÇ¸öfunc
+				// ÕÒµ½ÁË±¾´Î¶¨ÒåËùÔÚµÄ×Óº¯Êı
 				tb.pfinfl.set(j, func);
 			}
 		}
-		// resultåœ¨txtä¸­å­˜æ”¾æ–¹å¼ï¼Œå…ˆæ‰“å°æ€»è¡¨ï¼Œæ€»è¡¨ä¸­çš„æ¯ä¸ªvariä¸€è¡Œ
-		// å†æ‰“å°å‡½æ•°è¡¨ï¼Œå‡½æ•°è¡¨ä¸­å‰ä¸‰ä¸ªå…ƒç´ ä¸€è¡Œï¼Œvtï¼šnè¡Œ
+		// resultÔÚtxtÖĞ´æ·Å·½Ê½£¬ÏÈ´òÓ¡×Ü±í£¬×Ü±íÖĞµÄÃ¿¸övariÒ»ĞĞ
+		// ÔÙ´òÓ¡º¯Êı±í£¬º¯Êı±íÖĞÇ°Èı¸öÔªËØÒ»ĞĞ£¬vt£ºnĞĞ
 		//tb.print(tb);
 		writedl(tb);
 		return true;
@@ -137,7 +138,7 @@ public class define_local {
 			}
 		}
 		try {
-			File writename = new File("./z.ç¬¦å·è¡¨.txt");
+			File writename = new File("./z.·ûºÅ±í.txt");
 			writename.createNewFile();
 			OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(writename), "UTF-8");
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
@@ -177,7 +178,7 @@ public class define_local {
 			}
 		}
 		try {
-			File writename = new File("../z.ç¬¦å·è¡¨.txt");
+			File writename = new File("../z.·ûºÅ±í.txt");
 			writename.createNewFile();
 			OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(writename), "UTF-8");
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
@@ -189,10 +190,10 @@ public class define_local {
 		}
 	}
 	static int getofad(List<table.vari> vt) {
-		// æ±‚åç§»åœ°å€ï¼šå¦‚æœvt.size()ä¸º0ï¼Œåˆ™åç§»åœ°å€ä¸º0ï¼Œ
-		// å¦‚æœvt.size()ä¸ä¸º0ï¼Œå°±å»çœ‹çœ‹ä¸Šä¸€æ¡variçš„ç±»å‹æ˜¯å¦æ˜¯int[]ï¼Œ
-		// å¦‚æœæ˜¯int[]ï¼Œé‚£ä¹ˆåç§»åœ°å€ä¸ºä¸Šä¸€æ¡variçš„other+ofad
-		// å¦‚æœä¸æ˜¯æ•°ç»„è€Œæ˜¯intæˆ–è€…charï¼Œé‚£ä¹ˆåç§»åœ°å€ä¸ºofad+1
+		// ÇóÆ«ÒÆµØÖ·£ºÈç¹ûvt.size()Îª0£¬ÔòÆ«ÒÆµØÖ·Îª0£¬
+		// Èç¹ûvt.size()²»Îª0£¬¾ÍÈ¥¿´¿´ÉÏÒ»ÌõvariµÄÀàĞÍÊÇ·ñÊÇint[]£¬
+		// Èç¹ûÊÇint[]£¬ÄÇÃ´Æ«ÒÆµØÖ·ÎªÉÏÒ»ÌõvariµÄother+ofad
+		// Èç¹û²»ÊÇÊı×é¶øÊÇint»òÕßchar£¬ÄÇÃ´Æ«ÒÆµØÖ·Îªofad+1
 		if (vt.size() == 0)
 			return 0;
 		if (vt.get(vt.size() - 1).tp.equals("int[]"))

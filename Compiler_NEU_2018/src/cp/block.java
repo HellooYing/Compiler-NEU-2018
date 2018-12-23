@@ -1,3 +1,4 @@
+package cp;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,8 +9,8 @@ import java.util.*;
 
 public class block {
 	public static void main(String[] args) throws Exception {
-		String path_in = "./z.cè¯­è¨€ä»£ç è¾“å…¥.txt";
-		String path_out = "./z.tokenåºåˆ—.txt";
+		String path_in = "./z.cÓïÑÔ´úÂëÊäÈë.txt";
+		String path_out = "./z.tokenĞòÁĞ.txt";
 		List<List<String>> anal = new analyzer().answer(path_in,path_out);
 		String[] step, i, C, S, c, k, p;
 
@@ -36,31 +37,31 @@ public class block {
 		k = k1;
 		p = p1;
 		int bracket, n;
-		boolean zd=true;//é”™è¯¯ä¸­æ–­
+		boolean zd=true;//´íÎóÖĞ¶Ï
 		List<String[]> qt = new ArrayList<String[]>();
-		List<String[]> qtt = new ArrayList<String[]>();// åŠ å…¥qtä¹‹å‰è¦æ£€æŸ¥ä¸´æ—¶å˜é‡tå‡ æ˜¯å¦æœ‰é‡å¤ï¼Œæ‰€ä»¥è¦ä¸´æ—¶æ”¾ä¸€ä¸‹æ”¹å®Œå†åŠ è¿›å»
+		List<String[]> qtt = new ArrayList<String[]>();// ¼ÓÈëqtÖ®Ç°Òª¼ì²éÁÙÊ±±äÁ¿t¼¸ÊÇ·ñÓĞÖØ¸´£¬ËùÒÔÒªÁÙÊ±·ÅÒ»ÏÂ¸ÄÍêÔÙ¼Ó½øÈ¥
 		List<String> code = new ArrayList<String>();
 		List<String[]> sentence = new ArrayList<String[]>();
-		// å¯¹äºä¸€ä¸ªå—ï¼Œè¦çŸ¥é“stepå‡ -å‡ æ˜¯å¼•ç”¨äº†åˆ†æ”¯æˆ–å¾ªç¯ç»“æ„ç”Ÿæˆçš„å››å…ƒå¼ï¼Œå‡ -å‡ æ˜¯å¼•ç”¨äº†å‡½æ•°ç”Ÿæˆçš„å››å…ƒå¼
-		// æ¯”å¦‚è¯´0-12æ˜¯èµ‹å€¼è¿ç®—ç›´æ¥ä¸€å¥ä¸€å¥çš„ç”¨exp_fourç”Ÿæˆcodeï¼Œ13-50æ˜¯if{}elseçš„ç»“æ„ç”¨çš„æ˜¯if_fourç”Ÿæˆcode
+		// ¶ÔÓÚÒ»¸ö¿é£¬ÒªÖªµÀstep¼¸-¼¸ÊÇÒıÓÃÁË·ÖÖ§»òÑ­»·½á¹¹Éú³ÉµÄËÄÔªÊ½£¬¼¸-¼¸ÊÇÒıÓÃÁËº¯ÊıÉú³ÉµÄËÄÔªÊ½
+		// ±ÈÈçËµ0-12ÊÇ¸³ÖµÔËËãÖ±½ÓÒ»¾äÒ»¾äµÄÓÃexp_fourÉú³Écode£¬13-50ÊÇif{}elseµÄ½á¹¹ÓÃµÄÊÇif_fourÉú³Écode
 		String t;
 		for (int j = 0; j < step.length; j++) {
 
-			if (step[j].substring(1, 2).equals("k")) {// æ˜¯å…³é”®å­—
+			if (step[j].substring(1, 2).equals("k")) {// ÊÇ¹Ø¼ü×Ö
 				t = k[Integer.parseInt(step[j].substring(3, step[j].length() - 1))];
-				if (t.equals("int") || t.equals("char") || t.equals("int[]") || t.equals("String")) {// æ˜¯å£°æ˜
+				if (t.equals("int") || t.equals("char") || t.equals("int[]") || t.equals("String")) {// ÊÇÉùÃ÷
 					int jj;
 					if (j + 2 < step.length && step[j + 2].substring(1, 2).equals("p")
 							&& p[Integer.parseInt(step[j + 2].substring(3, step[j + 2].length() - 1))].equals("(")) {
-						// è¿™å°±è¯´æ˜æ˜¯å‡½æ•°å£°æ˜è€Œéå˜é‡å£°æ˜
-						for (jj = j + 3; jj < step.length; jj++) {// æ‰¾åˆ°int f(int a,int b){}çš„å‰å¤§æ‹¬å·
+						// Õâ¾ÍËµÃ÷ÊÇº¯ÊıÉùÃ÷¶ø·Ç±äÁ¿ÉùÃ÷
+						for (jj = j + 3; jj < step.length; jj++) {// ÕÒµ½int f(int a,int b){}µÄÇ°´óÀ¨ºÅ
 							if (step[jj].substring(1, 2).equals("p")) {
 								if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
 									break;
 							}
 						}
 						bracket = 1;
-						while (bracket > 0) {// æ‰¾åˆ°è·Ÿä¹‹å‰æ‰¾åˆ°çš„é‚£ä¸ªå‰å¤§æ‹¬å·åŒ¹é…çš„åå¤§æ‹¬å·
+						while (bracket > 0) {// ÕÒµ½¸úÖ®Ç°ÕÒµ½µÄÄÇ¸öÇ°´óÀ¨ºÅÆ¥ÅäµÄºó´óÀ¨ºÅ
 							jj++;
 							if (step[jj].substring(1, 2).equals("p")) {
 								if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
@@ -69,28 +70,28 @@ public class block {
 									bracket--;
 							}
 						}
-						sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentenceæŠŠæ•´ä¸ªifçš„ä¸€å¤§å¥è¯åŠ è¿›å»
+						sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence°ÑÕû¸öifµÄÒ»´ó¾ä»°¼Ó½øÈ¥
 						j = jj;
 					} else {
-						for (jj = j + 1; jj < step.length; jj++) {// æ‰¾åˆ°;
+						for (jj = j + 1; jj < step.length; jj++) {// ÕÒµ½;
 							if (step[jj].substring(1, 2).equals("p")) {
 								if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals(";"))
 									break;
 							}
 						}
-						sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentenceæŠŠæ•´ä¸ªifçš„ä¸€å¤§å¥è¯åŠ è¿›å»
-						j = jj;// å¼€å§‹æ‰¾ä¸‹é¢çš„
+						sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence°ÑÕû¸öifµÄÒ»´ó¾ä»°¼Ó½øÈ¥
+						j = jj;// ¿ªÊ¼ÕÒÏÂÃæµÄ
 					}
-				} else if (t.equals("if")) {// æ˜¯if
+				} else if (t.equals("if")) {// ÊÇif
 					int jj;
-					for (jj = j + 1; jj < step.length; jj++) {// æ‰¾åˆ°if{}çš„å‰å¤§æ‹¬å·
+					for (jj = j + 1; jj < step.length; jj++) {// ÕÒµ½if{}µÄÇ°´óÀ¨ºÅ
 						if (step[jj].substring(1, 2).equals("p")) {
 							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
 								break;
 						}
 					}
 					bracket = 1;
-					while (bracket > 0) {// æ‰¾åˆ°è·Ÿä¹‹å‰æ‰¾åˆ°çš„é‚£ä¸ªå‰å¤§æ‹¬å·åŒ¹é…çš„åå¤§æ‹¬å·
+					while (bracket > 0) {// ÕÒµ½¸úÖ®Ç°ÕÒµ½µÄÄÇ¸öÇ°´óÀ¨ºÅÆ¥ÅäµÄºó´óÀ¨ºÅ
 						jj++;
 						if (step[jj].substring(1, 2).equals("p")) {
 							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
@@ -99,16 +100,16 @@ public class block {
 								bracket--;
 						}
 					}
-					if (jj + 1 < step.length && step[jj + 1].substring(1, 2).equals("k")) {// å¦‚æœåå¤§æ‹¬å·ç´§è·Ÿç€çš„æ˜¯å…³é”®å­—else
+					if (jj + 1 < step.length && step[jj + 1].substring(1, 2).equals("k")) {// Èç¹ûºó´óÀ¨ºÅ½ô¸ú×ÅµÄÊÇ¹Ø¼ü×Öelse
 						if (k[Integer.parseInt(step[jj + 1].substring(3, step[jj + 1].length() - 1))].equals("else")) {
-							for (jj = jj + 1; jj < step.length; jj++) {// æ‰¾elseçš„å‰å¤§æ‹¬å·
+							for (jj = jj + 1; jj < step.length; jj++) {// ÕÒelseµÄÇ°´óÀ¨ºÅ
 								if (step[jj].substring(1, 2).equals("p")) {
 									if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
 										break;
 								}
 							}
 							bracket = 1;
-							while (bracket > 0) {// æ‰¾elseçš„åå¤§æ‹¬å·
+							while (bracket > 0) {// ÕÒelseµÄºó´óÀ¨ºÅ
 								jj++;
 								if (step[jj].substring(1, 2).equals("p")) {
 									if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
@@ -120,18 +121,18 @@ public class block {
 							}
 						}
 					}
-					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentenceæŠŠæ•´ä¸ªifçš„ä¸€å¤§å¥è¯åŠ è¿›å»
-					j = jj;// å¼€å§‹æ‰¾ä¸‹é¢çš„
-				}else if (t.equals("switch")) {// æ˜¯switch
+					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence°ÑÕû¸öifµÄÒ»´ó¾ä»°¼Ó½øÈ¥
+					j = jj;// ¿ªÊ¼ÕÒÏÂÃæµÄ
+				}else if (t.equals("switch")) {// ÊÇswitch
 					int jj;
-					for (jj = j + 1; jj < step.length; jj++) {// æ‰¾åˆ°switch{}çš„å‰å¤§æ‹¬å·
+					for (jj = j + 1; jj < step.length; jj++) {// ÕÒµ½switch{}µÄÇ°´óÀ¨ºÅ
 						if (step[jj].substring(1, 2).equals("p")) {
 							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
 								break;
 						}
 					}
 					bracket = 1;
-					while (bracket > 0) {// æ‰¾åˆ°è·Ÿä¹‹å‰æ‰¾åˆ°çš„é‚£ä¸ªå‰å¤§æ‹¬å·åŒ¹é…çš„åå¤§æ‹¬å·
+					while (bracket > 0) {// ÕÒµ½¸úÖ®Ç°ÕÒµ½µÄÄÇ¸öÇ°´óÀ¨ºÅÆ¥ÅäµÄºó´óÀ¨ºÅ
 						jj++;
 						if (step[jj].substring(1, 2).equals("p")) {
 							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
@@ -140,21 +141,21 @@ public class block {
 								bracket--;
 						}
 					}
-					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentenceæŠŠæ•´ä¸ªifçš„ä¸€å¤§å¥è¯åŠ è¿›å»
-					j = jj;// å¼€å§‹æ‰¾ä¸‹é¢çš„
+					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence°ÑÕû¸öifµÄÒ»´ó¾ä»°¼Ó½øÈ¥
+					j = jj;// ¿ªÊ¼ÕÒÏÂÃæµÄ
 				}
-				// å†æ‰¾while
+				// ÔÙÕÒwhile
 				else if (t.equals("while")) {
 
 					int jj;
-					for (jj = j + 1; jj < step.length; jj++) {// æ‰¾åˆ°while{}çš„å‰å¤§æ‹¬å·
+					for (jj = j + 1; jj < step.length; jj++) {// ÕÒµ½while{}µÄÇ°´óÀ¨ºÅ
 						if (step[jj].substring(1, 2).equals("p")) {
 							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
 								break;
 						}
 					}
 					bracket = 1;
-					while (bracket > 0) {// æ‰¾åˆ°è·Ÿä¹‹å‰æ‰¾åˆ°çš„é‚£ä¸ªå‰å¤§æ‹¬å·åŒ¹é…çš„åå¤§æ‹¬å·
+					while (bracket > 0) {// ÕÒµ½¸úÖ®Ç°ÕÒµ½µÄÄÇ¸öÇ°´óÀ¨ºÅÆ¥ÅäµÄºó´óÀ¨ºÅ
 						jj++;
 						if (step[jj].substring(1, 2).equals("p")) {
 							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
@@ -163,19 +164,19 @@ public class block {
 								bracket--;
 						}
 					}
-					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentenceæŠŠæ•´ä¸ªwhileçš„ä¸€å¤§å¥è¯åŠ è¿›å»
-					j = jj;// å¼€å§‹æ‰¾ä¸‹é¢çš„
+					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence°ÑÕû¸öwhileµÄÒ»´ó¾ä»°¼Ó½øÈ¥
+					j = jj;// ¿ªÊ¼ÕÒÏÂÃæµÄ
 				} else if (t.equals("for")) {
 
 					int jj;
-					for (jj = j + 1; jj < step.length; jj++) {// æ‰¾åˆ°while{}çš„å‰å¤§æ‹¬å·
+					for (jj = j + 1; jj < step.length; jj++) {// ÕÒµ½while{}µÄÇ°´óÀ¨ºÅ
 						if (step[jj].substring(1, 2).equals("p")) {
 							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
 								break;
 						}
 					}
 					bracket = 1;
-					while (bracket > 0) {// æ‰¾åˆ°è·Ÿä¹‹å‰æ‰¾åˆ°çš„é‚£ä¸ªå‰å¤§æ‹¬å·åŒ¹é…çš„åå¤§æ‹¬å·
+					while (bracket > 0) {// ÕÒµ½¸úÖ®Ç°ÕÒµ½µÄÄÇ¸öÇ°´óÀ¨ºÅÆ¥ÅäµÄºó´óÀ¨ºÅ
 						jj++;
 						if (step[jj].substring(1, 2).equals("p")) {
 							if (p[Integer.parseInt(step[jj].substring(3, step[jj].length() - 1))].equals("{"))
@@ -184,8 +185,8 @@ public class block {
 								bracket--;
 						}
 					}
-					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentenceæŠŠæ•´ä¸ªwhileçš„ä¸€å¤§å¥è¯åŠ è¿›å»
-					j = jj;// å¼€å§‹æ‰¾ä¸‹é¢çš„
+					sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence°ÑÕû¸öwhileµÄÒ»´ó¾ä»°¼Ó½øÈ¥
+					j = jj;// ¿ªÊ¼ÕÒÏÂÃæµÄ
 				} else if (t.equals("break")) {
 					sentence.add(Arrays.copyOfRange(step, j, j + 2));
 					j = j + 1;
@@ -197,7 +198,7 @@ public class block {
 					j = j + 2;
 				}
 			}
-			// else if(æ˜¯i åœ¨functionåˆ—è¡¨é‡Œ)
+			// else if(ÊÇi ÔÚfunctionÁĞ±íÀï)
 			else if (step[j].substring(1, 2).equals("p")) {
 				if (p[Integer.parseInt(step[j].substring(3, step[j].length() - 1))].equals("=")) {
 					int jj;
@@ -218,13 +219,13 @@ public class block {
 		for (String[] s : sentence)
 			l += s.length;
 		if (l != step.length) {
-			System.out.println("å‡ºç°äº†æœªçŸ¥çš„è¯­å¥ï¼Œè¯·æ£€æŸ¥è¾“å…¥ä»£ç æ˜¯å¦æ­£ç¡®");
+			System.out.println("³öÏÖÁËÎ´ÖªµÄÓï¾ä£¬Çë¼ì²éÊäÈë´úÂëÊÇ·ñÕıÈ·");
 			System.out.print(l + " " + step.length);
 			for (String s : step) {
 				System.out.print(s+" ");
 			}
 			System.out.println();
-		} // æ£€æŸ¥æ˜¯å¦æ‰€æœ‰å•è¯éƒ½æœ‰å¥å­å¯åŠ ï¼Œæ²¡æœ‰å°±è¯´æ˜æœ‰é—®é¢˜
+		} // ¼ì²éÊÇ·ñËùÓĞµ¥´Ê¶¼ÓĞ¾ä×Ó¿É¼Ó£¬Ã»ÓĞ¾ÍËµÃ÷ÓĞÎÊÌâ
 
 		int nn = 0;
 		for (int j = 0; j < sentence.size(); j++) {
@@ -364,7 +365,7 @@ public class block {
 			result = result.concat("] ");
 		}
 		try {
-			File writename = new File("./z.å››å…ƒå¼.txt");
+			File writename = new File("./z.ËÄÔªÊ½.txt");
 			writename.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			out.write(result);
@@ -387,7 +388,7 @@ public class block {
 			result = result.concat("] ");
 		}
 		try {
-			File writename = new File("../z.å››å…ƒå¼.txt");
+			File writename = new File("../z.ËÄÔªÊ½.txt");
 			writename.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			out.write(result);
@@ -397,7 +398,7 @@ public class block {
 			e.printStackTrace();
 		}
 	}
-	static int reset_t(List<String[]> qtt, int n) {// é¿å…ä¸´æ—¶å˜é‡çš„å†²çªï¼Œåœ¨æ¯æ¬¡å¾€qtåŠ qttçš„æ—¶å€™éƒ½è¦é‡ç½®æ‰€æœ‰tåé¢çš„å€¼
+	static int reset_t(List<String[]> qtt, int n) {// ±ÜÃâÁÙÊ±±äÁ¿µÄ³åÍ»£¬ÔÚÃ¿´ÎÍùqt¼ÓqttµÄÊ±ºò¶¼ÒªÖØÖÃËùÓĞtºóÃæµÄÖµ
 		String[] inqtt;
 		int num, max = 0;
 		for (int j = 0; j < qtt.size(); j++) {

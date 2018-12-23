@@ -1,3 +1,4 @@
+package cp;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,14 +10,14 @@ import java.util.*;
 public class exp_four {
     public static int now = 0, flag = 1, num = 1, brackets = 0;
     public static String[] step, i, C, S, c, k, p, inqt;
-    public static Stack<String> st1 = new Stack<String>();// å…ƒç´ æ ˆ
-    public static Stack<String> st2 = new Stack<String>();// ç¬¦å·æ ˆ
-    public static List<String[]> qt = new ArrayList<String[]>();// å­˜å››å…ƒå¼
+    public static Stack<String> st1 = new Stack<String>();// ÔªËØÕ»
+    public static Stack<String> st2 = new Stack<String>();// ·ûºÅÕ»
+    public static List<String[]> qt = new ArrayList<String[]>();// ´æËÄÔªÊ½
     public static String f;
 
     public static void main(String[] args) throws Exception {
-        String path_in = "./z.cè¯­è¨€ä»£ç è¾“å…¥.txt";
-        String path_out = "./z.tokenåºåˆ—.txt";
+        String path_in = "./z.cÓïÑÔ´úÂëÊäÈë.txt";
+        String path_out = "./z.tokenĞòÁĞ.txt";
         List<List<String>> anal = new analyzer().answer(path_in,path_out);
         String[] step, i, C, S, c, k, p;
 
@@ -46,14 +47,14 @@ public class exp_four {
         now = 0;
         flag = 1;
         num = 1;
-        brackets = 0;// æ¸…é™¤ä¸Šä¸€æ¬¡ç•™ä¸‹çš„å€¼
+        brackets = 0;// Çå³ıÉÏÒ»´ÎÁôÏÂµÄÖµ
         String finalout = "";
         if (step1.length > 4 && step1[1].substring(1, 2).equals("p")
                 && p[Integer.parseInt(step1[1].substring(3, step1[1].length() - 1))].equals("=")) {
             finalout = i[Integer.parseInt(step1[0].substring(3, step1[0].length() - 1))];
             step = Arrays.copyOfRange(step1, 2, step1.length);
         } else if (step1[1].substring(1, 2).equals("p")
-                && p[Integer.parseInt(step1[1].substring(3, step1[1].length() - 1))].equals("=") && step1.length <= 4) {// èµ‹å€¼è¯­å¥
+                && p[Integer.parseInt(step1[1].substring(3, step1[1].length() - 1))].equals("=") && step1.length <= 4) {// ¸³ÖµÓï¾ä
             inqt = new String[4];
             inqt[0] = "=";
             switch (step1[2].substring(1, 2)) {
@@ -64,7 +65,7 @@ public class exp_four {
                 inqt[1] = c[Integer.parseInt(step1[2].substring(3, step1[2].length() - 1))];
                 break;
             default:
-                System.out.println("è¾“å…¥è¡¨è¾¾å¼æ— æ•ˆ");
+                System.out.println("ÊäÈë±í´ïÊ½ÎŞĞ§");
             }
             inqt[2] = "_";
             inqt[3] = i[Integer.parseInt(step1[0].substring(3, step1[0].length() - 1))];
@@ -72,17 +73,17 @@ public class exp_four {
             return qt;
         } else
             step = step1;
-        // ç¬¦å·æ ˆä¸å…ƒç´ æ ˆï¼Œé‡åˆ°å…ƒç´ å°±åŠ è¿›å…ƒç´ æ ˆï¼Œé‡åˆ°ç¬¦å·å°±åŠ è¿›ç¬¦å·æ ˆ
-        // é‡åˆ°ç¬¦å·çš„æ—¶å€™è¦è·Ÿç¬¦å·æ ˆçš„æ ˆé¡¶å…ƒç´ æ¯”è¾ƒï¼Œæ“ä½œæ˜¯ï¼š
-        // é‡+- æ ˆé¡¶+-*/ï¼Œå‡ºæ ˆ  ç©ºæˆ– å…¥æ ˆ
-        // é‡*/ æ ˆé¡¶+-ï¼ˆç©º å…¥æ ˆ   * 
-        // é‡ï¼‰ å‡ºæ ˆåˆ°ï¼ˆ
-        // å‡ºæ ˆçš„æ„æ€æ˜¯ï¼Œinqt[0]=st2.pop();inqt[2]=st1.pop();inqt[1]=st1.pop();inqt[3]="t".concat(String.valueOf(num));num++;st1.add(inqt[3]);
-        // å…¥æ ˆçš„æ„æ€æ˜¯ï¼Œst2.add(ç¬¦å·)
-        // é‡åˆ°å…ƒç´ å…¨ç›´æ¥å…¥æ ˆ
+        // ·ûºÅÕ»ÓëÔªËØÕ»£¬Óöµ½ÔªËØ¾Í¼Ó½øÔªËØÕ»£¬Óöµ½·ûºÅ¾Í¼Ó½ø·ûºÅÕ»
+        // Óöµ½·ûºÅµÄÊ±ºòÒª¸ú·ûºÅÕ»µÄÕ»¶¥ÔªËØ±È½Ï£¬²Ù×÷ÊÇ£º
+        // Óö+- Õ»¶¥+-*/£¬³öÕ»  ¿Õ»ò ÈëÕ»
+        // Óö*/ Õ»¶¥+-£¨¿Õ ÈëÕ»   * 
+        // Óö£© ³öÕ»µ½£¨
+        // ³öÕ»µÄÒâË¼ÊÇ£¬inqt[0]=st2.pop();inqt[2]=st1.pop();inqt[1]=st1.pop();inqt[3]="t".concat(String.valueOf(num));num++;st1.add(inqt[3]);
+        // ÈëÕ»µÄÒâË¼ÊÇ£¬st2.add(·ûºÅ)
+        // Óöµ½ÔªËØÈ«Ö±½ÓÈëÕ»
         E();
         if (flag == 0)
-            System.out.println("è¾“å…¥è¡¨è¾¾å¼æ— æ•ˆ");
+            System.out.println("ÊäÈë±í´ïÊ½ÎŞĞ§");
         else {
             while (!st2.empty()&&st1.size()!=1) {
                 inqt = new String[4];
@@ -109,7 +110,7 @@ public class exp_four {
                 result = result.concat("] ");
             }
             try {
-                File writename = new File("./z.å››å…ƒå¼.txt");
+                File writename = new File("./z.ËÄÔªÊ½.txt");
                 writename.createNewFile();
                 BufferedWriter out = new BufferedWriter(new FileWriter(writename));
                 out.write(result);
@@ -122,7 +123,7 @@ public class exp_four {
         return qt;
     }
 
-    public static String getTraceInfo() { // ä¸€ä¸ªè¾“å‡ºä»£ç è¡Œå·çš„å‡½æ•°ï¼Œç”¨æ¥å‘Šè¯‰æˆ‘ä½•æ—¶returnä¹Ÿå°±æ˜¯ä½•æ—¶è®¤ä¸ºè¡¨è¾¾å¼å‡ºé”™äº†æˆ–è€…è®¤ä¸ºè¡¨è¾¾å¼ç»“æŸäº†
+    public static String getTraceInfo() { // Ò»¸öÊä³ö´úÂëĞĞºÅµÄº¯Êı£¬ÓÃÀ´¸æËßÎÒºÎÊ±returnÒ²¾ÍÊÇºÎÊ±ÈÏÎª±í´ïÊ½³ö´íÁË»òÕßÈÏÎª±í´ïÊ½½áÊøÁË
         StringBuffer sb = new StringBuffer();
 
         StackTraceElement[] stacks = new Throwable().getStackTrace();
@@ -187,7 +188,7 @@ public class exp_four {
                     return;
                 }
                 ;
-                now++;// +å’Œ-åªåœ¨T1é‡Œæ¶ˆé™¤ï¼Œåˆ«çš„åœ°æ–¹é‡åˆ°éƒ½æ˜¯é”™çš„
+                now++;// +ºÍ-Ö»ÔÚT1ÀïÏû³ı£¬±ğµÄµØ·½Óöµ½¶¼ÊÇ´íµÄ
                 T();
                 E1();
                 break;
@@ -241,7 +242,7 @@ public class exp_four {
                     return;
                 }
                 ;
-                now++;// *å’Œ/åªåœ¨T1é‡Œæ¶ˆé™¤ï¼Œåˆ«çš„åœ°æ–¹é‡åˆ°éƒ½æ˜¯é”™çš„
+                now++;// *ºÍ/Ö»ÔÚT1ÀïÏû³ı£¬±ğµÄµØ·½Óöµ½¶¼ÊÇ´íµÄ
                 F();
                 T1();
                 return;

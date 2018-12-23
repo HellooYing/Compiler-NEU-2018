@@ -1,3 +1,4 @@
+package cp;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
@@ -12,7 +13,7 @@ public class optimization {
 		String[] t = {}, ttt;
 		String tt;
 		try {
-			File filename = new File("./z.å››å…ƒå¼.txt");
+			File filename = new File("./z.ËÄÔªÊ½.txt");
 			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename));
 			BufferedReader br = new BufferedReader(reader);
 			String line = "";
@@ -36,12 +37,12 @@ public class optimization {
 		String[] inqt;
 		String[] t;
 		List<String> replace = new ArrayList<String>();
-		int flag = 1;// å¦‚æœæ•´ä½“å¾ªç¯éƒ½æ²¡æœ‰æ–°çš„éœ€è¦ä¼˜åŒ–çš„åœ°æ–¹ï¼Œæ‰ä»£è¡¨çœŸæ­£ä¼˜åŒ–å®Œæ¯•ã€‚
+		int flag = 1;// Èç¹ûÕûÌåÑ­»·¶¼Ã»ÓĞĞÂµÄĞèÒªÓÅ»¯µÄµØ·½£¬²Å´ú±íÕæÕıÓÅ»¯Íê±Ï¡£
 		while (flag == 1) {
 			flag = 0;
-			int flag_appear12;// ä»£è¡¨t1è¿™æ ·çš„ç»“æœï¼Œæ˜¯å¦åœ¨ä¸‹é¢çš„ç¬¬ä¸€ä½å’Œç¬¬äºŒä½å‡ºç°è¿‡ã€‚å‡ºç°è¿‡å°±ä»£è¡¨è¢«ä½¿ç”¨è¿‡ï¼Œä¸æ˜¯æ— æ•ˆèµ‹å€¼ã€‚
-			int flag_appear3;// ä»£è¡¨t1è¿™æ ·çš„ç»“æœï¼Œåœ¨ä¸‹é¢çš„ç¬¬ä¸‰ä½å‡ºç°è¿‡ï¼Œä»£è¡¨è¢«é‡æ–°èµ‹å€¼è¿‡ã€‚
-			for (int i = 0; i < r.size(); i++) {// ç¬¬ä¸‰éå¾ªç¯ï¼Œå¦‚æœæŸä¸ªå››å…ƒå¼çš„ç»“æœåœ¨åç»­è¢«é‡æ–°èµ‹å€¼è¿‡å¹¶ä¸”æ²¡è¢«å¼•ç”¨è¿‡ï¼Œé‚£ä¹ˆå®ƒæ˜¯æ— æ•ˆèµ‹å€¼å¯ä»¥åˆ æ‰
+			int flag_appear12;// ´ú±ít1ÕâÑùµÄ½á¹û£¬ÊÇ·ñÔÚÏÂÃæµÄµÚÒ»Î»ºÍµÚ¶şÎ»³öÏÖ¹ı¡£³öÏÖ¹ı¾Í´ú±í±»Ê¹ÓÃ¹ı£¬²»ÊÇÎŞĞ§¸³Öµ¡£
+			int flag_appear3;// ´ú±ít1ÕâÑùµÄ½á¹û£¬ÔÚÏÂÃæµÄµÚÈıÎ»³öÏÖ¹ı£¬´ú±í±»ÖØĞÂ¸³Öµ¹ı¡£
+			for (int i = 0; i < r.size(); i++) {// µÚÈı±éÑ­»·£¬Èç¹ûÄ³¸öËÄÔªÊ½µÄ½á¹ûÔÚºóĞø±»ÖØĞÂ¸³Öµ¹ı²¢ÇÒÃ»±»ÒıÓÃ¹ı£¬ÄÇÃ´ËüÊÇÎŞĞ§¸³Öµ¿ÉÒÔÉ¾µô
 				inqt = r.get(i);
 				if(!(inqt[0].equals("+")||inqt[0].equals("-")||inqt[0].equals("*")||inqt[0].equals("/")||inqt[0].equals("="))) continue;
 				flag_appear12 = 0;
@@ -61,17 +62,17 @@ public class optimization {
 					i--;
 				}
 			}
-			replace.add(" ");// ä¸ºäº†ä¸‹é¢çš„å¾ªç¯å¯ä»¥è¿›å…¥
+			replace.add(" ");// ÎªÁËÏÂÃæµÄÑ­»·¿ÉÒÔ½øÈë
 			while (replace.size() > 0) {
 				replace.clear();
-				for (int i = 0; i < r.size(); i++) {// ç¬¬ä¸€éå¾ªç¯ï¼Œæ£€æŸ¥å¸¸æ•°ã€‚åœ¨è¿™ä¸ªå˜é‡å‡ºç°åœ¨å››å…ƒå¼æœ€åä¸€ä½æ—¶ï¼Œå°±ä¸å¯æ›¿æ¢äº†
+				for (int i = 0; i < r.size(); i++) {// µÚÒ»±éÑ­»·£¬¼ì²é³£Êı¡£ÔÚÕâ¸ö±äÁ¿³öÏÖÔÚËÄÔªÊ½×îºóÒ»Î»Ê±£¬¾Í²»¿ÉÌæ»»ÁË
 					inqt = r.get(i);
 					if(!(inqt[0].equals("+")||inqt[0].equals("-")||inqt[0].equals("*")||inqt[0].equals("/")||inqt[0].equals("="))) continue;
 					if ((is_c(inqt[1]) && is_c(inqt[2])&&is_t(r.get(i)[3])) && (inqt[0].equals("*") || inqt[0].equals("+")
 							|| inqt[0].equals("-") || inqt[0].equals("/"))) {
-						// å¦‚æœç¬¬äºŒä½ç¬¬ä¸‰ä½éƒ½æ˜¯æ•°å­—ä¸”ç¬¬ä¸€ä½æ˜¯åŠ å‡ä¹˜é™¤
-						replace.add(inqt[3]);// åœ¨æ›¿æ¢åˆ—è¡¨åŠ å…¥ç±»ä¼¼äºt1 6.28ï¼Œä»£è¡¨ç­‰ä¼šæŠŠæ‰€æœ‰t1æ¢æˆ6.28
-						switch (inqt[0]) {// è¿™é‡Œæ˜¯è®¡ç®—ç¬¬äºŒä½ç¬¬ä¸‰ä½çš„è¿ç®—ç»“æœï¼Œç„¶ååŠ åˆ°replaceé‡Œã€‚replaceæˆå¯¹åŠ å…¥ï¼Œå¶æ•°ä½æ˜¯t1ï¼Œå¥‡æ•°ä½æ˜¯6.28
+						// Èç¹ûµÚ¶şÎ»µÚÈıÎ»¶¼ÊÇÊı×ÖÇÒµÚÒ»Î»ÊÇ¼Ó¼õ³Ë³ı
+						replace.add(inqt[3]);// ÔÚÌæ»»ÁĞ±í¼ÓÈëÀàËÆÓÚt1 6.28£¬´ú±íµÈ»á°ÑËùÓĞt1»»³É6.28
+						switch (inqt[0]) {// ÕâÀïÊÇ¼ÆËãµÚ¶şÎ»µÚÈıÎ»µÄÔËËã½á¹û£¬È»ºó¼Óµ½replaceÀï¡£replace³É¶Ô¼ÓÈë£¬Å¼ÊıÎ»ÊÇt1£¬ÆæÊıÎ»ÊÇ6.28
 						case "*":
 							replace.add(Double.toString(Double.valueOf(inqt[1]) * Double.valueOf(inqt[2])));
 							break;
@@ -85,13 +86,13 @@ public class optimization {
 							replace.add(Double.toString(Double.valueOf(inqt[1]) / Double.valueOf(inqt[2])));
 							break;
 						}
-						r.remove(i);// ç„¶åæŠŠè¿™ä¸€æ¡åˆ æ‰
+						r.remove(i);// È»ºó°ÑÕâÒ»ÌõÉ¾µô
 						i--;
 						continue;
 					}
-					if (replace.size() > 0) {// å¦‚æœreplaceä¸æ˜¯ç©ºï¼Œå°±æ£€æŸ¥å½“å‰å››å…ƒå¼æ˜¯å¦è¦æŠŠt1æ›¿æ¢æˆ6.28ä¹‹ç±»çš„
+					if (replace.size() > 0) {// Èç¹ûreplace²»ÊÇ¿Õ£¬¾Í¼ì²éµ±Ç°ËÄÔªÊ½ÊÇ·ñÒª°Ñt1Ìæ»»³É6.28Ö®ÀàµÄ
 						flag = 1;
-						for (int j = 0; j <= replace.size() / 2; j = j + 2) {// å› ä¸ºreplaceæ˜¯æˆå¯¹åŠ çš„
+						for (int j = 0; j <= replace.size() / 2; j = j + 2) {// ÒòÎªreplaceÊÇ³É¶Ô¼ÓµÄ
 							if (inqt[1].equals(replace.get(j)))
 								{inqt[1] = replace.get(j + 1);}
 							if (inqt[2].equals(replace.get(j)))
@@ -105,8 +106,8 @@ public class optimization {
 					}
 				}
 			}
-			replace.add(" ");// ä¸ºäº†ä¸‹é¢çš„å¾ªç¯å¯ä»¥è¿›å…¥
-			while (replace.size() > 0) {// ç¬¬äºŒéå¾ªç¯ï¼Œå¦‚æœt2å’Œt4çš„ç¬¦å·ã€æ“ä½œæ•°ã€ç›®æ ‡æ“ä½œæ•°éƒ½ä¸€æ ·ï¼Œé‚£ä¹ˆt4=t2ï¼Œt4é‚£æ¡å››å…ƒå¼åˆ é™¤
+			replace.add(" ");// ÎªÁËÏÂÃæµÄÑ­»·¿ÉÒÔ½øÈë
+			while (replace.size() > 0) {// µÚ¶ş±éÑ­»·£¬Èç¹ût2ºÍt4µÄ·ûºÅ¡¢²Ù×÷Êı¡¢Ä¿±ê²Ù×÷Êı¶¼Ò»Ñù£¬ÄÇÃ´t4=t2£¬t4ÄÇÌõËÄÔªÊ½É¾³ı
 				replace.clear();
 				for (int i = 0; i < r.size(); i++) {
 					inqt = r.get(i);
@@ -135,7 +136,7 @@ public class optimization {
 					flag = 1;
 			}
 
-			// // ç¬¬å››éå¾ªç¯ï¼Œåˆ å»æ— å¼•ç”¨çš„ä¸´æ—¶å˜é‡ï¼šé€†åºï¼Œä»ç¬¬ä¸€ä¸ªéæœ€ç»ˆè¿”å›çš„ä¸´æ—¶å˜é‡æ‰¾èµ·ï¼Œæ‰¾è¿™åé¢æœ‰æ²¡æœ‰å®ƒçš„å¼•ç”¨ï¼Œæ²¡æœ‰å°±åˆ å»å®ƒ
+			// // µÚËÄ±éÑ­»·£¬É¾È¥ÎŞÒıÓÃµÄÁÙÊ±±äÁ¿£ºÄæĞò£¬´ÓµÚÒ»¸ö·Ç×îÖÕ·µ»ØµÄÁÙÊ±±äÁ¿ÕÒÆğ£¬ÕÒÕâºóÃæÓĞÃ»ÓĞËüµÄÒıÓÃ£¬Ã»ÓĞ¾ÍÉ¾È¥Ëü
 			// for (int i = r.size() - 2; i >= 0; i--) {
 			// 	inqt = r.get(i);
 			// 	if (!is_t(inqt[3]))
@@ -169,7 +170,7 @@ public class optimization {
 			result = result.concat("] ");
 		}
 		try {
-			File writename = new File("./z.ä¼˜åŒ–åçš„å››å…ƒå¼.txt");
+			File writename = new File("./z.ÓÅ»¯ºóµÄËÄÔªÊ½.txt");
 			writename.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			out.write(result);
@@ -191,7 +192,7 @@ public class optimization {
 			result = result.concat("] ");
 		}
 		try {
-			File writename = new File("../z.ä¼˜åŒ–åçš„å››å…ƒå¼.txt");
+			File writename = new File("../z.ÓÅ»¯ºóµÄËÄÔªÊ½.txt");
 			writename.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			out.write(result);

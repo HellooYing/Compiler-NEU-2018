@@ -1,27 +1,11 @@
+package cp;
 import java.io.*;
 import java.util.*;
 
-public class define_local {
-	// 本函数的作用，在全局变量的情况下，输入int a这种定义性语句的token序列和当前符号总表，
-	// 输出修改后的符号表。
-	// 然后在生成目标代码的时候，先查询一个变量在不在总表里，在就用全局变量的操作（直接在数据段读写），
-	// 不在就用临时变量的操作（放到堆栈段，用活动记录跟堆栈段一一对应，每次应该读堆栈段的哪里是临时变量的值）
-	// 因此，在define_local输入int a,就只进行查看a是否在总表里出现过（重定义检测），然后在对应函数表的
-
-	// List<String[]> synbl;总表：变量名、类型（int int[] function char)、在数据段中的偏移地址、其他信息
-	// （如类型为函数，则指向函数表中的某一个。如类型为数组，则存放数组长度）
-	// 所以总表中的String[]的length=4，synbl.size()=定义语句出现次数
-
-	// List<List<String>> pfinfl;
-	// 函数表：函数名0、形参类型1、形参名（与形参类型一一对应）2、返回类型(如["int"])3、临时变量（[a,b,c]）4、临时变量在堆栈段的偏移地址5
-	// 如果临时变量是一个数组，它的下一个临时变量的偏移地址就要加上那个数组的长度
-
-	// List<String> vall;
-
-	// 当前能接收的语句只有int a;/int a,b,c;
+public class define_global {
 	public static void main(String[] args) throws Exception {
-		String path_in = "./z.c语言代码输入.txt";
-		String path_out = "./z.token序列.txt";
+		String path_in = "./z.c���Դ�������.txt";
+		String path_out = "./z.token����.txt";
 		List<List<String>> anal = new analyzer().answer(path_in,path_out);
 		String[] step, i, C, S, c, k, p;
 
@@ -34,38 +18,31 @@ public class define_local {
 		step = (String[]) anal.get(6).toArray(new String[anal.get(6).size()]);
 		table tb = new table();
 		init(tb);
-		new define_local().answer(step, i, C, S, c, k, p, tb);
+		new define_global().answer(step, i, C, S, c, k, p, tb);
 	}
 
 	boolean answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1, String[] p1,
 			table tb) {
 		String[] step, i, C, S, c, k, p;
-		step = step1;// token序列
-		i = i1;// 变量
-		C = C1;// 字符
-		S = S1;// 字符串
-		c = c1;// 数字常量
-		k = k1;// 关键字
-		p = p1;// 符号
-		table.func func = tb.new func();
-		String fnm = getf(tb);
-		List<table.vari> vt = new ArrayList<table.vari>();// 这个函数的临时变量表
-		
-		for (int j = 0; j < tb.pfinfl.size(); j++) {
-			if (tb.pfinfl.get(j).name.equals(fnm)) {// 符号表的函数表的函数名与fnm相同的那个func
-				// 找到了本次定义所在的子函数
-				func = tb.pfinfl.get(j);
-				vt = tb.pfinfl.get(j).vt;
-			}
-		}
+		step = step1;// token����
+		i = i1;// ����
+		C = C1;// �ַ�
+		S = S1;// �ַ���
+		c = c1;// ���ֳ���
+		k = k1;// �ؼ���
+		p = p1;// ����
 
-		// 对于进来的句子，先判断是否有逗号，来判别是几个变量
-		String tp = k[Integer.parseInt(step[0].substring(3, step[0].length() - 1))];// 进来的语句第一个都是类型如int
+		// �½�����ʱ��������ֱ�Ӽӽ��ܱ��ͺ���
+		// ���ڽ����ľ��ӣ����ж��Ƿ��ж��ţ����б��Ǽ�������
+		String tp = k[Integer.parseInt(step[0].substring(3, step[0].length() - 1))];// ����������һ������������int
+		if (p[Integer.parseInt(step[step.length - 1].substring(3, step[0].length() - 1))].equals(")")) {
+			tp = "function";
+		}
 		List<String> name = new ArrayList<String>();
 		List<Integer> other = new ArrayList<Integer>();
-		if (tp.equals("int") || tp.equals("char")) {// 对int或者char的定义，other是"_"
+		if (tp.equals("int") || tp.equals("char")) {// ��int����char�Ķ��壬other��"_"
 			for (int j = 1; j < step.length; j++) {
-				// 找逗号判断几个变量，如果遇到逗号或分号，则变量在逗号或分号前一个
+				// �Ҷ����жϼ�������������������Ż�ֺţ�������ڶ��Ż�ֺ�ǰһ��
 				if (step[j].substring(1, 2).equals("p")) {
 					if (p[Integer.parseInt(step[j].substring(3, step[j].length() - 1))].equals(",")
 							|| p[Integer.parseInt(step[j].substring(3, step[j].length() - 1))].equals(";")) {
@@ -74,41 +51,72 @@ public class define_local {
 					}
 				}
 			}
-		}
-		// 增添对数组的支持时写这里
-
-		// 现在拿到了这次变量名，现在要新建一个vari类型，用来存本变量的信息。本变量的信息中有一条偏移地址，
-
-		for (int j = 0; j < name.size(); j++) {// 对于这次定义的每个变量
-			table.vari thisv = tb.new vari();// 新建一个vari
-			thisv.name = name.get(j);
-			for(int jj=0;jj<vt.size();jj++){
-				if(vt.get(jj).name.equals(thisv.name)){
-					System.out.println("局部变量重定义！该变量为："+thisv.name+". 函数名为："+fnm);
+			for (int j = 0; j < name.size(); j++) {// ������ζ����ÿ������
+				table.vari thisv = tb.new vari();// �½�һ��vari
+				thisv.name = name.get(j);
+				for(int jj=0;jj<tb.synbl.size();jj++){
+					if(tb.synbl.get(jj).name.equals(thisv.name)){
+						System.out.println("ȫ�ֱ����ض��壡�ñ���Ϊ��"+thisv.name);
+						return false;
+					}
+				}
+				thisv.tp = tp;
+				thisv.other = other.get(j);
+				thisv.ofad = getofad(tb.synbl);
+				tb.synbl.add(thisv);
+			}
+		} else if (tp.equals("function")) {
+			table.vari thisv = tb.new vari();// �½�һ��vari
+			thisv.name="";
+			int j;
+			for (j = 1; j < step.length; j++) {
+				if (step[j].substring(1, 2).equals("i")) {
+					thisv.name = i[Integer.parseInt(step[j].substring(3, step[j].length() - 1))];
+					break;
+				}
+			}
+			for(int jj=0;jj<tb.synbl.size();jj++){
+				if(tb.synbl.get(jj).name.equals(thisv.name)){
+					System.out.println("�����ض��壡�ú���Ϊ��"+thisv.name);
 					return false;
 				}
 			}
 			thisv.tp = tp;
-			thisv.other = other.get(j);
-			thisv.ofad = getofad(vt);
-			vt.add(thisv);
-		}
+			thisv.other = tb.pfinfl.size();
+			thisv.ofad = 0;
+			tb.synbl.add(thisv);
 
-		func.vt = vt;
-		for (int j = 0; j < tb.pfinfl.size(); j++) {
-			if (tb.pfinfl.get(j).name.equals(fnm)) {// 符号表的函数表的函数名与fnm相同的那个func
-				// 找到了本次定义所在的子函数
-				tb.pfinfl.set(j, func);
+			table.func fuc = tb.new func();
+			fuc.name = thisv.name;
+			List<String> xctp = new ArrayList<String>();
+			List<String> xcname = new ArrayList<String>();
+			for (j=j+1; j < step.length; j++) {
+				if (step[j].substring(1, 2).equals("i")) {
+					xcname.add(i[Integer.parseInt(step[j].substring(3, step[j].length() - 1))]);
+				} else if (step[j].substring(1, 2).equals("k")) {
+					xctp.add(k[Integer.parseInt(step[j].substring(3, step[j].length() - 1))]);
+				}
 			}
+			fuc.xctp = xctp;
+			fuc.xcname = xcname;
+			List<table.vari> vt = new ArrayList<table.vari>();
+			table.vari xc;
+			for (j = 0; j < xctp.size(); j++) {
+				xc = tb.new vari();
+				xc.name = xcname.get(j);
+				xc.tp = xctp.get(j);
+				xc.ofad = getofad(vt);
+				vt.add(xc);
+			}
+			fuc.vt = vt;
+			tb.pfinfl.add(fuc);
 		}
-		// result在txt中存放方式，先打印总表，总表中的每个vari一行
-		// 再打印函数表，函数表中前三个元素一行，vt：n行
 		//tb.print(tb);
-		writedl(tb);
+		writedg(tb);
 		return true;
 	}
 
-	static void writedl(table tb) {
+	static void writedg(table tb) {
 		String result = "";
 		for (int j = 0; j < tb.synbl.size(); j++) {
 			table.vari tv = tb.synbl.get(j);
@@ -137,7 +145,7 @@ public class define_local {
 			}
 		}
 		try {
-			File writename = new File("./z.符号表.txt");
+			File writename = new File("./z.���ű�.txt");
 			writename.createNewFile();
 			OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(writename), "UTF-8");
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
@@ -148,7 +156,7 @@ public class define_local {
 			e.printStackTrace();
 		}
 	}
-	static void wtdl(table tb) {
+	static void wtdg(table tb) {
 		String result = "";
 		for (int j = 0; j < tb.synbl.size(); j++) {
 			table.vari tv = tb.synbl.get(j);
@@ -177,7 +185,7 @@ public class define_local {
 			}
 		}
 		try {
-			File writename = new File("../z.符号表.txt");
+			File writename = new File("../z.���ű�.txt");
 			writename.createNewFile();
 			OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(writename), "UTF-8");
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
@@ -189,20 +197,27 @@ public class define_local {
 		}
 	}
 	static int getofad(List<table.vari> vt) {
-		// 求偏移地址：如果vt.size()为0，则偏移地址为0，
-		// 如果vt.size()不为0，就去看看上一条vari的类型是否是int[]，
-		// 如果是int[]，那么偏移地址为上一条vari的other+ofad
-		// 如果不是数组而是int或者char，那么偏移地址为ofad+1
+		// ��ƫ�Ƶ�ַ�����vt.size()Ϊ0����ƫ�Ƶ�ַΪ0��
+		// ���vt.size()��Ϊ0����ȥ������һ��vari�������Ƿ���int[]��
+		// �����int[]����ôƫ�Ƶ�ַΪ��һ��vari��other+ofad
+		// ��������������int����char����ôƫ�Ƶ�ַΪofad+1
 		if (vt.size() == 0)
 			return 0;
+		int other=0,ofad=0;
+		for(int j=vt.size()-1;j>=0;j--){
+			if(!vt.get(j).tp.equals("function")){
+				other=vt.get(j).other;
+				ofad=vt.get(j).ofad;
+				break;
+			}
+		}
 		if (vt.get(vt.size() - 1).tp.equals("int[]"))
-			return vt.get(vt.size() - 1).other + vt.get(vt.size() - 1).ofad;
+			return other + ofad;
 		else
-			return vt.get(vt.size() - 1).ofad + 1;
+			return ofad + 1;
 	}
 
 	static void init(table tb) {
-
 		table.func s = tb.new func();
 		s.name = "test";
 		List<String> xctp = new ArrayList<String>();
@@ -239,14 +254,4 @@ public class define_local {
 		vall.add("test");
 		tb.vall = vall;
 	}
-	static String getf(table tb){
-        List<String> fnml=new ArrayList<String>();
-        for(int i=0;i<tb.pfinfl.size();i++){
-            fnml.add(tb.pfinfl.get(i).name);
-        }
-        for(int i=tb.vall.size()-1;i>=0;i--){
-            if(fnml.contains(tb.vall.get(i))) return tb.vall.get(i);
-        }
-        return "main";
-    }
 }

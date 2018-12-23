@@ -1,3 +1,4 @@
+package cp;
 
 import java.io.File;
 import java.io.InputStreamReader;
@@ -9,28 +10,28 @@ import java.util.*;
 
 public class analyzer {
 	String[] k = { "main", "void", "if", "else", "while", "for", "int", "char", "string", "break", "continue",
-			"return","switch","case","default" };// å…³é”®å­—æ”¾åˆ°æ•°ç»„é‡Œ
-	List<String> i = new ArrayList<String>();// å˜é‡å
-	List<String> C = new ArrayList<String>();// å­—ç¬¦
-	List<String> S = new ArrayList<String>();// å­—ç¬¦ä¸²
-	List<Double> c = new ArrayList<Double>();// æ•°å­—
-	List<String> p = new ArrayList<String>();// ç•Œç¬¦
-	// é€»è¾‘æ˜¯ï¼Œä»å¤´åˆ°å°¾è¯»å–String rä¹Ÿå°±æ˜¯while(j<r.length)ï¼Œswitch(asciiç )
-	// case0ï¼Œæ˜¯ç©ºæ ¼(32)ï¼Œj++
-	// case1ï¼Œæ˜¯å­—æ¯ï¼ˆ65-90ï¼Œ97-122ï¼‰ï¼Œå°±æ¥ç€å¾€ä¸‹è¯»ï¼Œå¦‚æœä¸€ç›´æ²¡å‡ºç°ç¬¦å·ï¼Œå°±è¯»åˆ°ç©ºæ ¼ä¸ºæ­¢ï¼Œæ˜¯ä¸€ä¸ªæ•´ä½“å•è¯ã€‚
-	// å¯¹è¿™ä¸ªå•è¯æ£€æŸ¥æ˜¯å¦ä¸ºå…³é”®å­—åœ¨kä¸­ï¼Œæ˜¯åˆ™{k,n}(nçš„å–å€¼ä½¿k[n]==å•è¯)ï¼Œå¦‚æœä¸æ˜¯åˆ™è®¤ä¸ºå®ƒæ˜¯å˜é‡å{i,n}
-	// ä¸ºæ­¤è¦æ„å»ºä¸€ä¸ªlist iï¼Œæ¯æ¬¡å‡ºç°å˜é‡åå°±çœ‹çœ‹listé‡Œæœ‰æ²¡æœ‰å®ƒï¼Œæ²¡æœ‰å°±åŠ è¿›å»ï¼Œä½¿å¾—i[n]==å˜é‡å
-	// ä½œä¸ºä¸€æ¬¡ç»“æŸä¹Ÿè¦jåŠ åˆ°åˆé€‚çš„å€¼
-	// case2ï¼Œæ˜¯æ•°å­—ï¼ˆ48-57ï¼‰ï¼Œå°±æ¥ç€å¾€ä¸‹è¯»è¯»åˆ°ç©ºæ ¼ä¸ºæ­¢ï¼Œæ„å»ºlist cï¼ŒåŒä¸Šæ“ä½œï¼Œ{c,n},j++
-	// case3ï¼Œæ˜¯"ï¼ˆ34ï¼‰ï¼Œå¾€ä¸‹è¯»åˆ°"ï¼Œæ„å»ºlist Sï¼Œ{S,n},j++
-	// case4ï¼Œæ˜¯'ï¼ˆ39ï¼‰ï¼Œå¾€ä¸‹è¯»åˆ°'ï¼Œæ„å»ºlist Cï¼Œ{C,n},j++
-	// case5ï¼Œå…¶ä»–ç¬¦å·(33-47,58-64ï¼Œ91-96ï¼Œ123-126,é34ï¼Œé39ï¼‰ï¼Œå¦‚æœä¸‹ä¸€ä¸ªè¿˜æ˜¯å…¶ä»–å­—ç¬¦å°±è¯»ä¿©ï¼Œå¦åˆ™å°±å®ƒæœ¬èº«ä¸€ä¸ªå­—ç¬¦
-	// æ„å»ºlist pï¼Œ{p,n},j++
-	// defaultï¼Œè¾“å‡ºæ¥æˆ‘çœ‹çœ‹æ˜¯å•¥å¼‚å¸¸æƒ…å†µï¼Ÿj++
+			"return","switch","case","default" };// ¹Ø¼ü×Ö·Åµ½Êı×éÀï
+	List<String> i = new ArrayList<String>();// ±äÁ¿Ãû
+	List<String> C = new ArrayList<String>();// ×Ö·û
+	List<String> S = new ArrayList<String>();// ×Ö·û´®
+	List<Double> c = new ArrayList<Double>();// Êı×Ö
+	List<String> p = new ArrayList<String>();// ½ç·û
+	// Âß¼­ÊÇ£¬´ÓÍ·µ½Î²¶ÁÈ¡String rÒ²¾ÍÊÇwhile(j<r.length)£¬switch(asciiÂë)
+	// case0£¬ÊÇ¿Õ¸ñ(32)£¬j++
+	// case1£¬ÊÇ×ÖÄ¸£¨65-90£¬97-122£©£¬¾Í½Ó×ÅÍùÏÂ¶Á£¬Èç¹ûÒ»Ö±Ã»³öÏÖ·ûºÅ£¬¾Í¶Áµ½¿Õ¸ñÎªÖ¹£¬ÊÇÒ»¸öÕûÌåµ¥´Ê¡£
+	// ¶ÔÕâ¸öµ¥´Ê¼ì²éÊÇ·ñÎª¹Ø¼ü×ÖÔÚkÖĞ£¬ÊÇÔò{k,n}(nµÄÈ¡ÖµÊ¹k[n]==µ¥´Ê)£¬Èç¹û²»ÊÇÔòÈÏÎªËüÊÇ±äÁ¿Ãû{i,n}
+	// Îª´ËÒª¹¹½¨Ò»¸ölist i£¬Ã¿´Î³öÏÖ±äÁ¿Ãû¾Í¿´¿´listÀïÓĞÃ»ÓĞËü£¬Ã»ÓĞ¾Í¼Ó½øÈ¥£¬Ê¹µÃi[n]==±äÁ¿Ãû
+	// ×÷ÎªÒ»´Î½áÊøÒ²Òªj¼Óµ½ºÏÊÊµÄÖµ
+	// case2£¬ÊÇÊı×Ö£¨48-57£©£¬¾Í½Ó×ÅÍùÏÂ¶Á¶Áµ½¿Õ¸ñÎªÖ¹£¬¹¹½¨list c£¬Í¬ÉÏ²Ù×÷£¬{c,n},j++
+	// case3£¬ÊÇ"£¨34£©£¬ÍùÏÂ¶Áµ½"£¬¹¹½¨list S£¬{S,n},j++
+	// case4£¬ÊÇ'£¨39£©£¬ÍùÏÂ¶Áµ½'£¬¹¹½¨list C£¬{C,n},j++
+	// case5£¬ÆäËû·ûºÅ(33-47,58-64£¬91-96£¬123-126,·Ç34£¬·Ç39£©£¬Èç¹ûÏÂÒ»¸ö»¹ÊÇÆäËû×Ö·û¾Í¶ÁÁ©£¬·ñÔò¾ÍËü±¾ÉíÒ»¸ö×Ö·û
+	// ¹¹½¨list p£¬{p,n},j++
+	// default£¬Êä³öÀ´ÎÒ¿´¿´ÊÇÉ¶Òì³£Çé¿ö£¿j++
 
 	public static void main(String[] args) throws Exception {
-		String path_in = "./z.cè¯­è¨€ä»£ç è¾“å…¥.txt";
-		String path_out = "./z.tokenåºåˆ—.txt";
+		String path_in = "./z.cÓïÑÔ´úÂëÊäÈë.txt";
+		String path_out = "./z.tokenĞòÁĞ.txt";
 		new analyzer().answer(path_in,path_out);
 	}
 
@@ -39,8 +40,8 @@ public class analyzer {
 		String result = "";
 		try {
 			File filename = new File(path_in);
-			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename)); // å»ºç«‹ä¸€ä¸ªè¾“å…¥æµå¯¹è±¡reader
-			BufferedReader br = new BufferedReader(reader);// å»ºç«‹ä¸€ä¸ªå¯¹è±¡ï¼Œå®ƒæŠŠæ–‡ä»¶å†…å®¹è½¬æˆè®¡ç®—æœºèƒ½è¯»æ‡‚çš„è¯­è¨€
+			InputStreamReader reader = new InputStreamReader(new FileInputStream(filename)); // ½¨Á¢Ò»¸öÊäÈëÁ÷¶ÔÏóreader
+			BufferedReader br = new BufferedReader(reader);// ½¨Á¢Ò»¸ö¶ÔÏó£¬Ëü°ÑÎÄ¼şÄÚÈİ×ª³É¼ÆËã»úÄÜ¶Á¶®µÄÓïÑÔ
 			String r = "";
 			String line = "";
 			int j = 0;
@@ -58,11 +59,11 @@ public class analyzer {
 				else
 					r = r.substring(r.indexOf("/*"));
 			}
-			r = r.replaceAll(" {2,}", " ");// åˆ å»å¤šä½™çš„ç©ºæ ¼
+			r = r.replaceAll(" {2,}", " ");// É¾È¥¶àÓàµÄ¿Õ¸ñ
 			if (r.charAt(0) == ' ')
-				r = r.substring(1);// åˆ å»é¦–éƒ¨ç©ºæ ¼
+				r = r.substring(1);// É¾È¥Ê×²¿¿Õ¸ñ
 			if (r.charAt(r.length() - 1) == ' ')
-				r = r.substring(0, r.length() - 1);// åˆ å»å°¾éƒ¨ç©ºæ ¼
+				r = r.substring(0, r.length() - 1);// É¾È¥Î²²¿¿Õ¸ñ
 
 			// System.out.println(r);
 
@@ -82,18 +83,18 @@ public class analyzer {
 						|| (t >= 123 && t <= 126))
 					status = 5;
 				else {
-					System.out.println("statuså¼‚å¸¸");
+					System.out.println("statusÒì³£");
 					System.out.println(r.charAt(j));
 					System.out.println((int) r.charAt(j));
 					break;
 				}
 
 				switch (status) {
-				case 0:// ç©ºæ ¼
+				case 0:// ¿Õ¸ñ
 					j++;
 					break;
 
-				case 1:// å­—æ¯ï¼ˆå•è¯ï¼‰
+				case 1:// ×ÖÄ¸£¨µ¥´Ê£©
 					jj = j;
 					if (j != r.length()) {
 						t = (int) r.charAt(j);
@@ -107,7 +108,7 @@ public class analyzer {
 								}
 							}
 						}
-						// è¿™ä¸ªwhileçš„æ„æ€æ˜¯å¦‚æœåé¢è¿˜æ˜¯å­—æ¯æˆ–æ•°å­—ï¼Œè¿™ä¸ªå•è¯å°±æ²¡æœ‰ç»“æŸï¼Œè¦ä¸€ç›´j++æ‰¾åˆ°å•è¯çš„ç»“å°¾
+						// Õâ¸öwhileµÄÒâË¼ÊÇÈç¹ûºóÃæ»¹ÊÇ×ÖÄ¸»òÊı×Ö£¬Õâ¸öµ¥´Ê¾ÍÃ»ÓĞ½áÊø£¬ÒªÒ»Ö±j++ÕÒµ½µ¥´ÊµÄ½áÎ²
 					}
 					if (jj == j)
 						j++;
@@ -139,7 +140,7 @@ public class analyzer {
 					// System.out.println(result);
 					break;
 
-				case 2:// æ•°å­—
+				case 2:// Êı×Ö
 					jj = j;
 					if (j != r.length()) {
 						t = (int) r.charAt(j);
@@ -173,14 +174,14 @@ public class analyzer {
 					// System.out.println(result);
 					break;
 
-				case 3:// å­—ç¬¦ä¸²
+				case 3:// ×Ö·û´®
 					jj = j;
 					j++;
 					while ((int) r.charAt(j) != 34 && j < r.length() - 1)
 						j++;
 					word = r.substring(jj, j + 1);
 					if ((int) word.charAt(word.length() - 1) != 34)
-						System.out.println("åŒå¼•å·ä¸æˆå¯¹é”™è¯¯");
+						System.out.println("Ë«ÒıºÅ²»³É¶Ô´íÎó");
 					if (C == null) {
 						C.add(word);
 						result = result.concat(" {C,0}");
@@ -197,14 +198,14 @@ public class analyzer {
 					j++;
 					break;
 
-				case 4:// å­—ç¬¦
+				case 4:// ×Ö·û
 					jj = j;
 					j++;
 					while ((int) r.charAt(j) != 39 && j < r.length() - 1)
 						j++;
 					word = r.substring(jj, j + 1);
 					if ((int) word.charAt(word.length() - 1) != 39)
-						System.out.println("å•å¼•å·ä¸æˆå¯¹é”™è¯¯");
+						System.out.println("µ¥ÒıºÅ²»³É¶Ô´íÎó");
 					if (C == null) {
 						C.add(word);
 						result = result.concat(" {C,0}");
@@ -221,7 +222,7 @@ public class analyzer {
 					j++;
 					break;
 
-				case 5:// ç¬¦å·
+				case 5:// ·ûºÅ
 					word = r.substring(j, j + 1);
 					if (j + 1 < r.length()) {
 						t = (int) r.charAt(j + 1);
@@ -274,14 +275,14 @@ public class analyzer {
 			show_c = "c:".concat(c.toString());
 			show_k = "k:[main, void, if, else, while, for, int, char, string, break, continue, return, switch, case, default]";
 			show_p = "p:".concat(p.toString());
-			File writename = new File(path_out); // å¦‚æœæ²¡æœ‰åˆ™æ–°å»ºä¸€ä¸ªæ–°çš„path_outçš„txtæ–‡ä»¶
-			writename.createNewFile(); // åˆ›å»ºæ–°æ–‡ä»¶
+			File writename = new File(path_out); // Èç¹ûÃ»ÓĞÔòĞÂ½¨Ò»¸öĞÂµÄpath_outµÄtxtÎÄ¼ş
+			writename.createNewFile(); // ´´½¨ĞÂÎÄ¼ş
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			result = result.concat("\n").concat(show_i).concat("\n").concat(show_C).concat("\n").concat(show_S)
 					.concat("\n").concat(show_c).concat("\n").concat(show_k).concat("\n").concat(show_p);
-			out.write(result); // å†™å…¥
-			out.flush(); // æŠŠç¼“å­˜åŒºå†…å®¹å‹å…¥æ–‡ä»¶
-			out.close(); // æœ€åè®°å¾—å…³é—­æ–‡ä»¶
+			out.write(result); // Ğ´Èë
+			out.flush(); // °Ñ»º´æÇøÄÚÈİÑ¹ÈëÎÄ¼ş
+			out.close(); // ×îºó¼ÇµÃ¹Ø±ÕÎÄ¼ş
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

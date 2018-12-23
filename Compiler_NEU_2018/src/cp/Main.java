@@ -1,9 +1,10 @@
+package cp;
 import java.util.*;
 import java.io.*;
 public class Main {
 	public static void main(String[] args) throws Exception {
-		String path_in = "../z.cè¯­è¨€ä»£ç è¾“å…¥.txt";
-		String path_out = "../z.tokenåºåˆ—.txt";
+		String path_in = "../z.cÓïÑÔ´úÂëÊäÈë.txt";
+		String path_out = "../z.tokenĞòÁĞ.txt";
 		List<List<String>> anal = new analyzer().answer(path_in,path_out);
 		String[] step, i, C, S, c, k, p;
 		int n = 0;
@@ -26,7 +27,7 @@ public class Main {
 		List<String[]> qt = new block().answer(step, i, C, S, c, k, p, tb);
 		new block().wtblock(qt);
 		List<String[]> opqt = new ArrayList<String[]>();
-		System.out.println("\nåŸå§‹å››å…ƒå¼ï¼š");
+		System.out.println("\nÔ­Ê¼ËÄÔªÊ½£º");
 		printLS(qt);
 		int j,jj=0;
 		for(j=0;j<qt.size();j++){
@@ -46,7 +47,7 @@ public class Main {
 			qtt=new optimization().answer(qtt);
 			opqt.addAll(qtt);
 		}
-		System.out.println("\nä¼˜åŒ–åçš„å››å…ƒå¼ï¼š");
+		System.out.println("\nÓÅ»¯ºóµÄËÄÔªÊ½£º");
 		printLS(opqt);
 		writeopqt(opqt);
 		new optimization().wtop(opqt);
@@ -80,7 +81,7 @@ public class Main {
 			result = result.concat("] ");
 		}
 		try {
-			File writename = new File("./z.ä¼˜åŒ–åçš„å››å…ƒå¼.txt");
+			File writename = new File("./z.ÓÅ»¯ºóµÄËÄÔªÊ½.txt");
 			writename.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			out.write(result);

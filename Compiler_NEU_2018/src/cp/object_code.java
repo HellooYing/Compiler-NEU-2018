@@ -1,3 +1,4 @@
+package cp;
 import java.io.*;
 import java.util.*;
 public class object_code {
@@ -10,17 +11,17 @@ public class object_code {
     List<String> answer(List<String[]> qt,table tb) {
         List<String> code = new ArrayList<String>();
         String[] inqt;
-		boolean[][] active = new boolean[qt.size()][4];// å­˜qtçš„æ´»è·ƒä¿¡æ¯
-        HashSet<String> t = new HashSet<String>();// ä¸€ä¸ªé›†åˆï¼Œä¸ºäº†æŠŠæ¯ä¸ªéæ•°å­—çš„å˜é‡ååŠ å…¥setå»é‡ï¼Œè·å–å˜é‡è¡¨
-		List<String> variiable;// setè½¬åŒ–ä¸ºlistçš„å˜é‡è¡¨
-		boolean[] symbl;// å­˜æ”¾å˜é‡å¯¹åº”çš„æ´»è·ƒä¿¡æ¯
-		String RDL;// è¡¨ç¤ºå¯„å­˜å™¨æ­¤æ—¶å­˜çš„æ˜¯å“ªä¸ªå˜é‡ã€‚æˆ‘æ˜¯å†™çš„å•å¯„å­˜å™¨ã€‚
+		boolean[][] active = new boolean[qt.size()][4];// ´æqtµÄ»îÔ¾ĞÅÏ¢
+        HashSet<String> t = new HashSet<String>();// Ò»¸ö¼¯ºÏ£¬ÎªÁË°ÑÃ¿¸ö·ÇÊı×ÖµÄ±äÁ¿Ãû¼ÓÈësetÈ¥ÖØ£¬»ñÈ¡±äÁ¿±í
+		List<String> variiable;// set×ª»¯ÎªlistµÄ±äÁ¿±í
+		boolean[] symbl;// ´æ·Å±äÁ¿¶ÔÓ¦µÄ»îÔ¾ĞÅÏ¢
+		String RDL;// ±íÊ¾¼Ä´æÆ÷´ËÊ±´æµÄÊÇÄÄ¸ö±äÁ¿¡£ÎÒÊÇĞ´µÄµ¥¼Ä´æÆ÷¡£
         String[] kt = { "if","es","ie","wh","dw","bk","ct","we","for","df","do","fe","fun","rt","xc","esf","sw","dft","cs"};
         List<String> k=Arrays.asList(kt);
-        for (int i = 0; i < qt.size(); i++) {// åŠ setå»é‡è·å–å˜é‡è¡¨
+        for (int i = 0; i < qt.size(); i++) {// ¼ÓsetÈ¥ÖØ»ñÈ¡±äÁ¿±í
 			inqt = qt.get(i);
 			for (int j = 1; j < inqt.length; j++) {
-				if (!is_c(inqt[j])&&!inqt[j].equals("_")&&!k.contains(inqt[j])) {// å¦‚æœå½“å‰å­—ç¬¦ä¸æ˜¯æ•°å­—
+				if (!is_c(inqt[j])&&!inqt[j].equals("_")&&!k.contains(inqt[j])) {// Èç¹ûµ±Ç°×Ö·û²»ÊÇÊı×Ö
 					t.add(inqt[j]);
 				}
 			}
@@ -28,19 +29,19 @@ public class object_code {
 
 		variiable = new ArrayList<String>(t);
 		symbl = new boolean[variiable.size()];
-		for (int i = 0; i < variiable.size(); i++) {// ç»™å˜é‡çš„æ´»è·ƒä¿¡æ¯èµ‹åˆå€¼
+		for (int i = 0; i < variiable.size(); i++) {// ¸ø±äÁ¿µÄ»îÔ¾ĞÅÏ¢¸³³õÖµ
 			if (variiable.get(i).length() > 1 && variiable.get(i).substring(0, 1).equals("t")
 					&& is_c(variiable.get(i).substring(1))) {
-				// å¦‚æœvariiableæ˜¯t+æ•°å­—çš„ç»„åˆï¼Œå°±æ˜¯ä¸´æ—¶å˜é‡
-				symbl[i] = false;// ä¸´æ—¶å˜é‡åˆå€¼false
+				// Èç¹ûvariiableÊÇt+Êı×ÖµÄ×éºÏ£¬¾ÍÊÇÁÙÊ±±äÁ¿
+				symbl[i] = false;// ÁÙÊ±±äÁ¿³õÖµfalse
 			} else
-				symbl[i] = true;// éä¸´æ—¶å˜é‡åˆå€¼true
+				symbl[i] = true;// ·ÇÁÙÊ±±äÁ¿³õÖµtrue
 		}
 
-		for (int i = qt.size() - 1; i >= 0; i--) {// é€†åºæ‰«æå››å…ƒå¼ç»„ï¼Œæ·»åŠ å˜é‡åœ¨æ¯ä¸ªå››å…ƒå¼çš„æ—¶å€™çš„æ´»è·ƒä¿¡æ¯
+		for (int i = qt.size() - 1; i >= 0; i--) {// ÄæĞòÉ¨ÃèËÄÔªÊ½×é£¬Ìí¼Ó±äÁ¿ÔÚÃ¿¸öËÄÔªÊ½µÄÊ±ºòµÄ»îÔ¾ĞÅÏ¢
 			inqt = qt.get(i);
-			if (t.contains(inqt[1])) {// å¦‚æœinqt[1]æ˜¯å˜é‡è€Œä¸æ˜¯æ•°å­—ï¼Œä¹Ÿå°±æ˜¯å®ƒåœ¨té‚£ä¸ªé›†åˆé‡Œ
-				active[i][1] = symbl[index(variiable, inqt[1])];// ç»™å®ƒæ·»åŠ æ´»è·ƒä¿¡æ¯
+			if (t.contains(inqt[1])) {// Èç¹ûinqt[1]ÊÇ±äÁ¿¶ø²»ÊÇÊı×Ö£¬Ò²¾ÍÊÇËüÔÚtÄÇ¸ö¼¯ºÏÀï
+				active[i][1] = symbl[index(variiable, inqt[1])];// ¸øËüÌí¼Ó»îÔ¾ĞÅÏ¢
 				symbl[index(variiable, inqt[1])] = true;
 			}
 			if (t.contains(inqt[2])) {
@@ -51,16 +52,16 @@ public class object_code {
 				active[i][3] = symbl[index(variiable, inqt[3])];
 				symbl[index(variiable, inqt[3])] = false;
 			}
-		} // åˆ°è¿™ä¸ºæ­¢ï¼Œactiveå­˜æ”¾ç€å˜é‡çš„æ´»è·ƒä¿¡æ¯ï¼Œä½ç½®ä¸qtä¸€ä¸€å¯¹åº”ã€‚è€Œæ²¡æœ‰æ´»è·ƒä¿¡æ¯çš„æ•°å­—å’Œç¬¦å·é»˜è®¤ä¸ºfalseï¼Œåé¢åº”ç”¨æ—¶åº”é¿å…æŸ¥è¯¢ã€‚
+		} // µ½ÕâÎªÖ¹£¬active´æ·Å×Å±äÁ¿µÄ»îÔ¾ĞÅÏ¢£¬Î»ÖÃÓëqtÒ»Ò»¶ÔÓ¦¡£¶øÃ»ÓĞ»îÔ¾ĞÅÏ¢µÄÊı×ÖºÍ·ûºÅÄ¬ÈÏÎªfalse£¬ºóÃæÓ¦ÓÃÊ±Ó¦±ÜÃâ²éÑ¯¡£
 
         RDL = "";
-        int n=0;//ä½œä¸ºWH:/ES: ç­‰ç­‰çš„åç¼€
-        Stack<String> whn = new Stack<String>();//ä¿å­˜whileè¯¥æ€ä¹ˆè·³ï¼Œé‡åˆ°whileæ–°å»ºWHå°±pushï¼Œé‡åˆ°WEå°±pop
-        Stack<String> wen = new Stack<String>();//é‡åˆ°CMPæ–°å»ºWEå°±pushï¼Œé‡åˆ°WEå°±pop
-        Stack<String> esn = new Stack<String>();//é‡åˆ°ifæ–°å»ºESå°±pushï¼Œé‡åˆ°ieå°±pop
-        Stack<String> ien = new Stack<String>();//é‡åˆ°esæ–°å»ºIEå°±pushï¼Œé‡åˆ°ieå°±pop
+        int n=0;//×÷ÎªWH:/ES: µÈµÈµÄºó×º
+        Stack<String> whn = new Stack<String>();//±£´æwhile¸ÃÔõÃ´Ìø£¬Óöµ½whileĞÂ½¨WH¾Ípush£¬Óöµ½WE¾Ípop
+        Stack<String> wen = new Stack<String>();//Óöµ½CMPĞÂ½¨WE¾Ípush£¬Óöµ½WE¾Ípop
+        Stack<String> esn = new Stack<String>();//Óöµ½ifĞÂ½¨ES¾Ípush£¬Óöµ½ie¾Ípop
+        Stack<String> ien = new Stack<String>();//Óöµ½esĞÂ½¨IE¾Ípush£¬Óöµ½ie¾Ípop
         Stack<String> jmpfn = new Stack<String>();
-        //æ ¹æ®ç¬¦å·è¡¨ç”Ÿæˆç¨‹åºå‰éƒ¨ï¼š
+        //¸ù¾İ·ûºÅ±íÉú³É³ÌĞòÇ°²¿£º
         code.add("DATAS SEGMENT");
         table.vari v;
         for(int i=0;i<tb.synbl.size();i++){
@@ -79,7 +80,7 @@ public class object_code {
         code.add("  MOV DS,AX");
         code.add("  MOV SP,BP");
 
-        //æ ¹æ®qtç”Ÿæˆç¨‹åºä¸­éƒ¨ï¼š
+        //¸ù¾İqtÉú³É³ÌĞòÖĞ²¿£º
         for (int i = 0; i < qt.size(); i++) {
             inqt = qt.get(i);
             if (inqt[0].equals("+")) {
@@ -91,7 +92,7 @@ public class object_code {
 				} else if (RDL.equals(getv(inqt[1],tb))) {
 					code.add("  ADD AL,".concat(getv(inqt[2],tb)));
 				} else if (active[i - 1][3]) {
-					code.add("  MOV ".concat(getv1(RDL,tb)).concat(",AL"));// æŸ¥è¯¢æ´»è·ƒä¿¡æ¯è¡¨ï¼ŒRDLæ­¤æ—¶æ˜¯ä¸Šä¸€æ¡å››å…ƒå¼çš„ç»“æœï¼Œå¦‚æœè¿™ä¸ªç»“æœå˜é‡ä»ç„¶æ´»è·ƒï¼Œæ‰æŠŠå®ƒå¼¹åˆ°å†…å­˜
+					code.add("  MOV ".concat(getv1(RDL,tb)).concat(",AL"));// ²éÑ¯»îÔ¾ĞÅÏ¢±í£¬RDL´ËÊ±ÊÇÉÏÒ»ÌõËÄÔªÊ½µÄ½á¹û£¬Èç¹ûÕâ¸ö½á¹û±äÁ¿ÈÔÈ»»îÔ¾£¬²Å°ÑËüµ¯µ½ÄÚ´æ
 					code.add("  MOV AL,".concat(getv(inqt[1],tb)));
 					code.add("  ADD AL,".concat(getv(inqt[2],tb)));
 				}
@@ -278,7 +279,7 @@ public class object_code {
                 RDL = "";
             }
         }
-        //åŠ ä¸Šç¨‹åºå°¾éƒ¨ï¼š
+        //¼ÓÉÏ³ÌĞòÎ²²¿£º
         code.add("  MOV AH,4CH");
         code.add("  INT 21H");
         code.add("CODES ENDS");
@@ -292,7 +293,7 @@ public class object_code {
 			result = result.concat(code.get(i)).concat("\n");
 		}
 		try {
-			File writename = new File("./z.ç›®æ ‡ä»£ç .txt");
+			File writename = new File("./z.Ä¿±ê´úÂë.txt");
 			writename.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			out.write(result);
@@ -309,7 +310,7 @@ public class object_code {
 			result = result.concat(code.get(i)).concat("\n");
 		}
 		try {
-			File writename = new File("../z.ç›®æ ‡ä»£ç .txt");
+			File writename = new File("../z.Ä¿±ê´úÂë.txt");
 			writename.createNewFile();
 			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
 			out.write(result);
@@ -331,12 +332,12 @@ public class object_code {
                     r="DS:[".concat(String.valueOf(ofad)).concat("]");
                 }
             }
-            if(flag==0&&is_t(v)){//å¦‚æœæ˜¯ä¸´æ—¶å˜é‡tå‡ çš„è¯
+            if(flag==0&&is_t(v)){//Èç¹ûÊÇÁÙÊ±±äÁ¿t¼¸µÄ»°
                             for(int jj=0;jj<tb.vall.size();jj++){
-                                if(tb.vall.get(jj).equals(v)){//åœ¨æ´»åŠ¨è®°å½•æ‰¾åˆ°äº†å®ƒ
+                                if(tb.vall.get(jj).equals(v)){//ÔÚ»î¶¯¼ÇÂ¼ÕÒµ½ÁËËü
                                     ofad=jj;
                                     flag=1;
-                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//åç§»åœ°å€ä¸ºä¸´æ—¶å˜é‡åœ¨æ´»åŠ¨è®°å½•ä¸­çš„ä½ç½®-æ‰€å±å‡½æ•°åœ¨æ´»åŠ¨è®°å½•ä¸­çš„ä½ç½®
+                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//Æ«ÒÆµØÖ·ÎªÁÙÊ±±äÁ¿ÔÚ»î¶¯¼ÇÂ¼ÖĞµÄÎ»ÖÃ-ËùÊôº¯ÊıÔÚ»î¶¯¼ÇÂ¼ÖĞµÄÎ»ÖÃ
                                 }
                             }
                             if(flag==0){
@@ -367,12 +368,12 @@ public class object_code {
                                 else r="SS:[BP+".concat(String.valueOf(ofad)).concat("]");
                             }
                         }
-                        if(flag==0&&is_t(v)){//å¦‚æœæ˜¯ä¸´æ—¶å˜é‡tå‡ çš„è¯
+                        if(flag==0&&is_t(v)){//Èç¹ûÊÇÁÙÊ±±äÁ¿t¼¸µÄ»°
                             for(int jj=0;jj<tb.vall.size();jj++){
-                                if(tb.vall.get(jj).equals(v)){//åœ¨æ´»åŠ¨è®°å½•æ‰¾åˆ°äº†å®ƒ
+                                if(tb.vall.get(jj).equals(v)){//ÔÚ»î¶¯¼ÇÂ¼ÕÒµ½ÁËËü
                                     ofad=jj;
                                     flag=1;
-                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//åç§»åœ°å€ä¸ºä¸´æ—¶å˜é‡åœ¨æ´»åŠ¨è®°å½•ä¸­çš„ä½ç½®-æ‰€å±å‡½æ•°åœ¨æ´»åŠ¨è®°å½•ä¸­çš„ä½ç½®
+                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//Æ«ÒÆµØÖ·ÎªÁÙÊ±±äÁ¿ÔÚ»î¶¯¼ÇÂ¼ÖĞµÄÎ»ÖÃ-ËùÊôº¯ÊıÔÚ»î¶¯¼ÇÂ¼ÖĞµÄÎ»ÖÃ
                                 }
                             }
                             if(flag==0){
@@ -391,7 +392,7 @@ public class object_code {
                 r="OFFSET ".concat(v.substring(0,v.length()-2)).concat("D");
             }
             else{
-                System.out.println("å˜é‡é”™è¯¯ï¼æ— æ³•åœ¨ç¬¦å·è¡¨ä¸­æŸ¥è¯¢åˆ°æ­¤å˜é‡ï¼Œå˜é‡åä¸ºï¼š"+v);
+                System.out.println("±äÁ¿´íÎó£¡ÎŞ·¨ÔÚ·ûºÅ±íÖĞ²éÑ¯µ½´Ë±äÁ¿£¬±äÁ¿ÃûÎª£º"+v);
                 return "";
             }
         }
@@ -418,7 +419,7 @@ public class object_code {
         else return "";
     }
     
-    static String getv1(String v,table tb){//ä¸ºäº†åœ¨STæ—¶ä¸ºå…¨å±€å˜é‡ç”Ÿæˆç±»ä¼¼äº[DATA+1]ï¼Œå±€éƒ¨å˜é‡ç”ŸæˆSS:[SP+1]
+    static String getv1(String v,table tb){//ÎªÁËÔÚSTÊ±ÎªÈ«¾Ö±äÁ¿Éú³ÉÀàËÆÓÚ[DATA+1]£¬¾Ö²¿±äÁ¿Éú³ÉSS:[SP+1]
         int ofad=0;
         int flag=0;
         String r="";
@@ -430,12 +431,12 @@ public class object_code {
                     r="[".concat(v).concat("]");
                 }
             }
-            if(flag==0&&is_t(v)){//å¦‚æœæ˜¯ä¸´æ—¶å˜é‡tå‡ çš„è¯
+            if(flag==0&&is_t(v)){//Èç¹ûÊÇÁÙÊ±±äÁ¿t¼¸µÄ»°
                             for(int jj=0;jj<tb.vall.size();jj++){
-                                if(tb.vall.get(jj).equals(v)){//åœ¨æ´»åŠ¨è®°å½•æ‰¾åˆ°äº†å®ƒ
+                                if(tb.vall.get(jj).equals(v)){//ÔÚ»î¶¯¼ÇÂ¼ÕÒµ½ÁËËü
                                     ofad=jj;
                                     flag=1;
-                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//åç§»åœ°å€ä¸ºä¸´æ—¶å˜é‡åœ¨æ´»åŠ¨è®°å½•ä¸­çš„ä½ç½®-æ‰€å±å‡½æ•°åœ¨æ´»åŠ¨è®°å½•ä¸­çš„ä½ç½®
+                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//Æ«ÒÆµØÖ·ÎªÁÙÊ±±äÁ¿ÔÚ»î¶¯¼ÇÂ¼ÖĞµÄÎ»ÖÃ-ËùÊôº¯ÊıÔÚ»î¶¯¼ÇÂ¼ÖĞµÄÎ»ÖÃ
                                 }
                             }
                             if(flag==0){
@@ -466,12 +467,12 @@ public class object_code {
                                 else r="SS:[BP+".concat(String.valueOf(ofad)).concat("]");
                             }
                         }
-                        if(flag==0&&is_t(v)){//å¦‚æœæ˜¯ä¸´æ—¶å˜é‡tå‡ çš„è¯
+                        if(flag==0&&is_t(v)){//Èç¹ûÊÇÁÙÊ±±äÁ¿t¼¸µÄ»°
                             for(int jj=0;jj<tb.vall.size();jj++){
-                                if(tb.vall.get(jj).equals(v)){//åœ¨æ´»åŠ¨è®°å½•æ‰¾åˆ°äº†å®ƒ
+                                if(tb.vall.get(jj).equals(v)){//ÔÚ»î¶¯¼ÇÂ¼ÕÒµ½ÁËËü
                                     ofad=jj;
                                     flag=1;
-                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//åç§»åœ°å€ä¸ºä¸´æ—¶å˜é‡åœ¨æ´»åŠ¨è®°å½•ä¸­çš„ä½ç½®-æ‰€å±å‡½æ•°åœ¨æ´»åŠ¨è®°å½•ä¸­çš„ä½ç½®
+                                    r="SS:[BP+".concat(String.valueOf(ofad-getfnum(tb)+getflocalnum(tb))).concat("]");//Æ«ÒÆµØÖ·ÎªÁÙÊ±±äÁ¿ÔÚ»î¶¯¼ÇÂ¼ÖĞµÄÎ»ÖÃ-ËùÊôº¯ÊıÔÚ»î¶¯¼ÇÂ¼ÖĞµÄÎ»ÖÃ
                                 }
                             }
                             if(flag==0){
@@ -490,7 +491,7 @@ public class object_code {
                 r="OFFSET ".concat(v.substring(0,v.length()-2)).concat("D");
             }
             else{
-                System.out.println("å˜é‡é”™è¯¯ï¼æ— æ³•åœ¨ç¬¦å·è¡¨ä¸­æŸ¥è¯¢åˆ°æ­¤å˜é‡ï¼Œå˜é‡åä¸ºï¼š"+v);
+                System.out.println("±äÁ¿´íÎó£¡ÎŞ·¨ÔÚ·ûºÅ±íÖĞ²éÑ¯µ½´Ë±äÁ¿£¬±äÁ¿ÃûÎª£º"+v);
                 return "";
             }
         }
@@ -508,7 +509,7 @@ public class object_code {
         return "main";
     }
 	
-    static int getfnum(table tb){//è·å–æœ€æ–°å‡½æ•°åœ¨æ´»åŠ¨è®°å½•ä¸­çš„ä½ç½®
+    static int getfnum(table tb){//»ñÈ¡×îĞÂº¯ÊıÔÚ»î¶¯¼ÇÂ¼ÖĞµÄÎ»ÖÃ
         List<String> fnml=new ArrayList<String>();
         for(int i=0;i<tb.pfinfl.size();i++){
             fnml.add(tb.pfinfl.get(i).name);
@@ -519,7 +520,7 @@ public class object_code {
         return 0;
     }
 
-    static int getflocalnum(table tb){//è·å–æœ€æ–°å‡½æ•°çš„å±€éƒ¨å˜é‡çš„æ•°é‡
+    static int getflocalnum(table tb){//»ñÈ¡×îĞÂº¯ÊıµÄ¾Ö²¿±äÁ¿µÄÊıÁ¿
         String s=getf(tb);
         if(s.equals("main")) return 0;
         else{
@@ -532,7 +533,7 @@ public class object_code {
         return -1;
     }
 
-    static boolean hves(List<String[]> qt,int i){//ä»qtçš„ç¬¬iä¸ªå¼€å§‹ï¼ŒæŸ¥åˆ°ieå‰ï¼Œæœ‰æ²¡æœ‰es
+    static boolean hves(List<String[]> qt,int i){//´ÓqtµÄµÚi¸ö¿ªÊ¼£¬²éµ½ieÇ°£¬ÓĞÃ»ÓĞes
         for(;i<qt.size();i++){
             String[] ii=qt.get(i);
             if(ii[0].equals("ie")) break;

@@ -4,7 +4,8 @@ import java.util.*;
 public class define_global {
 	public static void main(String[] args) throws Exception {
 		String path_in = "./z.c语言代码输入.txt";
-		List<List<String>> anal = new analyzer().answer(path_in);
+		String path_out = "./z.token序列.txt";
+		List<List<String>> anal = new analyzer().answer(path_in,path_out);
 		String[] step, i, C, S, c, k, p;
 
 		i = (String[]) anal.get(0).toArray(new String[anal.get(0).size()]);
@@ -110,11 +111,11 @@ public class define_global {
 			tb.pfinfl.add(fuc);
 		}
 		//tb.print(tb);
-		wt(tb);
+		writedg(tb);
 		return true;
 	}
 
-	static void wt(table tb) {
+	static void writedg(table tb) {
 		String result = "";
 		for (int j = 0; j < tb.synbl.size(); j++) {
 			table.vari tv = tb.synbl.get(j);
@@ -154,7 +155,46 @@ public class define_global {
 			e.printStackTrace();
 		}
 	}
-
+	static void wtdg(table tb) {
+		String result = "";
+		for (int j = 0; j < tb.synbl.size(); j++) {
+			table.vari tv = tb.synbl.get(j);
+			result = result.concat(tv.name).concat(" ").concat(tv.tp).concat(" ").concat(String.valueOf(tv.ofad))
+					.concat(" ").concat(String.valueOf(tv.other)).concat("\n");
+		}
+		result = result.concat("\n");
+		for (int j = 0; j < tb.pfinfl.size(); j++) {
+			table.func tf = tb.pfinfl.get(j);
+			List<String> xctp = tf.xctp;
+			List<String> xcname = tf.xcname;
+			List<table.vari> vt;
+			result = result.concat(tf.name).concat("\n");
+			for (int jj = 0; jj < xctp.size(); jj++) {
+				result = result.concat(xctp.get(jj)).concat(" ").concat(xcname.get(jj)).concat("\n");
+			}
+			vt = tf.vt;
+			for (int jj = 0; jj < vt.size(); jj++) {
+				result = result.concat(vt.get(jj).name).concat(" ").concat(vt.get(jj).tp).concat(" ")
+						.concat(String.valueOf(vt.get(jj).ofad)).concat(" ").concat(String.valueOf(vt.get(jj).other))
+						.concat("\n");
+			}
+			result = result.concat("\n");
+			for (int jj = 0; jj < tb.vall.size(); jj++) {
+				result = result.concat(tb.vall.get(jj)).concat(" ");
+			}
+		}
+		try {
+			File writename = new File("../z.符号表.txt");
+			writename.createNewFile();
+			OutputStreamWriter write = new OutputStreamWriter(new FileOutputStream(writename), "UTF-8");
+			BufferedWriter out = new BufferedWriter(new FileWriter(writename));
+			out.write(result);
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	static int getofad(List<table.vari> vt) {
 		// 求偏移地址：如果vt.size()为0，则偏移地址为0，
 		// 如果vt.size()不为0，就去看看上一条vari的类型是否是int[]，

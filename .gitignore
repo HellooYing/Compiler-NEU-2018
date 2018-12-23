@@ -1,3 +1,5 @@
 *.class
 .metadata\*
 *.txt
+/.metadata/
+/Compiler_NEU_2018/

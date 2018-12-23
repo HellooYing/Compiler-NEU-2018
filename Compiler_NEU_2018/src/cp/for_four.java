@@ -1,3 +1,4 @@
+package cp;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,16 +8,16 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class for_four {
-    public static String[] step, i, C, S, c, k, p;// è¾“å…¥
-    public static List<String[]> qt = new ArrayList<String[]>();// å­˜å››å…ƒå¼
-    public static int n = 0, now = 0, startn, startnt; // n:ä¸´æ—¶å˜é‡tnåºå·ï¼Œnowï¼štokenä¸²åºå·ï¼Œstartnï¼šæš‚å­˜step_onå¼€å§‹tokenä¸²ä½ç½®,startnt:æš‚å­˜å°¾å¤„ç†åŒºå¼€å§‹tokenä¸²ä½ç½®
-    public static String LROT, RROT, P; // ä¿å­˜ä»£è¡¨å·¦å¼çš„ä¸´æ—¶å˜é‡ï¼Œä¿å­˜ä»£è¡¨å³å¼çš„ä¸´æ—¶å˜é‡ï¼Œä¿å­˜æ¯”è¾ƒçš„ç¬¦å·
+    public static String[] step, i, C, S, c, k, p;// ÊäÈë
+    public static List<String[]> qt = new ArrayList<String[]>();// ´æËÄÔªÊ½
+    public static int n = 0, now = 0, startn, startnt; // n:ÁÙÊ±±äÁ¿tnĞòºÅ£¬now£ºtoken´®ĞòºÅ£¬startn£ºÔİ´æstep_on¿ªÊ¼token´®Î»ÖÃ,startnt:Ôİ´æÎ²´¦ÀíÇø¿ªÊ¼token´®Î»ÖÃ
+    public static String LROT, RROT, P; // ±£´æ´ú±í×óÊ½µÄÁÙÊ±±äÁ¿£¬±£´æ´ú±íÓÒÊ½µÄÁÙÊ±±äÁ¿£¬±£´æ±È½ÏµÄ·ûºÅ
 
     public static void main(String[] args) throws Exception {
-        String path_in = "./z.cè¯­è¨€ä»£ç è¾“å…¥.txt";
-        String path_out = "./z.tokenåºåˆ—.txt";
+        String path_in = "./z.cÓïÑÔ´úÂëÊäÈë.txt";
+        String path_out = "./z.tokenĞòÁĞ.txt";
 
-        // è¿™ä¸€æ®µä»"z.tokenåºåˆ—.txt"æ–‡ä»¶è¯»å–äº†éœ€è¦ç”¨åˆ°çš„è¾“å…¥ï¼Œå³tokenåºåˆ—(æˆ‘æŠŠå®ƒå–åä¸ºp)å’Œi, C, S, c, k, pè¡¨
+        // ÕâÒ»¶Î´Ó"z.tokenĞòÁĞ.txt"ÎÄ¼ş¶ÁÈ¡ÁËĞèÒªÓÃµ½µÄÊäÈë£¬¼´tokenĞòÁĞ(ÎÒ°ÑËüÈ¡ÃûÎªp)ºÍi, C, S, c, k, p±í
         List<List<String>> anal = new analyzer().answer(path_in,path_out);
         String[] step, i, C, S, c, k, p;
         int n = 0;
@@ -28,9 +29,9 @@ public class for_four {
         k = (String[]) anal.get(4).toArray(new String[anal.get(4).size()]);
         p = (String[]) anal.get(5).toArray(new String[anal.get(5).size()]);
         step = (String[]) anal.get(6).toArray(new String[anal.get(6).size()]);
-        // è¯»å–å®Œæ¯•
+        // ¶ÁÈ¡Íê±Ï
 
-        // æ‰§è¡Œforè¯­æ³•åˆ†æç¨‹åº
+        // Ö´ĞĞforÓï·¨·ÖÎö³ÌĞò
         table tb = new table();
         init(tb);
         List<String[]> r1 = new for_four().answer(step, i, C, S, c, k, p, tb);
@@ -38,26 +39,26 @@ public class for_four {
 
     public List<String[]> answer(String[] step1, String[] i1, String[] C1, String[] S1, String[] c1, String[] k1,
             String[] p1, table tb) {
-        step = step1;// tokenåºåˆ—
-        i = i1;// å˜é‡
-        C = C1;// å­—ç¬¦
-        S = S1;// å­—ç¬¦ä¸²
-        c = c1;// æ•°å­—å¸¸é‡
-        k = k1;// å…³é”®å­—
-        p = p1;// ç¬¦å·
+        step = step1;// tokenĞòÁĞ
+        i = i1;// ±äÁ¿
+        C = C1;// ×Ö·û
+        S = S1;// ×Ö·û´®
+        c = c1;// Êı×Ö³£Á¿
+        k = k1;// ¹Ø¼ü×Ö
+        p = p1;// ·ûºÅ
 
-        String t, tTail = "i"; // tï¼šTokençš„å€¼ , tTailï¼šå°¾å¤„ç†åŒº tTail++,åˆå§‹åŒ–ä¸ºâ€œiâ€
-        String[] step_son; // å„é˜¶æ®µçš„å­tokenåºåˆ—
-        List<String[]> qtt; // å„é˜¶æ®µç”Ÿæˆçš„å››å…ƒå¼
-        String tn; // ä¸´æ—¶å˜é‡
-        int braceNum = 1; // "{"ä¸ªæ•°ï¼Œç”¨æ¥ç»Ÿè®¡for{}çš„ç»“æŸ
+        String t, tTail = "i"; // t£ºTokenµÄÖµ , tTail£ºÎ²´¦ÀíÇø tTail++,³õÊ¼»¯Îª¡°i¡±
+        String[] step_son; // ¸÷½×¶ÎµÄ×ÓtokenĞòÁĞ
+        List<String[]> qtt; // ¸÷½×¶ÎÉú³ÉµÄËÄÔªÊ½
+        String tn; // ÁÙÊ±±äÁ¿
+        int braceNum = 1; // "{"¸öÊı£¬ÓÃÀ´Í³¼Æfor{}µÄ½áÊø
 
         switch (step[now].substring(1, 2)) {
         case "k":
             t = k[Integer.parseInt(step[now].substring(3, step[now].length() - 1))];
             if (t.equals("for")) {
                 
-                startn = now + 2;// æš‚å­˜åˆå§‹åŒ–åŒºstep_oné¦–Tokenä¸²çš„åºå·
+                startn = now + 2;// Ôİ´æ³õÊ¼»¯Çøstep_onÊ×Token´®µÄĞòºÅ
                 while (true) {
                     now++;
                     switch (step[now].substring(1, 2)) {
@@ -71,19 +72,19 @@ public class for_four {
                         break;
                 }
                 step_son = Arrays.copyOfRange(step, startn, now);
-                if (step_son.length == 1)// åˆ¤æ–­åˆå§‹åŒ–åŒºæœ‰ä¸€ä¸ªæ ‡è¯†ç¬¦,ä¸äº§ç”Ÿå››å…ƒå¼
+                if (step_son.length == 1)// ÅĞ¶Ï³õÊ¼»¯ÇøÓĞÒ»¸ö±êÊ¶·û,²»²úÉúËÄÔªÊ½
                 {
-                } else// å·¦å¼å¤šäºä¸€ä¸ªæ ‡ç¤ºç¬¦
+                } else// ×óÊ½¶àÓÚÒ»¸ö±êÊ¾·û
                 {
                     qtt = new exp_four().answer(step_son, i, C, S, c, k, p, tb);
-                    n = reset_t(qtt, n); // è·å¾—å½“å‰ä¸´æ—¶å˜é‡tnçš„nå€¼
-                    for (int j = 0; j < qtt.size(); j++)// å°†åˆå§‹åŒ–åŒºå››å…ƒå¼åºåˆ—é€å…¥å››å…ƒå¼åŒº
+                    n = reset_t(qtt, n); // »ñµÃµ±Ç°ÁÙÊ±±äÁ¿tnµÄnÖµ
+                    for (int j = 0; j < qtt.size(); j++)// ½«³õÊ¼»¯ÇøËÄÔªÊ½ĞòÁĞËÍÈëËÄÔªÊ½Çø
                     {
                         qt.add(qtt.get(j));
                     }
                 }
-                addqt("for", "_", "_", "_");// ç”Ÿæˆforå››å…ƒå¼
-                startn = now + 1;// æš‚å­˜æ¯”è¾ƒåŒºå·¦å¼step_oné¦–Tokenä¸²çš„åºå·
+                addqt("for", "_", "_", "_");// Éú³ÉforËÄÔªÊ½
+                startn = now + 1;// Ôİ´æ±È½ÏÇø×óÊ½step_onÊ×Token´®µÄĞòºÅ
                 while (true) {
                     now++;
                     switch (step[now].substring(1, 2)) {
@@ -95,12 +96,12 @@ public class for_four {
                     }
                     if (t.equals(">=") || t.equals("<=") || t.equals("==") || t.equals("!=") || t.equals("<")
                             || t.equals(">")) {
-                        P = t;// æš‚å­˜æ¯”è¾ƒç¬¦å·
+                        P = t;// Ôİ´æ±È½Ï·ûºÅ
                         break;
                     }
                 }
                 step_son = Arrays.copyOfRange(step, startn, now);
-                if (step_son.length == 1)// åˆ¤æ–­æ¯”è¾ƒåŒºå·¦å¼æœ‰ä¸€ä¸ªæ ‡è¯†ç¬¦
+                if (step_son.length == 1)// ÅĞ¶Ï±È½ÏÇø×óÊ½ÓĞÒ»¸ö±êÊ¶·û
                 {
                     switch (step[now - 1].substring(1, 2)) {
                     case "i":
@@ -112,18 +113,18 @@ public class for_four {
                     default:
                         break;
                     }
-                } else// å·¦å¼å¤šäºä¸€ä¸ªæ ‡ç¤ºç¬¦
+                } else// ×óÊ½¶àÓÚÒ»¸ö±êÊ¾·û
                 {
                     qtt = new exp_four().answer(step_son, i, C, S, c, k, p, tb);
-                    n = reset_t(qtt, n); // è·å¾—å½“å‰ä¸´æ—¶å˜é‡tnçš„nå€¼
-                    LROT = qtt.get(qtt.size() - 1)[3];// æš‚å­˜æ¯”è¾ƒçš„å·¦å¼çš„ä¸´æ—¶å˜é‡
-                    for (int j = 0; j < qtt.size(); j++)// å°†æ¯”è¾ƒçš„å·¦å¼å››å…ƒå¼åºåˆ—é€å…¥å››å…ƒå¼åŒº
+                    n = reset_t(qtt, n); // »ñµÃµ±Ç°ÁÙÊ±±äÁ¿tnµÄnÖµ
+                    LROT = qtt.get(qtt.size() - 1)[3];// Ôİ´æ±È½ÏµÄ×óÊ½µÄÁÙÊ±±äÁ¿
+                    for (int j = 0; j < qtt.size(); j++)// ½«±È½ÏµÄ×óÊ½ËÄÔªÊ½ĞòÁĞËÍÈëËÄÔªÊ½Çø
                     {
                         qt.add(qtt.get(j));
                     }
                 }
 
-                startn = now + 1;// æš‚å­˜æ¯”è¾ƒåŒºå³å¼step_oné¦–Tokenä¸²çš„åºå·
+                startn = now + 1;// Ôİ´æ±È½ÏÇøÓÒÊ½step_onÊ×Token´®µÄĞòºÅ
                 while (true) {
                     now++;
                     switch (step[now].substring(1, 2)) {
@@ -137,7 +138,7 @@ public class for_four {
                         break;
                 }
                 step_son = Arrays.copyOfRange(step, startn, now);
-                if (step_son.length == 1)// åˆ¤æ–­æ¯”è¾ƒåŒºå³å¼æœ‰ä¸€ä¸ªæ ‡è¯†ç¬¦
+                if (step_son.length == 1)// ÅĞ¶Ï±È½ÏÇøÓÒÊ½ÓĞÒ»¸ö±êÊ¶·û
                 {
                     n=n+1;
                     switch (step[now - 1].substring(1, 2)) {
@@ -150,22 +151,22 @@ public class for_four {
                     default:
                         break;
                     }
-                } else// æ¯”è¾ƒåŒºå³å¼å¤šäºä¸€ä¸ªæ ‡ç¤ºç¬¦
+                } else// ±È½ÏÇøÓÒÊ½¶àÓÚÒ»¸ö±êÊ¾·û
                 {
                     qtt = new exp_four().answer(step_son, i, C, S, c, k, p, tb);
-                    n = reset_t(qtt, n) + 1;// è·å¾—å½“å‰ä¸´æ—¶å˜é‡tnçš„nå€¼
-                    RROT = qtt.get(qtt.size() - 1)[3];// æš‚å­˜æ¯”è¾ƒåŒºçš„å³å¼çš„ä¸´æ—¶å˜é‡
-                    for (int j = 0; j < qtt.size(); j++)// å°†æ¯”è¾ƒåŒºçš„å³å¼å››å…ƒå¼åºåˆ—é€å…¥å››å…ƒå¼åŒº
+                    n = reset_t(qtt, n) + 1;// »ñµÃµ±Ç°ÁÙÊ±±äÁ¿tnµÄnÖµ
+                    RROT = qtt.get(qtt.size() - 1)[3];// Ôİ´æ±È½ÏÇøµÄÓÒÊ½µÄÁÙÊ±±äÁ¿
+                    for (int j = 0; j < qtt.size(); j++)// ½«±È½ÏÇøµÄÓÒÊ½ËÄÔªÊ½ĞòÁĞËÍÈëËÄÔªÊ½Çø
                     {
                         qt.add(qtt.get(j));
                     }
                 }
                 tn = "t".concat(String.valueOf(n));
-                addqt(P, LROT, RROT, tn); // ç”Ÿæˆæ¯”è¾ƒå››å…ƒå¼
-                addqt("df", tn, "_", "_");// ç”Ÿæˆåˆ¤æ–­å››å…ƒå¼
+                addqt(P, LROT, RROT, tn); // Éú³É±È½ÏËÄÔªÊ½
+                addqt("df", tn, "_", "_");// Éú³ÉÅĞ¶ÏËÄÔªÊ½
 
-                startnt = now + 1;// æš‚å­˜å°¾å¤„ç†åŒºå¼€å§‹tokenä¸²ä½ç½®
-                while (true)// è·³è¿‡å°¾å¤„ç†åŒºï¼Œåœ¨forä¸»ç¨‹åºä¹‹åç”Ÿæˆå››å…ƒå¼
+                startnt = now + 1;// Ôİ´æÎ²´¦ÀíÇø¿ªÊ¼token´®Î»ÖÃ
+                while (true)// Ìø¹ıÎ²´¦ÀíÇø£¬ÔÚforÖ÷³ÌĞòÖ®ºóÉú³ÉËÄÔªÊ½
                 {
                     now++;
                     switch (step[now].substring(1, 2)) {
@@ -179,8 +180,8 @@ public class for_four {
                         break;
                 }
 
-                startn = now + 1;// æš‚å­˜for{}å†…ç¨‹åºå¼€å§‹ä½ç½®
-                t = "zhaozhiyi";// å¼ºåˆ¶ç»™tèµ‹äºˆæŸä¸ªå€¼ï¼Œä½¿å…¶ä¸ä¸ºâ€œ{â€ï¼Œé˜²æ­¢ä¸‹é¢åˆ¤æ–­for{}å†…é¦–ä¸ªtokenå‘ç”Ÿé”™è¯¯
+                startn = now + 1;// Ôİ´æfor{}ÄÚ³ÌĞò¿ªÊ¼Î»ÖÃ
+                t = "zhaozhiyi";// Ç¿ÖÆ¸øt¸³ÓèÄ³¸öÖµ£¬Ê¹Æä²»Îª¡°{¡±£¬·ÀÖ¹ÏÂÃæÅĞ¶Ïfor{}ÄÚÊ×¸ötoken·¢Éú´íÎó
                 while (true) {
                     now++;
                     switch (step[now].substring(1, 2)) {
@@ -192,10 +193,10 @@ public class for_four {
                     }
                     if (t.equals("{")) {
                         braceNum++;
-                        t = "zhaozhiyi";// å¼ºåˆ¶ç»™tèµ‹äºˆæŸä¸ªå€¼ï¼Œä½¿å…¶ä¸ä¸ºâ€œ{â€ï¼Œé˜²æ­¢ä¸‹é¢æœ‰è¿ç»­çš„"{"æ—¶åˆ¤æ–­å‘ç”Ÿé”™è¯¯
+                        t = "zhaozhiyi";// Ç¿ÖÆ¸øt¸³ÓèÄ³¸öÖµ£¬Ê¹Æä²»Îª¡°{¡±£¬·ÀÖ¹ÏÂÃæÓĞÁ¬ĞøµÄ"{"Ê±ÅĞ¶Ï·¢Éú´íÎó
                     }
                     if (t.equals("}")) {
-                        t = "zhaozhiyi";// å¼ºåˆ¶ç»™tèµ‹äºˆæŸä¸ªå€¼ï¼Œä½¿å…¶ä¸ä¸ºâ€œ}â€ï¼Œé˜²æ­¢ä¸‹é¢æœ‰è¿ç»­çš„"}"æ—¶åˆ¤æ–­å‘ç”Ÿé”™è¯¯
+                        t = "zhaozhiyi";// Ç¿ÖÆ¸øt¸³ÓèÄ³¸öÖµ£¬Ê¹Æä²»Îª¡°}¡±£¬·ÀÖ¹ÏÂÃæÓĞÁ¬ĞøµÄ"}"Ê±ÅĞ¶Ï·¢Éú´íÎó
                         braceNum--;
                         if (braceNum == 0)
                             break;
@@ -208,7 +209,7 @@ public class for_four {
                     qt.add(qtt.get(j));
                 }
 
-                startn = startnt;// ä¿å­˜å°¾å¤„ç†åŒºstep_oné¦–Tokenä¸²çš„åºå·
+                startn = startnt;// ±£´æÎ²´¦ÀíÇøstep_onÊ×Token´®µÄĞòºÅ
                 while (true) {
                     startnt++;
                     switch (step[startnt].substring(1, 2)) {
@@ -222,9 +223,9 @@ public class for_four {
                         break;
                 }
                 step_son = Arrays.copyOfRange(step, startn, startnt - 1);
-                if (step_son.length == 3)// ä¸‰ä¸ªtokenä¸²ï¼Œæœ‰å¯èƒ½æ˜¯i++/i--æƒ…å†µ
+                if (step_son.length == 3)// Èı¸ötoken´®£¬ÓĞ¿ÉÄÜÊÇi++/i--Çé¿ö
                 {
-                    switch (step[startnt - 4].substring(1, 2))// ä¿å­˜â€œiâ€
+                    switch (step[startnt - 4].substring(1, 2))// ±£´æ¡°i¡±
                     {
                     case "i":
                         tTail = i[Integer.parseInt(step[startnt - 4].substring(3, step[startnt - 4].length() - 1))];
@@ -239,52 +240,52 @@ public class for_four {
                     switch (step[startnt - 2].substring(1, 2)) {
                     case "p":
                         t = p[Integer.parseInt(step[startnt - 2].substring(3, step[startnt - 2].length() - 1))];
-                        if (t.equals("+")) // i++æƒ…å†µ
+                        if (t.equals("+")) // i++Çé¿ö
                         {
-                            tn = "t".concat(String.valueOf(n+1));// ç”Ÿæˆä¸´æ—¶å˜é‡
+                            tn = "t".concat(String.valueOf(n+1));// Éú³ÉÁÙÊ±±äÁ¿
                             addqt("+", tTail, "1.0", tn);
                             addqt("=", tn, "_", tTail);
-                        } else if (t.equals("-")) // i--æƒ…å†µ
+                        } else if (t.equals("-")) // i--Çé¿ö
                         {
-                            tn = "t".concat(String.valueOf(n+1));// ç”Ÿæˆä¸´æ—¶å˜é‡
+                            tn = "t".concat(String.valueOf(n+1));// Éú³ÉÁÙÊ±±äÁ¿
                             addqt("-", tTail, "1.0", tn);
                             addqt("=", tn, "_", tTail);
-                        } else // æ™®é€šç®—æœ¯è¡¨è¾¾å¼
+                        } else // ÆÕÍ¨ËãÊõ±í´ïÊ½
                         {
                             qtt = new exp_four().answer(step_son, i, C, S, c, k, p, tb);
-                            n = reset_t(qtt, n); // è·å¾—å½“å‰ä¸´æ—¶å˜é‡tnçš„nå€¼
-                            for (int j = 0; j < qtt.size(); j++)// å°†åˆå§‹åŒ–åŒºå››å…ƒå¼åºåˆ—é€å…¥å››å…ƒå¼åŒº
+                            n = reset_t(qtt, n); // »ñµÃµ±Ç°ÁÙÊ±±äÁ¿tnµÄnÖµ
+                            for (int j = 0; j < qtt.size(); j++)// ½«³õÊ¼»¯ÇøËÄÔªÊ½ĞòÁĞËÍÈëËÄÔªÊ½Çø
                             {
                                 qt.add(qtt.get(j));
                             }
                         }
                         break;
 
-                    default:// æœ€åä¸€ä¸ªtokenä¸æ˜¯â€œ+â€/â€œ-â€ï¼Œä¸å¯èƒ½æ˜¯i++/i--æƒ…å†µ
+                    default:// ×îºóÒ»¸ötoken²»ÊÇ¡°+¡±/¡°-¡±£¬²»¿ÉÄÜÊÇi++/i--Çé¿ö
                         qtt = new exp_four().answer(step_son, i, C, S, c, k, p, tb);
-                        n = reset_t(qtt, n); // è·å¾—å½“å‰ä¸´æ—¶å˜é‡tnçš„nå€¼
-                        for (int j = 0; j < qtt.size(); j++)// å°†åˆå§‹åŒ–åŒºå››å…ƒå¼åºåˆ—é€å…¥å››å…ƒå¼åŒº
+                        n = reset_t(qtt, n); // »ñµÃµ±Ç°ÁÙÊ±±äÁ¿tnµÄnÖµ
+                        for (int j = 0; j < qtt.size(); j++)// ½«³õÊ¼»¯ÇøËÄÔªÊ½ĞòÁĞËÍÈëËÄÔªÊ½Çø
                         {
                             qt.add(qtt.get(j));
                         }
                         break;
                     }
-                } else// ä¸æ˜¯ä¸‰ä¸ªtokenä¸²ï¼Œä¸å¯èƒ½æ˜¯i++/i--æƒ…å†µ
+                } else// ²»ÊÇÈı¸ötoken´®£¬²»¿ÉÄÜÊÇi++/i--Çé¿ö
                 {
                     qtt = new exp_four().answer(step_son, i, C, S, c, k, p, tb);
-                    n = reset_t(qtt, n); // è·å¾—å½“å‰ä¸´æ—¶å˜é‡tnçš„nå€¼
-                    for (int j = 0; j < qtt.size(); j++)// å°†åˆå§‹åŒ–åŒºå››å…ƒå¼åºåˆ—é€å…¥å››å…ƒå¼åŒº
+                    n = reset_t(qtt, n); // »ñµÃµ±Ç°ÁÙÊ±±äÁ¿tnµÄnÖµ
+                    for (int j = 0; j < qtt.size(); j++)// ½«³õÊ¼»¯ÇøËÄÔªÊ½ĞòÁĞËÍÈëËÄÔªÊ½Çø
                     {
                         qt.add(qtt.get(j));
                     }
                 }
 
-                addqt("fe", "_", "_", "_");// è·³è½¬å››å…ƒå¼
+                addqt("fe", "_", "_", "_");// Ìø×ªËÄÔªÊ½
             }
         default:
             break;
         }
-        // è¿™ä¸€æ®µä»£ç æ˜¯å°†ä½ ç”Ÿæˆçš„å››å…ƒå¼å†™å…¥æ–‡ä»¶ï¼Œç»™è€å¸ˆæ£€æŸ¥æ–¹ä¾¿
+        // ÕâÒ»¶Î´úÂëÊÇ½«ÄãÉú³ÉµÄËÄÔªÊ½Ğ´ÈëÎÄ¼ş£¬¸øÀÏÊ¦¼ì²é·½±ã
         String result = "";
         for (int aa = 0; aa < qt.size(); aa++) {
             result = result.concat("[");
@@ -296,7 +297,7 @@ public class for_four {
             result = result.concat("] ");
         }
         try {
-            File writename = new File("./z.å››å…ƒå¼.txt");
+            File writename = new File("./z.ËÄÔªÊ½.txt");
             writename.createNewFile();
             BufferedWriter out = new BufferedWriter(new FileWriter(writename));
             out.write(result);
@@ -305,7 +306,7 @@ public class for_four {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // å†™å…¥å®Œæ¯•
+        // Ğ´ÈëÍê±Ï
 
         return qt;
     }
@@ -329,7 +330,7 @@ public class for_four {
         }
     }
 
-    static int reset_t(List<String[]> qtt, int n) // é¿å…ä¸´æ—¶å˜é‡çš„å†²çªï¼Œåœ¨æ¯æ¬¡å¾€qtåŠ qttçš„æ—¶å€™éƒ½è¦é‡ç½®æ‰€æœ‰tåé¢çš„å€¼
+    static int reset_t(List<String[]> qtt, int n) // ±ÜÃâÁÙÊ±±äÁ¿µÄ³åÍ»£¬ÔÚÃ¿´ÎÍùqt¼ÓqttµÄÊ±ºò¶¼ÒªÖØÖÃËùÓĞtºóÃæµÄÖµ
     {
         String[] inqtt;
         int num, max = 0;
