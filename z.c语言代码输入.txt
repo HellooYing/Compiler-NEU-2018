@@ -1,10 +1,45 @@
-int a[10];
-int b;
-b=10;
-a[0]=10;
-a[1]=10;
-a[5]=10;
-a[8]=10;
-while(a[8]==10){
-    break;
+int main()
+{
+    int x1,x2,x3;
+    x1=1;x2=2;x3=3;
+    x1=x2;
+    x2=x3;
+    x3=x1;
+    x1=x3+x2;
+
+    int a;
+    int b;
+    int w1;
+    b=10;
+    a=1+2+3*4*5+b;
+    int f(int c,int d)
+    {
+        int e;
+        e=c+d;
+        return e;
+    }
+    a=f(10,15);
+
+    w1=1;
+    while(w1<5)
+    {
+        a=b+2;
+        w1=w1+1;
+        if(w1>3)
+        {
+            a=a+200;
+            break;
+        }
+        else
+        {
+            a=a+2;
+        }
+    }
+    int i;
+    for(i=0;i<=6;i++)
+    {
+        a=a+9;
+    }
 }
+
+

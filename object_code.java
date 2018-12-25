@@ -283,7 +283,6 @@ public class object_code {
         code.add("  INT 21H");
         code.add("CODES ENDS");
         code.add("  END START");
-        System.out.println(getv("a[2]",tb));
         return code;
     }
 

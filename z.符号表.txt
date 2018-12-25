@@ -1,3 +1,17 @@
-a int[] 0 10
-b int 10 -1
+x1 int 0 -1
+x2 int 1 -1
+x3 int 2 -1
+a int 3 -1
+b int 4 -1
+w1 int 5 -1
+f function 0 0
+i int 6 -1
 
+f
+int c
+int d
+c int 0 0
+d int 1 0
+e int 2 -1
+
+main 
