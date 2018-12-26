@@ -39,7 +39,7 @@ public class block {
 		boolean zd=true;//错误中断
 		List<String[]> qt = new ArrayList<String[]>();
 		List<String[]> qtt = new ArrayList<String[]>();// 加入qt之前要检查临时变量t几是否有重复，所以要临时放一下改完再加进去
-		List<String> code = new ArrayList<String>();
+		//List<String> code = new ArrayList<String>();
 		List<String[]> sentence = new ArrayList<String[]>();
 		// 对于一个块，要知道step几-几是引用了分支或循环结构生成的四元式，几-几是引用了函数生成的四元式
 		// 比如说0-12是赋值运算直接一句一句的用exp_four生成code，13-50是if{}else的结构用的是if_four生成code
@@ -69,7 +69,7 @@ public class block {
 									bracket--;
 							}
 						}
-						sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence把整个if的一大句话加进去
+						sentence.add(Arrays.copyOfRange(step, j, jj + 1));
 						j = jj;
 					} else {
 						for (jj = j + 1; jj < step.length; jj++) {// 找到;
@@ -78,7 +78,7 @@ public class block {
 									break;
 							}
 						}
-						sentence.add(Arrays.copyOfRange(step, j, jj + 1));// sentence把整个if的一大句话加进去
+						sentence.add(Arrays.copyOfRange(step, j, jj + 1));
 						j = jj;// 开始找下面的
 					}
 				} else if (t.equals("if")) {// 是if
